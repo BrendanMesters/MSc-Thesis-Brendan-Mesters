@@ -1,0 +1,33 @@
+\section{Background}
+\label{section: introduction - background}
+
+\textbf{¿¿¿ Should this be a section or a chapter ???}
+
+This thesis works with a specific sensor, the Millimeter Wave Radar (MMWave Radar), and tries to solve a specific problem, Human Pose Estimation (HPE). 
+This section aims to give readers the necessary knowledge on these subjects to be able to read and understand this thesis.
+Furthermore, we will discuss some of the current state-of-the-art systems for HPE using an MMWave radar.
+
+% I'll give background on MMWave, HPE, and the current SOA HPE methods used with MMWave.
+% I will also discuss some of the properties of MMWave which makes it difficult to handle
+
+\subsection{Millimeter Wave Radar}
+\label{sub-section: introduction - background - millimeter wave radar}
+Give an explanation of what MMWave radars are, to what extent we can configure them, and what we get out of them (3d pointclouds, at ~10Hz, with between 30-100 points per frame).
+Mention the inherent privacy-preserving nature of MMWave due to its not capturing images, and how it fares better in varied light conditions (overexposure/underexposure).
+Also, briefly explain how they work internally, using \textit{beam forming antennas} on the receiving and, as well as the large amount of FFT's over the raw signal, to get to pointclouds.
+
+I should mention that the data from MMWave radars is not always temporally stable.
+Aka, one frame I might see my left arm, but the next I might see my right.
+This is important for section \cref{sub-section: methodology - data filtering - temporal filtering}.
+
+\subsection{Human Pose Estimation}
+\label{sub-section: introduction - background - human pose estimation}
+Explain what exactly human pose estimation is, and reference some papers discussing it. 
+Present the kinect and skeletal estimation, and \textbf{clearly specify} the \textbf{differences} between my \textit{arm location} estimation, and a \textit{full skeletal estimation}.
+
+\subsection{Current State of the Art}
+\label{sub-section: introduction - background - current soa}
+Briefly mention some \textit{non-mmwave} HPE solutions, those using cameras and those using sensors, as well as their shortcomings (privacy/light situation and clunkiness of wearables, respectively).
+Discuss the various SOA MMWave HPE sollutions, their strengths, weaknesses and shortcommings.
+Also specify the strengths of Stochastic explainable systems over DL systems (tunable, testable, explainable, significantly lower need for training data), and setup a bridge to the scientific gap.
+

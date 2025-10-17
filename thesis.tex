@@ -26,6 +26,7 @@
 
 % add new packages here
 
+
 % math packages
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -55,15 +56,18 @@
 \usepackage{url}
 \usepackage[plainpages=false]{hyperref} 
 
+% [[ BRENDAN PACKAGE ]]
+\usepackage{cleveref} % Automatically references well.
+
 % Information that will be filled in at various points in the report
 \newcommand{\reportTitle}{WRITE YOUR THESIS TITLE HERE}
-\newcommand{\reportAuthor}{WRITE YOUR NAME AND SURNAME HERE} % Please put your full and official name here: no abbreviations (and to Dutch students: geen roepnamen)
-\newcommand{\studentNumber}{WRITE YOUR TU DELFT STUDENT NUMBER HERE}
-\newcommand{\reportEmailTUD}{REPORT-YOUR-TU-DELFT-EMAIL-FROM-STUDENT-TUDELFT-NL@student.tudelft.nl}
-\newcommand{\reportEmailNonTUD}{REPORT-YOUR-NON-TU-DELFT-EMAIL@some.other.non.tudelft.nl.domain.com}
+\newcommand{\reportAuthor}{Brendan Rudolf Mesters} % Please put your full and official name here: no abbreviations (and to Dutch students: geen roepnamen)
+\newcommand{\studentNumber}{4876016}
+\newcommand{\reportEmailTUD}{b.r.mesters@student.tudelft.nl}
+\newcommand{\reportEmailNonTUD}{brendanmesters@gmail.com}
 \newcommand{\reportUrlEmailTUD}{\href{mailto:\reportEmailTUD}{\reportEmailTUD}}
 \newcommand{\reportUrlEmailNonTUD}{\href{mailto:\reportEmailNonTUD}{\reportEmailNonTUD}}
-\newcommand{\reportMSC}{PUT TU DELFT PROGRAM THAT YOU FOLLOWED HERE} % Examples are {Embedded Systems} {Computer Engineering} {Computer Science} or {Electrical Engineering}
+\newcommand{\reportMSC}{Computer and Embedded Systems Engineering} % Examples are {Embedded Systems} {Computer Engineering} {Computer Science} or {Electrical Engineering}
 \newcommand{\reportDate}{PUT DATE OF PROVIDING THESIS TO GRADUATION COMMITTEE HERE}
 \newcommand{\presentationDate}{PUT DATE OF YOUR PRESENTATION HERE}
 \newcommand{\graduationCommittee}{
@@ -146,7 +150,7 @@ PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft Universit
 \cleardoublepage
 
 % Create preface: page v
-\input{chapters/preface}
+\input{chapters/-1. preface}
 
 % Empty page: page vi
 \cleardoublepage
@@ -160,26 +164,33 @@ PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft Universit
 \setcounter{page}{1}
 
 % Create Introduction: page 1
-\include{introduction}
+% \include{introduction}
+\input{chapters/1. introduction}
 
-% Create chapters
-\input{chapters/chapter_1}
-%\input{chapters/chapter_2}
-% ...
-%\nput{chapters/chapter_X}
+% Create a chapter for backgorund and related work
+\input{chapters/2. background}
+
+% Create a set discussing the tracking methods
+\input{chapters/3. tracking method}
+
+% Create a chapter describing test setup, baseline and the datasets
+\input{chapters/4. setup, baseline, dataset}
+
+% Create an evaluation
+\input{chapters/5. evaluation}
 
 % Create conclusions
-\input{chapters/conclusions}
+\input{chapters/6. conclusion}
 
 % Create future work
 \input{chapters/futurework}
 
 % Create bibliography
 \bibliographystyle{plain} % Please do not change the style of bibliography (yes, it should be `plain`)
-\bibliography{../bib/MyMScTUDESThesisBibFile} % remove "../" before "bib" if you compile directly in Overleaf or in your favourite local LaTeX distribution
+\bibliography{bib/MyMScTUDESThesisBibFile} % remove "../" before "bib" if you compile directly in Overleaf or in your favourite local LaTeX distribution
 
 % Create appendix
 \appendix
-\input{chapters/appendix_a}
+\input{appendixes/appendix_a}
 
 \end{document}

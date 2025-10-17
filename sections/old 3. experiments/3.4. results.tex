@@ -1,0 +1,40 @@
+\section{Results}
+\label{section: experiments - results}
+% Here I will put up tables with important numbers, as well as refer to an appendix item which gives a lot more in-depth tables of results.
+% I will look at overall performance, but also at performance of \textbf{just} the third time they used the system (ignoring time 1 and 2), as they were a bit used to the system at this point.
+I will discuss the results of my analysis and use the figures of the graphs I made to support that analysis, where applicable.
+
+
+\subsection{IAmMuse results}
+\label{sub-section: experiments - results - IAmMuse results}
+I will look at the performance of IAmMuse and try to highlight some parts where it performs well and some parts where it performs poorly
+
+I will discuss the issue of "specific zone size", where holding hangs "too high" can result in a low zone being detected (and vice versa).
+
+I will discuss the small trend of people improving as they use the system, "learning how" to use the system.
+
+In this section, I want to use my "notes on users" \cref{appendix: experiment notes} and some graphed data to support my claims.
+
+\subsection{MARS results}
+\label{sub-section: experiments - results - MARS results}
+I will compare the results of the different MARS weight sets and explain why I chose to use the 70/10/20 split (best result, more data than the "pre-initialization" trained, more representative data than the original results).
+
+I will discuss the shortcomings I found in MARS, and mention why I think those exist: \\
+- \textbf{Cannot move arms independently}: Easily overfitted model, training set was (seemingly) too small (! Mention training set size), if it doesn't know, the arms middle gives the lowest Mean Squared Error.\\
+- \textbf{unstable}: "one frame" predictions, no internal system of temporality. More generally, MARS does not have any bounds on the system that are logically imposed by reality (it can predict arms that are 5 meters apart).
+
+Give some preliminary numbers to the results (worst recording, best recording, median recording results)
+
+I will also mention how I tried to give MARS some temporal stabilization by requiring a zone to be chosen multiple times before switching (just the same as IAmMuse does), and that that did not help.
+
+
+\subsection{Comparing the results}
+\label{sub-section: experiments - results - comparing the results}
+
+I will show that, overall, my results are substantially better, and show graphs and statistics to support that claim.
+
+I will briefly compare the issues of both systems and discuss how they weigh up to each other.
+
+I will make an argument that the fact that my results are better may be in large part due to the "no independent hand" issue of MARS.
+
+¿¿¿ The MARS predictions are also (sort of) better when looking at \textit{both hands} ??? What to do here?

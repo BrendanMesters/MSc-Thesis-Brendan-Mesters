@@ -1,0 +1,13 @@
+\chapter{Tracking Method}
+\label{chapter: tracking method}
+
+
+For this thesis, a standalone pipeline was built to handle the whole process from communication with the FMCW and package decoding, through to the filtering, labeling, and interpretation of the data. 
+In this report, we will focus on the latter part of this pipeline, which implements this paper's interpretation algorithm.
+The final system used by IAmMuse will be discussed in \cref{section: methodology - data enhancement} and \cref{section: methodology - data interpretation}.
+After that, \cref{section: methodology - different approaches} will discuss some of the earlier attempts, as well as reasoning why those might have failed.
+
+The IAmMuse system, as well as most later approaches, uses a workflow where the final \textit{interpretation} system relies on an \textit{initialization} performed by the user.
+During the creation of IAmMuse, it was found that it was not feasible to interpret the MMWave data without any sort of context.
+Such an \textit{initialization} step may not be needed in the future, as the understanding of effective interpretation methods improves, these steps could feasibly be done in real time, during usage.
+However, creating such an understanding of effective methods of generating context of a pointcloud does benefit greatly from a well-defined initialization step, for that reason, IAmMuse chose to use such an initialization step.

@@ -1,0 +1,41 @@
+\section{Pre-configuration}
+
+\textbf{¡¡¡ Should probably become part of the "different approaches" section.}
+
+\label{section: methodology - pre configuration}
+I want to briefly discuss what pre-configuration methods are, and why they are important (It adds some context to the scene).
+I also want to make a case for this being a valid ask, in part due to the fact that the SOA systems require large training sessions (and still don't always fit new contexts well), and in part due to the fact that, in engineering, these crutches are put in place to build a system, and to make it robust, but they could be removed later (.... something something, why didn't I remove them?).
+
+\subsection{Torso Tracking}
+\label{sub-section: methodology - pre configuration - torso tracking}
+Discuss the way in which the torso tracking preconfiguration works.
+We ask the user to stand still while we collect points, then we can remove all points near the captured area from incomming frames, to remove the torso, thus only leaving the arms (the part we care about).
+It either removed to little or to much, and won't really working well.
+For a more detailed look into the related system approach see \cref{sub-section: methodology - different approaches - torso tracking}
+
+
+\subsection{Arm Location Initialization}
+\label{sub-section: methodology - pre config - arm location initialization}
+The concept being the \textit{arm location initialization} was to take a "fingerprint" of what arms looked like in certain positions, by asking the user to hold "both hands low", middle, or high.
+We could then calculate a "right" and a "left" "arm location" with some clustering algorithms.
+During runtime we could simply do a nearest neighbour check on the different arm locations, however, there where some issues.
+
+One major issue was the fact that the fmcw I used had a systemetic error, where one side produced more points (noise and data) then the other side. 
+This resulted in situations where sometimes, both the "left" and "right" locations would be placed near eachother. 
+This had the resulting effect that one of these two would shadow the other, leading to incorrect readings.
+Another issue was that the quality of the resulting regions was not consistently good. 
+Overall it was of reasonable quality, but some sessions you had a bad configuration, and only sometimes a "good" configuation.
+On the average the configurations where "decent", but most importantly, not always consistent between runs (meaning your arm positions might be different between sessions).
+For a more detailed look into the related system approach see \cref{sub-section: methodology - different approaches - arm location initialization}
+
+
+\subsection{Minimal Enclosing Ball Based}
+\label{sub-section: methodology - pre config - minimal enclosing ball based}
+The leading idea in the Minimal Enclosing Ball (MEB) approach was to collect points of the person with all possible arm positions, to have an idea of \textit{where the users arms might go}.
+This is achieved by asking the user to move their arms, outstretched to the side, up and down, while the system collects the pointclouds and sums them.
+This could then be used to filter out outliers, as well as torso data, while giving more weight to the most representative points, namely those of the hand.
+
+This system uses a system to find the MEB of an n-dimentional point set (3 in our case) with a certain percentage $\gamma$ of points being discarded as outliers, according to the Algorithm 1 of \cite{ding2020sublineartimeframeworkgeometric} by Hu Ding.
+This is done 100 times, and the result is averaged, as any individual result of the algorithm can be somewhat noisy.
+For a more detailed look into the related system aproach, see \cref{sub-section: methodology - different approaches - minimal enclosing ball based}
+

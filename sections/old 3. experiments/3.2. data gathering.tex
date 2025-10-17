@@ -1,0 +1,82 @@
+\section{Data Gathering}
+\label{section: experiments - data gathering}
+I want to describe the process of data gathering, how I did \textbf{3 standardized runs}, where I gave tips in between, the type of tips I gave (waving your hand, not your arm, to the camera, or doing jazz hands; Where the zones where the zones got the best data).
+
+I want to discuss the formats in which the data was gathered, and why that choice was made.
+
+
+\subsection{Formal Data Explanation}
+\label{sub-section: experiments - data gathering - formal data explanation}
+
+In order to understand the results, it's important to know exactly how these results were achieved.
+During the data recording, the users were presented with the musical output of IAmMuse. 
+Each recording has a number of frames (between \textbf{FIND DATA RANGE AND MEDIAN} frames), which were used to \textit{calibrate} IAmMuse to the specific user, the rest of the frames are the frames that IAmMuse used to generate its output and will thus be used for its evaluation.
+These two parts of the recording will be referred to as the \textbf{calibration data} and the \textbf{usage data} respectively, and an exhaustive list of these frame counts can be found in \cref{appendix: recording frame distribution}.
+
+Each specific user has \textit{three recordings} where they perform a \textbf{standardized movement set}.
+For each specific user, there are also \textit{between one and four} \textbf{free play} recordings (users were encouraged, but not mandated to use the system to their own accord).
+If a \textit{specific recording} is referenced, it will be done as follows: 
+\begin{itemize}
+\item "\textbf{standard movement set} recording from \textbf{user 07} number \textbf{2 out of 3}".
+\item or "\textbf{free play} recording from \textbf{user 52} number \textbf{1 out of 1}
+\end{itemize}
+
+The MARS system requires training data in order to be able to evaluate anything, the specific selection of this training data is very important.
+For this evaluation, the MARS system has been trained and tested in a few distinct ways.\\
+% MARS pre-trained
+\textbf{First}, we used the MARS system with the trained model provided by \citeauthor{an2021mars} in the paper of MARS\cite{an2021mars}. 
+This model was then evaluated on the \textit{usage data} of \textbf{all recordings}.
+This evaluation will be referred to as "\textit{MARS pre-trained}".\\
+% MARS calibration trained
+\textbf{Second}, the MARS model is trained (in accordance with the specifications on their GitHub page \cite{mars_github}) with the \textit{calibration data} from \textbf{all recordings}.
+80\% of this data will be used as a \textit{training set} and 20\% of this data will be used as a \textit{validation set}.
+This model was then evaluated (tested) on the \textit{usage data} of \textbf{all recordings}.
+This evaluation will be referred to as "\textit{MARS calibration data trained}".\\
+% MARS full trained
+\textbf{Third}, the MARS model is trained (in accordance with the specifications on their GitHub page \cite{mars_github}) with \textit{all the data} (calibration and usage) of 70\% of the recordings (randomly selected) will be used as a \textit{training set}, 10\% of the recordings (randomly selected) will be used as a \textit{validation set} and the last 20\% of the recordings will be used as a \textit{test set}.
+For the evaluation (testing), only the \textit{usage data} of the recordings will be used, such that the results can be cleanly compared with IAmMuse.
+This evaluation will be referred to as "\textit{MARS large self trained}".\\
+% MARS other user trained
+\textbf{Fourth}, the MARS model is trained (in accordance with the specifications on their GitHub page \cite{mars_github}) on the data of \textbf{all but one user}, with an 80/20 train validation split.
+The model will then be evaluated on the data of the user who did \textbf{not appear} in the \textit{training data}, this will be done separately for \textbf{each user}.
+This evaluation will be referred to as "\textit{MARS user by user}".\\
+% MARS std free
+\textbf{Fifth}, the MARS model is trained (in accordance with the specifications on their GitHub page \cite{mars_github}) on the data of \textbf{all standard movement set} recordings, with an 80/20 train validation split.
+The model will then be evaluated using the \textit{usage data} portion of the \textbf{free play} recordings.
+This evaluation will be referred to as "\textit{MARS standard to free}".\\
+% MARS all_users_representative
+\textbf{Sixth}, the MARS model is trained (in accordance with the specifications on their GitHub page \cite{mars_github}) on the data of all the \textbf{first two standard recordings} of each user.
+The model will then be evaluated using the \textit{usage data} portion of the \textbf{third standard recording} of each user.
+This evaluation will be referred to as "\textit{MARS partial standard trained}".\\
+
+\subsection*{in short}
+\subsubsection*{Formal data specification}
+Each recording contains a number of frames (\textasciitilde100) at the
+start which my system uses for initialization, these frames are called
+the \textbf{calibration data}. The rest of the data (which is all
+\textbf{later} then the \emph{calibration data}) is called the
+\textbf{usage data}.
+
+Each \textbf{user} has \emph{multiple recordings}, they always have 3
+\textbf{standard recordings} (where they performed a standardized set of
+moves). Each \textbf{user} has \emph{between one and four} \textbf{free
+recordings} (where they where free to move however they wanted).
+
+My system has been \textbf{calibrated} on the \emph{calibration data} of
+the specific recording in question, and has \textbf{evaluated} the
+\emph{usage data} of the specific recording in question.
+
+\subsubsection*{Formal MARS train/test/validate split}
+
+The \textbf{MARS} system has to be trained on data in order to work, I
+want to evaluate MARS with \textbf{four different trainings}. 
+\begin{enumerate}
+\item ``MARS pre-trained'': We use the model provided by An and Orgas in their paper on MARS to evaluate the \emph{usage data} from \textbf{all recordings}.
+\item ``MARS calibration-trained'': We will train MARS ourselved with the \emph{calibration data} of \textbf{all recordings} (using an 80/20 train/test split).
+This trained model will then be evaluated on the \emph{usage data} of \textbf{all recordings} .
+\item ``MARS standard to free'': We will train MARS on \emph{all data} from the \textbf{standard recordings} (using an 80/20 train/test split). 
+This trained model will then be evaluated on the \emph{usage data} of \textbf{all free recordings}. 
+\item ``MARS partial standard trained'': We will train MARS on \emph{the first and second} \textbf{standard recording} of \textbf{each user} (using an 80/20 train/test split). 
+This trained model will then be evaluated on the \emph{usage data} of \textbf{the third standard recording} of \textbf{each user}.
+\end{enumerate}
+

@@ -1,0 +1,50 @@
+\section{Different Approaches}
+\label{section: methodology - different approaches}
+
+This section will discuss the various approaches I've looked at, how they worked (brief) and why they failed.
+Here I also want to discuss the specific issues which certain approaches had, while general issues should be discussed in \cref{section: methodology - issues}.
+
+\subsection{Control System Based}
+\label{sub-section: methodology - different approaches - control system based}
+The main idea was that control systems can help get a clear signal out of noisy data. 
+One of the main issues we had in the system was that there was a lot of noise in the pointcloud, thus any (simple) estimation of where the arm was would be prone to noise.
+We thus attempted to use a kalman filter and a PID controller to stabalize noisy angle predictions.
+The theory was that this would give stability, while still allowing us to quickly adjust, if tuned right.
+In practice we either had to slow of a response, the response overshot, or the system was to noisy.
+
+\subsection{Firmware Tracking Based}
+\label{sub-section: methodology - different approaches - firmware tracking based}
+The FMCW has multiple different firmware sets, for different applications, one such firmware was aimed at tracking different targets in a frame.
+This approach tried to use the tracking algorithms already present in the firmware to track small (~10 cm) objects, in order to track arms (consisting of a number of parts ~10 cm).
+Though it was possible to visually make out the rough position of the arms, this greatly increased the sparseness of the data, and the added information was not enough to build a robust system on.
+
+\subsection{Torso Tracking}
+\label{sub-section: methodology - different approaches - torso tracking}
+I want to discuss the ideas behind this method (removing the torso leaves the arms, which are the part we care about).
+I also want to discuss the downsides (overly enthousiastic, noise), and why its not a good enough system on its own.
+I also want to mention the potential to increase data quality with this or similar methods, for both stochastic, as well as DL methods (I should also mention that I do something similar with the weight changing in MEB).
+
+\subsection{Arm Location Initialization}
+\label{sub-section: methodology - different approaches - arm location initialization}
+I want to talk about the full implementation details of the \textit{arm location initializer}, its strengths and its weaknesses.
+I want to discuss why I think this is not a valid or future proof method.
+
+
+\subsection{Minimal Enclosing Ball Based}
+\label{sub-section: methodology - different approaches - minimal enclosing ball based}
+In this system we generate a Minimal Enclosing Ball {MEB} around the user, which is centered on their sternum, and encloses the full reach of their arms, according to the method discussed in \cref{sub-section: methodology - pre config - minimal enclosing ball based}.
+This MEB gives a good approximation of the users center point (located roughly at the sternum, as well as the span/reach of their arm.
+Using this information we calculate the angle between the down vector and the vector from the centroid to the point, for each point in our point cloud, simultaneously we give a weight to each point, depending on how close to the edge of the MEB it is.
+
+The data has now been transformed to a set of angles and weights, representing the angle of an arm if its located at a point, and the importance of said point.
+The different positions (low, middle, high - for left and right) have now been defined as angle ranges (from 30\deg to 70\deg for example).
+We then calculate the total point weight present in each angle range, and based on that decide which zone must currently be active.
+
+A few stabalization rules are also applied, namely: 
+The active zone gets its region increased slightly on both ends, this prevents the system from switching rapidly between two neighboring zones;
+There is a minimal threshold value of weight needed to be considered in zone calculation.
+A zone is selected if it had the highest weight twice in a row.
+If no zone has an eligable number of points in a specific frame, that frame is not considered for the consecutive highest weight calculation.
+e.g. if on \textit{frame n} zone middle has the highest weight, in \textit{frame n + 1} no zone crossed the threshold value, and in \textit{frame n + 2} zone middle has the highest weight, it will be selected.
+
+I should also discuss the advantages of this system, in the way that this MEB can be recalculated, or adjusted (moved) during the running of the program, potentially opening the door to removing some of the bounds on the current setup (such as allowing users to calmly walk around while using the instrument).
