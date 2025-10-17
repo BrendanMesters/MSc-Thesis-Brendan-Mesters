@@ -1,5 +1,5 @@
 \section{Data filtering}
-\label{section: methodology - data filtering}
+\label{section: tracking method - data filtering}
 
 One issue present with the MMWave Sensors (in our experience) is the fact that they are susceptible to both environmental noise as well as seemingly random noise. 
 This noise often occurred in "streaks", lines of points through your 3d space. 
@@ -9,12 +9,12 @@ Due to these attributes, a combination of a temporal as well as a spatial filter
 For this section, it's useful to know that the MMWave produces roughly 10 frames per second, thus each frame is roughly 100 ms.
 
 \subsection{Spatial Filtering}
-\label{sub-section: methodology - data filtering - density filtering}
+\label{sub-section: tracking method - data filtering - density filtering}
 
 A very common strategy for filtering spatial data is to look at the density and internal cohesion between points.
-The main idea on which this is based is the assumption that points with \textit{many close neighbours} are likely to \textit{represent reality well}, a "strength in numbers" kind of philosophy.
+The main idea on which this is based is the assumption that points with \textit{many close neighbors} are likely to \textit{represent reality well}, a "strength in numbers" kind of philosophy.
 In our system, the \textit{spatial filter} looks on a \textit{frame by frame basis} at the clustering of the points.
-Each point then gets assigned a value based on the cumulative weight of its neighbours (distance < 25 cm). 
+Each point then gets assigned a value based on the cumulative weight of its neighbors (distance < 25 cm). 
 Based on this value, points can be labelled as "noise" or "signal".
 
 The main function of spatial filtering is to remove outliers, to always let large clusters pass, and to give an indication of how important any sparse clusters are.
@@ -27,7 +27,7 @@ That is why the system also uses \textit{temporal filtering}.
 
 
 \subsection{Temporal Filtering}
-\label{sub-section: methodology - data filtering - temporal filtering}
+\label{sub-section: tracking method - data filtering - temporal filtering}
 The main function of the \textit{temporal filter} in this system is to provide stability across frames and to detect and remove noise spikes.
 The temporal filter achieves this in a very similar way to the spatial filter, but instead of considering other points in the same frame, it only considers points in previous frames.
 More specifically, the temporal filter takes into consideration the three frames (0.3-0.4 seconds) which came before, it then gives each point a score equal to the cumulative weight of spatially nearby points (within 20 cm) within these prior frames.
@@ -52,7 +52,7 @@ That is why the actual system uses a combination of both a \textit{spatial} and 
 
 
 \subsection{Combined Filtering and Tuning}
-\label{sub-section: methodology - data filtering - combined filtering and tuning}
+\label{sub-section: tracking method - data filtering - combined filtering and tuning}
 
 The system uses a combination of the \textit{spatial} and the \textit{temporal} filters, where it combines their respective scores, to make use of the strengths of both, while mitigating the weaknesses of both.
 The combined filter has six variables which it can tune: the number of frames considered in the temporal system; for both the \textit{spatial} \textbf{and} the \textit{temporal}, the neighbourhood size considered, and the threshold cumulative weight to distinguish between noise an signal; and lastly the amount we take into account the spatial result or the temporal result.

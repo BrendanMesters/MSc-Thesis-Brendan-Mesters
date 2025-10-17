@@ -1,0 +1,10 @@
+\section{Millimeter Wave Radar}
+\label{section: background - millimeter wave radar}
+Give an explanation of what MMWave radars are, to what extent we can configure them, and what we get out of them (3d pointclouds, at ~10Hz, with between 30-100 points per frame).
+Mention the inherent privacy-preserving nature of MMWave due to its not capturing images, and how it fares better in varied light conditions (overexposure/underexposure).
+Also, briefly explain how they work internally, using \textit{beam forming antennas} on the receiving and, as well as the large amount of FFT's over the raw signal, to get to pointclouds.
+
+I should mention that the data from MMWave radars is not always temporally stable.
+Aka, one frame I might see my left arm, but the next I might see my right.
+This is important for section \cref{sub-section: methodology - data filtering - temporal filtering}.
+

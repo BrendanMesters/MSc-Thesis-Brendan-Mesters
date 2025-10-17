@@ -51,13 +51,21 @@
 
 % Chose font style
 \usepackage[scaled=.92]{helvet}
+\usepackage[T1]{fontenc} % to allow symbols like < and >
 
 % for url's use "\url{http://www.google.com/}"
 \usepackage{url}
 \usepackage[plainpages=false]{hyperref} 
 
 % [[ BRENDAN PACKAGE ]]
+\usepackage{wrapfig} % Allows for figures inside of text
+% \usepackage{caption}
+% \usepackage{subcaption}
+
 \usepackage{cleveref} % Automatically references well.
+
+\crefname{chapter}{appendix}{appendices}
+\Crefname{chapter}{Appendix}{Appendices}
 
 % Information that will be filled in at various points in the report
 \newcommand{\reportTitle}{WRITE YOUR THESIS TITLE HERE}
@@ -191,6 +199,11 @@ PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft Universit
 
 % Create appendix
 \appendix
-\input{appendixes/appendix_a}
+
+\input{appendix/standardized movement set}
+\input{appendix/system explanation}
+\input{appendix/experiment notes}
+\input{appendix/recording frame distribution}
+\input{appendix/failed methods}
 
 \end{document}

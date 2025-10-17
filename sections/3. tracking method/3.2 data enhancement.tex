@@ -1,6 +1,6 @@
 
 \section{Data Enhancement}
-\label{section: methodology - data enhancement}
+\label{section: tracking method - data enhancement}
 
 
 The data that comes from the MMWave sensor is quite sparse, thus, it's important to get as much information out of this data as we can, this will be called \textit{data enhancement}.
@@ -9,10 +9,10 @@ This can be done in two major ways: firstly, the physical setup can be changed t
 The first option of a change to the physical setup can be quite effective, this should be avoided for the final product as it limits the flexibility of the system.
 Physical setup changes can, however, help greatly during the design of a system, before there are any software systems in place.
 % One way in which this can be done is by changing the physical setup for the point gathering, though we would like to avoid this for the final product, as this could greatly limit the flexibility of the system.
-Software based data enhancement is thus preferred for the final system, these work by adding additional information to the data already present, in this way you could also call the previously discussed \textit{data filtering} \ref{section: methodology - data filtering} "\textit{data enhancement}", but since this is subtractive (removing faulty data) as opposed to additive (adding additional useful data), it seemed best to consider these two as separate systems.
+Software based data enhancement is thus preferred for the final system, these work by adding additional information to the data already present, in this way you could also call the previously discussed \textit{data filtering} \ref{section: tracking method - data filtering} "\textit{data enhancement}", but since this is subtractive (removing faulty data) as opposed to additive (adding additional useful data), it seemed best to consider these two as separate systems.
 
 \subsection{Physical Enhancement}
-\label{sub-section: methodology - data enhancement - physical enhancement}
+\label{sub-section: tracking method - data enhancement - physical enhancement}
 
 \begin{wrapfigure}{r}{0.32\textwidth}
     \caption{A reflective wearable}
@@ -28,13 +28,13 @@ This caused the hands to produce more dense pointclouds, which is useful since t
 These reflective gloves ensured that the data used to create the later systems was of good quality while they were being designed.
 
 With the later parts of the pipeline in a decent state, it was possible to create software-based data enhancement methods and to "take off the gloves", as they say.
-A significant part of this thesis was spent on creating and testing various systems of data enhancement, most of which did not produce adequate results, but which are still discussed in \cref{section: methodology - different approaches}. 
-Furthermore, many of these systems rely, one way or another, on a "\textit{pre-configuration step}", where the user is asked to perform certain actions at startup for the system to initialize, which is discussed in \cref{section: methodology - pre configuration}.
+A significant part of this thesis was spent on creating and testing various systems of data enhancement, most of which did not produce adequate results, but which are still discussed in \cref{section: tracking method - different approaches}. 
+Furthermore, many of these systems rely, one way or another, on a "\textit{pre-configuration step}", where the user is asked to perform certain actions at startup for the system to initialize, which is discussed in \cref{section: tracking method - pre configuration}.
 Most of these data enhancement systems tried to "find" which points belonged to the hands, arms, and torso.
 This labeling would allow for weighing points of the hands more heavily, while weighing points of the arms less heavily and ignoring points of the torso, in effect, producing the same outcome as the gloves gave with their higher point density near the hands.
 
 \subsection{Initialization, Minimal Enclosing Ball}
-\label{sub-section: methodology - data enhancement - minimal enclosing ball}
+\label{sub-section: tracking method - data enhancement - minimal enclosing ball}
 
 As mentioned at the start of this section, the eventual goal is to create a software-based data enhancement system, the final system we arrived at will be discussed here.
 The eventual goal of this initialization would be to find out what points belong to what parts of the body.
@@ -61,6 +61,34 @@ A more dynamic version of the MEB initialization system was explored, where the 
 This approach did not work well as it caused the MEB to drift at times. 
 As an example, if a user wanted to hold their hands up high a lot, then after enough time, the pointcloud used to generate the MEB would not be representative of the whole movement of the user anymore.
 Similar systems, which allow the user to move slightly during execution, are certainly feasible, but were deemed outside of the scope of this research and are thus left for future research.
+
+
+\subsection{Programmatic enhancement: point weight}
+\label{sub-section: tracking method - data enhancement - programmatic enhancement}
+
+Now that the system is initialized and has a ball that encompasses the full area of motion of the user's arms and is centered on the user's sternum, the actual data enhancement can be done.
+Just as with the physical enhancement, discussed in \cref{sub-section: tracking method - data enhancement - physical enhancement}, we want to increase the "\textit{prevalence}" of the hands in the final point cloud.
+The reflective gloves achieved this by increasing the reflectivity of the user's hands, and thus increasing the number of points produced at their location, by the mmWave sensor.
+IAmMuse's enhancement system, on the other hand, tries to add an extra dimention of information to each point, namely a \textit{weight}.
+This weight tells the interpretation system how well each point represents the potential position of the user's arm.
+
+The metric used to determine how "representative" a specific point is is to look at how near to your hand the point is.
+Since the absolute distance between two points, belonging to a frame where the user's arm was in a different zone (e.g. one frame with left low, and one frame with left mid) is the largest for the points produced by the hand, thus those are "most representative" of where the arm is currently located.
+The points belonging to the arm itself come after this, where the points at the wrist and lower arm are more representative then those at the elbow and upper arm.
+As you might remember, ball generated by our initialization closely encompasses the full area of motion of the users arms, thus, the user's hands should always trace the edge of this ball if they hold their arms outstretched.
+
+This knowledge allows us to restate what the weight of a specific point is based on, from "how well does it represent the position of the arm" to "how close to the users hand it this point", and finally into "how close to the edge of the initialization ball is this point".
+Where the previous ways to define weight where very difficult to calculate, as they relied on "real world knowledge" of the users position, this new definition does not require any such knowledge, only using the estimation of the user's position and reach, as specified and calculated in \cref{sub-section: tracking method - data enhancement - minimal enclosing ball}.
+
+The distance between a point and the edge of the ball can be easily calculated as the distance between the center of the ball and the point in question, and the radius of the ball.
+The system should take into account the points at the edge itself, but should also take into account nearby points, just less so.
+The system which was chosen to transform this distance into a specific weight was the \textit{Gaussian Fucntion} because of its relative simplicity.
+It can be used to devalue points which are further away from the edge, and allows that devaluing to be easily tuned by modifying one variable (the variance).
+In practice the distance between a point and the edge of the MEB is never truely considered, rather the gausian has an expected value equal to the radius of the circle, a variance of 0.5m ($\sigma^2 = 0.25$), and the input value is the distance between the given point and the center of the MEB.
+This gives each point a weight on the range $(0, 1]$, where a higher score means that the point will be considered more strongly in the interpretation.
+
+
+
 
 
 % The data enhancement system, which ended up being used, was one where a \textit{Minimal Enclosing Ball with Outliers} (MEB) was used to get an idea of "where" the user was.
