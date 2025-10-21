@@ -3,3 +3,18 @@
 Depending on the results, I either want to encourage more research into stochastic MMWave interpretation, both in breath and scope. aka, people should try and make stochastic systems for more complex problems/different problems. And people should look further at optimizations in the current system, in firmware used, system tuning, and potential broadening.
 An interesting problem would be to see if you can increase the amount of zones, and reduce them in size, in such a way that you have ~20 zones per side, and to then try and modify the system to still predict zones correctly.
 This could be achieved with a kind of "decaying charge" (each step the zone loses a percentage of its value) and a kernel/distance based "charge addition" (each point gives value to multiple zones, depending on how "near to it" they are).
+
+
+\subsection{More Continuous Result Angles}
+One shortcoming of the current system is that it only considers some broad angle-zones.
+This isn't a weakness in and of itself, but it limits the usefulness of the system.
+One way to potentially mitigate this issue is to change the data interpretation method described in \cref{section: tracking method - data interpretation} to allow for a broader range of output values.
+One manner in which that could be done is to consider 360 "zones" of $1\degree$ each. 
+Due to the relatively low point density, this system would need to solve the issue that it's very unlikely for multiple points to end up in the same zone (which would make the system prone to random data distribution artifacts), and the fact that the current stabilization methods would not work anymore.
+One way to solve the first issue would to to have each point add its "weight" to many zones "near" it, for example, by using a Gaussian kernel to distribute its weight across nearby zones.
+This would produce a likelihood-density distribution along the angle axis.
+The peaks would be representative of where the arms might be, some clever new stabilization methods would be needed for this system, to ensure that "one sided frames" (frames whose data is predominantly on one side) don't mess things up, as well as to stabilize the output in general.
+
+One potential idea is to add the new weights to a running sum (for each zone) and normalize the output on a specific "Total weight", e.g., at the end of the normalization the sum total of all zone weights should always be 30.
+
+However, the further design and testing of these systems will be left to any future researchers.

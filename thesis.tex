@@ -44,7 +44,7 @@
 
 \usepackage{epstopdf}
 \usepackage{rotating}
-\usepackage{subfigure}
+% \usepackage{subfigure} old package, subcaption is better
 
 % Make captions distinguishable
 \usepackage[textfont=bf]{caption}
@@ -59,13 +59,19 @@
 
 % [[ BRENDAN PACKAGE ]]
 \usepackage{wrapfig} % Allows for figures inside of text
-% \usepackage{caption}
-% \usepackage{subcaption}
+\usepackage{subcaption} % Subfigures and such
+\usepackage[export]{adjustbox}
+
+% [[ natbib with `plain` looks]]
+% The paper wants me to use the "plain" bibliography style, but I'd really like the features form 
+% the `natbib` package, this setup should do exactly that
+\usepackage[numbers,sort&compress]{natbib} % Load natbib in numeric mode (same as plain)
+\setcitestyle{square,comma,numbers,sort&compress} % enforce exact same bracket/comma style as plain.bst
+
+\usepackage{textcomp, gensymb} % Mathematical symbols, such as the degree ( ° ) symbol
 
 \usepackage{cleveref} % Automatically references well.
-
-\crefname{chapter}{appendix}{appendices}
-\Crefname{chapter}{Appendix}{Appendices}
+% Define a new command for appendix chapters
 
 % Information that will be filled in at various points in the report
 \newcommand{\reportTitle}{WRITE YOUR THESIS TITLE HERE}
@@ -120,6 +126,7 @@ PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft Universit
 
 \begin{document}
 
+
 \pagenumbering{alph}
 \pagestyle{empty}
 
@@ -141,6 +148,7 @@ PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft Universit
 \pagestyle{plain}
 \pagenumbering{roman}
 \setcounter{page}{1}
+
 
 % Create title page: page i (hidden)
 \input{template/titlepage}
@@ -194,11 +202,15 @@ PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft Universit
 \input{chapters/futurework}
 
 % Create bibliography
-\bibliographystyle{plain} % Please do not change the style of bibliography (yes, it should be `plain`)
+% Natbib has been configured to be visually the same as `plain`, when using `plainnat`.
+\bibliographystyle{plainnat} % use plainnat, with visuals exactly the same as plain
+% \bibliographystyle{plain} % Please do not change the style of bibliography (yes, it should be `plain`)
 \bibliography{bib/MyMScTUDESThesisBibFile} % remove "../" before "bib" if you compile directly in Overleaf or in your favourite local LaTeX distribution
 
 % Create appendix
 \appendix
+% \crefname{chapter}{appendix}{appendices}
+% \Crefname{chapter}{Appendix}{Appendices}
 
 \input{appendix/standardized movement set}
 \input{appendix/system explanation}
@@ -207,3 +219,9 @@ PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft Universit
 \input{appendix/failed methods}
 
 \end{document}
+
+
+% [[ TODO ]]
+% List of things still needing figuring out.
+%
+% - Appendix references: currently `cref` references appendixes as 'chapters', which is an issue.

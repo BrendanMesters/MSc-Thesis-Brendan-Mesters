@@ -1,10 +1,17 @@
 \section{Data filtering}
 \label{section: tracking method - data filtering}
 
-One issue present with the MMWave Sensors (in our experience) is the fact that they are susceptible to both environmental noise as well as seemingly random noise. 
+One issue present with the mmWave Sensors (in our experience) is the fact that they are susceptible to both environmental noise as well as seemingly random noise. 
 This noise often occurred in "streaks", lines of points through your 3d space. 
-These "streaks" were not very dense spatially and usually only existed for a single frame.
+These "streaks" were not very dense spatially and usually only existed for a single frame, they often formed in the general shape of a line, though never exactly so, see \cref{figure: noise steak}.
 Due to these attributes, a combination of a temporal as well as a spatial filter was used to filter out the noise points.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/internal data/noise streak.png}
+    \caption{A noise streak in the data (right-hand side of image)}
+    \label{figure: noise steak}
+\end{figure}
 
 For this section, it's useful to know that the MMWave produces roughly 10 frames per second, thus each frame is roughly 100 ms.
 

@@ -4,9 +4,9 @@
 
 
 The data that comes from the MMWave sensor is quite sparse, thus, it's important to get as much information out of this data as we can, this will be called \textit{data enhancement}.
-Data enhancement broadly covers any method which increases the "\textit{quality}" of the data that is being sent to the recognition systems.
+Data enhancement broadly covers any method that increases the "\textit{quality}" of the data that is being sent to the recognition systems.
 This can be done in two major ways: firstly, the physical setup can be changed to increase the quality of the data, secondly, software systems can be put in place to add extra context to the raw data.
-The first option of a change to the physical setup can be quite effective, this should be avoided for the final product as it limits the flexibility of the system.
+The first option of a change to the physical setup can be quite effective, however, this should be avoided for the final product as it limits the flexibility of the system.
 Physical setup changes can, however, help greatly during the design of a system, before there are any software systems in place.
 % One way in which this can be done is by changing the physical setup for the point gathering, though we would like to avoid this for the final product, as this could greatly limit the flexibility of the system.
 Software based data enhancement is thus preferred for the final system, these work by adding additional information to the data already present, in this way you could also call the previously discussed \textit{data filtering} \ref{section: tracking method - data filtering} "\textit{data enhancement}", but since this is subtractive (removing faulty data) as opposed to additive (adding additional useful data), it seemed best to consider these two as separate systems.
@@ -39,17 +39,17 @@ This labeling would allow for weighing points of the hands more heavily, while w
 As mentioned at the start of this section, the eventual goal is to create a software-based data enhancement system, the final system we arrived at will be discussed here.
 The eventual goal of this initialization would be to find out what points belong to what parts of the body.
 If we can distinguish between points belonging to the torso, arms, and hands, we could utilize this information in our interpretation system to more accurately predict the angles of the arms.
-The approach of the \textit{Minimal Enclosing Ball} (MEB) system is to first create a pointcloud which has points across the whole physical movement range of the user, in other words, it has points of the user's arms at all possible locations of their arms.
+The approach of the \textit{Minimal Enclosing Ball} (MEB) system is to first create a point cloud which has points across the whole physical movement range of the user, in other words, it has points of the user's arms at all possible locations of their arms.
 During the usage of the system, this pointcloud is obtained by asking to user to move their hands up and down.
 IAmMuse then stacks the frames until it has at least 3000 points, at which point it informs the user that initialization is over.
-This pointcloud should contain noise points and points belonging to the user.
+This point cloud should contain noise points and points belonging to the user.
 The user's points should roughly evaluate to a thin cylinder, where the center of the cylinder would be at the user's sternum, and the radius to the edge would be slightly larger than the user's arm span.
-% The actual data in this pointcloud (points belonging to the user, not to noise) should roughly evaluate to be a disk, with the user's sternum as a centroid and their arm span as a radius.
+% The actual data in this point cloud (points belonging to the user, not to noise) should roughly evaluate to be a disk, with the user's sternum as a centroid and their arm span as a radius.
 We try to fit a ball around this data, and not a cylinder, because it's an easier and more explored problem, and it should be "good enough" in our case, given that the center and radius of such a ball should be very similar to the center and radius of an enclosing cylinder.
 % In this method, we try to fit the smallest ball around the data, which encompasses all of the points belonging to the user while ignoring any noise points.
 
 
-For this, we used a process described by \citeauthor{ding2020sublineartimeframeworkgeometric} in \textit{algorithm 1} in their paper \cite{ding2020sublineartimeframeworkgeometric}.
+For this, we used a process described by \citeauthor{ding2020sublinear}, in \textit{algorithm 1} in their paper \cite{ding2020sublinear}.
 This algorithm gives a stochastic estimation, with some lower and upper bounds on the accuracy.
 This means that, at times, we might get a bad result, for this reason, IAmMuse calculates this estimation 100 times and uses the average of these results.
 For the algorithm, we take $\delta$ (tightness bound) to be 0.08, we take $\gamma$ (noise percentage) to be 0.15, allowing 15\% of the points to be outside of the ball, and lastly we take $z$ (number of iterations used to look for an optimal solution) to be 50.
@@ -59,33 +59,39 @@ These variables should be re-examined if the system is deployed in a new environ
 A current limitation of this system is that a user can only \textit{initialize} the system once, and this initialization dictates where the user has to stand, since the system expects their sternum to be roughly at the center of the MEB.
 A more dynamic version of the MEB initialization system was explored, where the MEB would be recalculated each frame with the most recent 3000 points.
 This approach did not work well as it caused the MEB to drift at times. 
-As an example, if a user wanted to hold their hands up high a lot, then after enough time, the pointcloud used to generate the MEB would not be representative of the whole movement of the user anymore.
+As an example, if a user wanted to hold their hands up high a lot, then after enough time, the point cloud used to generate the MEB would not be representative of the whole movement of the user anymore.
 Similar systems, which allow the user to move slightly during execution, are certainly feasible, but were deemed outside of the scope of this research and are thus left for future research.
 
 
 \subsection{Programmatic enhancement: point weight}
 \label{sub-section: tracking method - data enhancement - programmatic enhancement}
 
+% What we have (MEB); What we want ("hands" with higher weight)
 Now that the system is initialized and has a ball that encompasses the full area of motion of the user's arms and is centered on the user's sternum, the actual data enhancement can be done.
 Just as with the physical enhancement, discussed in \cref{sub-section: tracking method - data enhancement - physical enhancement}, we want to increase the "\textit{prevalence}" of the hands in the final point cloud.
 The reflective gloves achieved this by increasing the reflectivity of the user's hands, and thus increasing the number of points produced at their location, by the mmWave sensor.
-IAmMuse's enhancement system, on the other hand, tries to add an extra dimention of information to each point, namely a \textit{weight}.
+IAmMuse's enhancement system, on the other hand, tries to add an extra dimension of information to each point, namely a \textit{weight}.
 This weight tells the interpretation system how well each point represents the potential position of the user's arm.
 
+% Why we look at hands; How we "define"/find our hands
 The metric used to determine how "representative" a specific point is is to look at how near to your hand the point is.
-Since the absolute distance between two points, belonging to a frame where the user's arm was in a different zone (e.g. one frame with left low, and one frame with left mid) is the largest for the points produced by the hand, thus those are "most representative" of where the arm is currently located.
-The points belonging to the arm itself come after this, where the points at the wrist and lower arm are more representative then those at the elbow and upper arm.
-As you might remember, ball generated by our initialization closely encompasses the full area of motion of the users arms, thus, the user's hands should always trace the edge of this ball if they hold their arms outstretched.
+Since the absolute distance between two points, belonging to a frame where the user's arm was in a different zone (e.g. one frame with left low, and one frame with left mid), is the largest for the points produced by the hand, thus those are "most representative" of where the arm is currently located.
+The points belonging to the arm itself come after this, where the points at the wrist and lower arm are more representative than those at the elbow and upper arm.
+As you might remember, the ball generated by our initialization closely encompasses the full area of motion of the user's arms, thus, the user's hands should always trace the edge of this ball if they hold their arms outstretched.
 
+% Restate question in terms of distance to MEB edge
 This knowledge allows us to restate what the weight of a specific point is based on, from "how well does it represent the position of the arm" to "how close to the users hand it this point", and finally into "how close to the edge of the initialization ball is this point".
 Where the previous ways to define weight where very difficult to calculate, as they relied on "real world knowledge" of the users position, this new definition does not require any such knowledge, only using the estimation of the user's position and reach, as specified and calculated in \cref{sub-section: tracking method - data enhancement - minimal enclosing ball}.
 
+% Gaussian kernel to calculate weight from distance
 The distance between a point and the edge of the ball can be easily calculated as the distance between the center of the ball and the point in question, and the radius of the ball.
 The system should take into account the points at the edge itself, but should also take into account nearby points, just less so.
-The system which was chosen to transform this distance into a specific weight was the \textit{Gaussian Fucntion} because of its relative simplicity.
+The system which was chosen to transform this distance into a specific weight was the \textit{Gaussian Function} because of its relative simplicity.
 It can be used to devalue points which are further away from the edge, and allows that devaluing to be easily tuned by modifying one variable (the variance).
-In practice the distance between a point and the edge of the MEB is never truely considered, rather the gausian has an expected value equal to the radius of the circle, a variance of 0.5m ($\sigma^2 = 0.25$), and the input value is the distance between the given point and the center of the MEB.
+In practice, the distance between a point and the edge of the MEB is never truly considered, rather, the Gaussian has an expected value equal to the radius of the circle, a variance of 0.5m ($\sigma^2 = 0.25$), and the input value is the distance between the given point and the center of the MEB.
 This gives each point a weight on the range $(0, 1]$, where a higher score means that the point will be considered more strongly in the interpretation.
+
+
 
 
 
@@ -100,12 +106,12 @@ This gives each point a weight on the range $(0, 1]$, where a higher score means
 % With this approximate knowledge of the users' \textit{position} (the center of the ball) and their \textit{arm span} (the radius of the ball), it becomes possible to assign a weight to the different points, based on how likely they are to belong to a hand.
 % Conceptually, for any point, if its distance to the center of the MEB is similar to the radius of the MEB, then that point is very likely to have been emitted by a hand.
 % If a point's distance the the center of the MEB is very different from the radius of the MEB, then the point will either be noise (if it's larger) or your arm/torso (if it's smaller).
-% To apply this weight change, a gausian kernel was used, with $\sigma = 0.5$ and $x' = r$, r being the radius of the MEB.
+% To apply this weight change, a Gaussian kernel was used, with $\sigma = 0.5$ and $x' = r$, r being the radius of the MEB.
 
 
 
 
-% At points during the creation of the thesis systems where used to enhance the quality of the data we received.
+% At points during the creation of the thesis, systems were used to enhance the quality of the data we received.
 % The most important one of these was a reflective wearable you put on your hand, see \cref{fig: wearable}. 
 % This wearable increased the density of points near the hand, this is particularly useful as the hand moves the most distance when you wave around your arm.
 % Due to this its easier to detect the arm position from hand points then from other arm points, as the effect of noise is reduced.
@@ -113,7 +119,7 @@ This gives each point a weight on the range $(0, 1]$, where a higher score means
 % One of the goals of this thesis, however, was to make a system which would work without the assistance of video cameras or wearables, thus an alternative to this glove was made.
 % One way to look at the effect of the wearable was that it moved the weighted average location of each arm towards the hand, as the hand produced more points.
 % Another way to achieve this is by giving a higher weight to points further away from the body. 
-% We could give every point a weight value of between 0.5 and 2 where the weight was linearly dependant on your distance from the centrum of the body. 
+% We could give every point a weight value of between 0.5 and 2, where the weight was linearly dependent on your distance from the center of the body. 
 % The centrum of the body would then give you a weight of 0.5, any point 1 meter away from the body (or more) would gain a weight of 2, any points in between would get a weight proportional to their distance.
 
 % This method emulates the desired result which the wearable provided without spawning any new points, as this could bring potential issues in and of itself. 
