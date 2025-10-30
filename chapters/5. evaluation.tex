@@ -1,28 +1,16 @@
 \chapter{Evaluation}
 \label{chapter: evaluation}
 
-\section{Baseline Analysis}
-\label{section: evaluation - baseline analysis}
-
-Show the results of mars trained on the calib data of ONLY that specific recording
-
-\section{Larger Models}
-\label{section: evaluation - larger models}
-
-Describe the new MARS trained models we'll be evaluating, (\texttt{mars\_paper} and mars trained on \textbf{all} calib data)
-
-Show their results, and explain why they perform badly (overfitting, non-representative data).
+brief introduction to \textbf{evaluation}, give a small overview "testing against different models, to see the strengths and weaknesses of IAmMuse"
 
 
-\section{IAmMuse vs Best MARS}
-\label{section: evaluation - iammuse vs best mars}
 
-Describe how we'll train the best MARS model we could make.
+\input{sections/5. evaluation/5.1. baseline evaluation}
 
-Show the acuracy results, discuss how it is better then the previous mars' but still worse then IAmMuse
+\input{sections/5. evaluation/5.2. larger models}
 
-Show the time-prediction diagram (showcasing the "stuttering" of mars)
+\input{sections/5. evaluation/5.3. iammuse vs best mars}
 
-Show that the lowpass MARS results still underperform.
+\input{sections/5. evaluation/5.4. representative data issue}
 
-Mention that, even when given all the tools we could, mars could not perform better then IAmMuse
+\input{sections/5. evaluation/5.5 key takeaways}

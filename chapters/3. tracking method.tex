@@ -8,18 +8,18 @@ More specifically, it should tell us in what general \textbf{zone} the arm is cu
 or "high", where the user's arm points up to the sky.
 These regions exist both for the left and for the right arm, and thus there are 6 different \textit{zones} which the system tries to predict.
 There are, of course, some physical bounds on this model. 
-A person can, for example, only have their arm in \textit{one zone}, that means the system will always output \textbf{one} \textit{left zone} (left low; left middle; left high) and \textbf{one} \textit{right zone}.
+A person can, for example, only have each arm in \textit{one zone}, that means the system will always output \textbf{one} \textit{left zone} (left low, left middle or left high) and \textbf{one} \textit{right zone}.
 
 To facilitate this "zone detection", a standalone pipeline was built to handle the whole process from communication with the FMCW and package decoding, through to the filtering, labeling, and interpretation of the data. 
-In this report, we will focus on the latter part of this pipeline, which implements some filtering and the paper's interpretation algorithm.
+In this report, we will focus on the latter part of this pipeline, which implements a noise filtering system and the paper's interpretation algorithm.
 The final system used by IAmMuse will be discussed in \cref{section: tracking method - data enhancement}
  and \cref{section: tracking method - data interpretation}.
 The final pipeline for IAmMuse only arrived after a lot of different approaches had been explored and proved unfruitful.
-These approaches are briefly discussed in \cref{app: failed methods}.
+These approaches are briefly discussed in Appendix \ref{app: failed methods}.
 
 % After that, \cref{section: tracking method - different approaches} will discuss some of the earlier attempts, as well as reasoning why those might have failed.
 
-The IAmMuse system, as well as most later approaches, uses a workflow where the final \textit{interpretation} system relies on an \textit{initialization} performed by the user.
+The IAmMuse system, as well as most of the failed approaches, uses a workflow where the final \textit{interpretation} system relies on an \textit{initialization} performed by the user.
 During the creation of IAmMuse, it was found that it was not feasible to interpret the MMWave data without any sort of context.
 Such an \textit{initialization} step may not be needed in the future, as the understanding of effective interpretation methods improves, these steps could feasibly be done in real time, during usage.
 However, creating such an understanding of effective methods to generate context from a pointcloud, does benefit greatly from a well-defined initialization step, for that reason, IAmMuse chose to use such an initialization step.

@@ -2,9 +2,9 @@
 \label{section: tracking method - data filtering}
 
 One issue present with the mmWave Sensors (in our experience) is the fact that they are susceptible to both environmental noise as well as seemingly random noise. 
-This noise often occurred in "streaks", lines of points through your 3d space. 
-These "streaks" were not very dense spatially and usually only existed for a single frame, they often formed in the general shape of a line, though never exactly so, see \cref{figure: noise streak}.
-Due to these attributes, a combination of a temporal as well as a spatial filter was used to filter out the noise points.
+This noise often occurred in "streaks", lines of points through 3d space. 
+These "streaks" were not very dense spatially and usually only existed for a single frame, see \cref{figure: noise streak}, they often formed in the general shape of a line, though the points never line up exactly.
+Due to these attributes, a combination of a temporal as well as a spatial filter was used to filter out these and other types of noise points.
 % I could've used a temporal DBSCAN algorithm
 
 \begin{figure}
@@ -14,12 +14,12 @@ Due to these attributes, a combination of a temporal as well as a spatial filter
     \label{figure: noise streak}
 \end{figure}
 
-Many sophisticated systems for pointcloud filtering exist \cite{ester1996dbscan, faisal2017density}, however, most of these systems are built for Lidar, which has a significantly higher number of points. 
+Many sophisticated systems for pointcloud filtering exist \cite{ester1996dbscan, faisal2017density}, however, most of these systems are built for Lidar, which has a significantly higher number of points per frame. 
 Even papers describing methods for "sparse pointclouds" reason about thousands of points at a time, as opposed to the dozens of points encountered in mmWave data.
 This makes mmWave pointcloud denoising a truly separate problem, as is evident by the dataset produced specifically for this problem \cite{farella2019sparse} by \citeauthor{farella2019sparse}.
-For these reasons, IAmMuse implements its own noise filters, built upon knn.
+For these reasons, IAmMuse implements its own noise filters, built upon a basis of KNN.
 
-For this section, it's useful to know that the MMWave produces roughly 10 frames per second, thus each frame is roughly 100 ms.
+For this section, it's useful to know that the mmWave radar produces roughly 10 frames per second, thus, frames are seperated by roughly 100ms
 
 \subsection{Spatial Filtering}
 \label{sub-section: tracking method - data filtering - density filtering}
@@ -31,7 +31,7 @@ Each point gets assigned a \textit{density score} based on the cumulative weight
 If their \textit{density score} exceeds a certain (configurable) threshold, then the point is labeled as "signal", otherwise it is labeled as "noise".
 
 The main task of spatial filtering in IAmMuse is to remove outliers, to always let dense clusters pass, and to give an indication of how important any sparse clusters are.
-By using the cumulative weight of the neighbors of a point, we also ensure that points that have already been shown to be more likely to be of use by different systems (such as the one described in \cref{sub-section: tracking method - data enhancement - minimal enclosing ball}) will be more likely to be labeled as "signal".
+By using the cumulative weight of the neighbors of a point, we also ensure that points that have already been shown to be more likely to be of use by different systems (such as the one described in \cref{sub-section: tracking method - data enhancement - point weight}) will be more likely to be labeled as "signal".
 One type of noise that the spatial filtering does not handle well, however, is dense but brief noise spikes.
 Since our spatial filtering method only takes into account the point density within a single frame, it's not able to discern between these noise spikes and the actual signal, and that is why the system also uses \textit{temporal filtering}.
 
@@ -42,15 +42,15 @@ Since our spatial filtering method only takes into account the point density wit
 \subsection{Temporal Filtering}
 \label{sub-section: tracking method - data filtering - temporal filtering}
 The main task of the \textit{temporal filter} in IAmMuse is to provide stability across frames and to detect and remove noise spikes.
-The temporal filter achieves this in a very similar way to the spatial filter, but instead of looking for neighbors (nearby points) in the same frame, it only considers neighbors in a configurable number of earlier frames.
-More specifically, IAmMuse's temporal filter takes into consideration the three frames (0.3-0.4 seconds) that came before, it then gives each point a score equal to the cumulative weight of its neighbors (points within 20 cm) within these prior frames.
+The temporal filter achieves this in a very similar way to the spatial filter, but instead of looking for neighbors (nearby points) in the same frame, it only considers neighbors in a number of earlier frames.
+More specifically, IAmMuse's temporal filter takes into consideration the three frames (0.3-0.4 seconds) that came before, it then gives each point a score equal to the cumulative weight of its neighbors (points within 20 cm) in these prior frames.
 This means that points in a dense cloud may all get a very low score if little or no data has been found in that area recently.
 In this way, the \textit{temporal filter} can filter out any inconsistent data, such as sudden but dense noise spikes.
 
 Removing inconsistent data is not the only thing that the temporal filter does.
-The temporal filter also gives a high score to, and thus selects, points in temporally stable areas more than the density filter would, because the temporal filter takes into account points of multiple frames.
+The temporal filter also gives a high score to, and thus disproportionately selects, points in temporally stable areas more than the density filter would, because the temporal filter takes into account points of multiple frames.
 This means that any data that is consistently present in an area across frames will be highly rated by the temporal filter, even though it takes into account a slightly smaller neighborhood (20 cm as opposed to the 25 cm of spatial filters).
-That being said, on their own, temporal filters can often miss large amounts of data, since the MMWave sensor does not always produce temporally consistent data, as discussed in \cref{section: background - millimeter wave radar}.
+That being said, on their own, temporal filters can often miss large amounts of data, since the MMWave sensor does not always produce temporally consistent data, as discussed in \cref{subsection: background - millimeter wave radar - pointclouds}.
 That is why IAmMuse uses a combination of both a \textit{spatial} and a \textit{temporal} filter.
 
 
@@ -68,10 +68,10 @@ That is why IAmMuse uses a combination of both a \textit{spatial} and a \textit{
 \label{sub-section: tracking method - data filtering - combined filtering and tuning}
 
 IAmMuse uses a combination of the \textit{spatial} and the \textit{temporal} filters, so that it can get the benefits of both while mitigating their weaknesses.
-It does this by calculating both the \textit{density score} and the \textit{temporal score} for each point, and combining these, in accordance with an distribution scale. 
-This \textit{combined score} is then compared to a threshold value, also composed of the two seperate threshold values combined through a distribution scale.
+It does this by calculating both the \textit{density score} and the \textit{temporal score} for each point, and combining these, in accordance to a weighted distribution (e.g. 60\% temporal, 40\% density). 
+This \textit{combined score} is then compared to a threshold value, also composed of the two separate threshold values combined with the same weighted distribution.
 % where it combines their respective scores, to make use of the strengths of both, while mitigating the weaknesses of both.
-Thus this combined filter has six variables which can be tuned: the number of frames considered in the temporal system; for both the \textit{spatial} \textbf{and} the \textit{temporal} filters, the neighborhood size considered, and the threshold value used to distinguish between noise an signal; and lastly the amount we take into account the spatial result or the temporal result, the \textit{distribution scale}.
+This combined filter has six variables which can be tuned: the number of frames considered in the temporal system; for both the \textit{spatial} \textbf{and} the \textit{temporal} filters, the neighborhood size considered, and the threshold value used to distinguish between noise an signal; and lastly the amount we take into account the spatial result or the temporal result, the \textit{weighted distribution}.
 Combining these two systems, however, does make it more difficult to tune, as there are more moving parts.
 Therefore, a specific tuning strategy is used for IAmMuse, to get the system to a reasonable state, afterwards, small tweaks are still made to fine tune the system.
 % Therefore, a specific tuning strategy was thought up beforehand to get the system to a reasonable state.
@@ -88,7 +88,7 @@ Our tuning strategy is thus to start by tuning the \textit{spatial filter} on it
 The \textit{temporal filter} should then be tuned, once again on its own, in such a way that it must not capture any noise, even if this means missing some points which are part of the signal.
 These two filters are then combined (starting with a 50-50 split of effectiveness), and fine-tuning will happen. 
 The goal of this fine tuning is to increase the prevalence of the spatial filter if data points are being missed, or to increase the prevalence of the temporal filter if noise is being labeled as data.
-This can be done by changing the \textit{distribution scale}, increasing the neighborhood of the filter which is not having enough effect, or decreasing the neighborhood size of the other filter. 
+This can be done by changing the \textit{weighted distribution}, increasing the neighborhood of the filter which is not having enough effect, or decreasing the neighborhood size of the other filter. 
 The \textit{threshold value} can also be changed by modifying the two threshold values which make it up, lowering or increasing it to increase or decrease the number of points labeled as data respectively
 % v [ old ] v
 % Here, the various variables will be modified slowly to resolve problems that are encountered.

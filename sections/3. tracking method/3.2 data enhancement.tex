@@ -10,7 +10,7 @@ However, physical setup changes can help greatly during the design of a system, 
 % One way in which this can be done is by changing the physical setup for the point gathering, though we would like to avoid this for the final product, as this could greatly limit the flexibility of the system.
 Software-based data enhancement is more difficult to create, but also more flexible, which makes it a preferable option for the final system.
 These systems work by adding additional information to the data already present, this is also where the difference between filtering and data enhancement exists.
-\textit{Data filtering} \ref{section: tracking method - data filtering} also adds information, the label of "noise" vs "signal", but this is a subtractive (removing faulty data) process, as opposed to an additive (adding additional useful data) process, therefore, a distinction between filtering and enhancement is made.
+Section \ref{section: tracking method - data filtering}, \textit{Data filtering}, also adds information, the label of "noise" vs "signal", but this is a subtractive (removing faulty data) process, as opposed to an additive (adding additional useful data) process, therefore, a distinction between filtering and enhancement is made.
 
 \textbf{add a part about why we want to look at hands?}
 
@@ -24,7 +24,7 @@ In IAmMuse, a wearable was chosen that increases the reflectivity of a specific 
 \begin{wrapfigure}{r}{0.32\textwidth}
     \caption{A reflective wearable}
     \centering
-    \includegraphics[width=0.32\textwidth]{figures/reflective wearable.png}
+    \includegraphics[width=0.32\textwidth]{figures/experimental setup/reflective wearable.png}
     \label{fig: reflective glove wearable}
 \end{wrapfigure}
  at a certain location will make the mmWave radar generate more and denser point clusters at that location.
@@ -85,7 +85,7 @@ Similar systems, which allow the user to move slightly during execution, are cer
 
 
 \subsection{Programmatic enhancement: point weight}
-\label{sub-section: tracking method - data enhancement - programmatic enhancement}
+\label{sub-section: tracking method - data enhancement - point weight}
 
 % What we have (MEB); What we want ("hands" with higher weight)
 Now that the system is initialized and has a ball that encompasses the full area of motion of the user's arms and is centered on the user's sternum, the actual data enhancement can be done.
