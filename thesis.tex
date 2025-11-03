@@ -61,7 +61,7 @@
 \usepackage{wrapfig} % Allows for figures inside of text
 \usepackage{subcaption} % Subfigures and such
 \usepackage[export]{adjustbox}
-
+\usepackage{tabularx}
 % [[ natbib with `plain` looks]]
 % The paper wants me to use the "plain" bibliography style, but I'd really like the features form 
 % the `natbib` package, this setup should do exactly that
@@ -168,7 +168,7 @@ PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft Universit
 \cleardoublepage
 
 % Create preface: page v
-\input{chapters/-1. preface}
+\input{chapters/-2. preface}
 
 % Empty page: page vi
 \cleardoublepage
@@ -177,6 +177,11 @@ PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft Universit
 \tableofcontents
 
 \cleardoublepage
+
+\input{chapters/-1. terminology}
+
+\cleardoublepage
+
 
 \pagenumbering{arabic}
 \setcounter{page}{1}
@@ -215,6 +220,7 @@ PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft Universit
 % \Crefname{chapter}{Appendix}{Appendices}
 
 \input{appendix/standardized movement set}
+\input{appendix/configuration in detail}
 \input{appendix/system explanation}
 \input{appendix/experiment notes}
 \input{appendix/recording frame distribution}

@@ -1,8 +1,20 @@
 \chapter{Evaluation}
 \label{chapter: evaluation}
 
-brief introduction to \textbf{evaluation}, give a small overview "testing against different models, to see the strengths and weaknesses of IAmMuse"
+% brief introduction to \textbf{evaluation}, give a small overview "testing against different models, to see the strengths and weaknesses of IAmMuse"
 
+In order to assess the effectiveness of the methods proposed in this thesis, a comparison should be made to a similar SOA model.
+In our case, the \textit{MARS} \cite{an2021mars} was chosen, this choice is explained in \cref{section: setup baseline dataset - baseline analysis}.
+Before the evaluation methods are discussed, a few terms should be specified. 
+The different positions a single arm can hold: "low", "middle", or "high" are called "\textbf{arm positions}".
+The combinations of two of these arm positions, with nine total options, three for the right arm and three for the left, are called "\textbf{position states}".
+
+For this evaluation, a few different metrics will be considered.
+Firstly, the total accuracy will be considered, defined as $\text{total accuracy} = \frac{\text{correct guesses}}{\text{total guesses}}$.
+Secondly, the distribution of predicted position states for a model, versus the distribution of prediction states that the ground truth suggests.
+This should give insights into potential systemic biases in a specific prediction system.
+Thirdly, the accuracy for each of the nine position states for a specific model, to analyze if any particular position is hard to predict.
+In addition to this, some other diagrams or figures might be used, these will be more clearly specified when they are.
 
 
 \input{sections/5. evaluation/5.1. baseline evaluation}

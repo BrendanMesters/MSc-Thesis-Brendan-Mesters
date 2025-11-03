@@ -1,5 +1,28 @@
 \chapter{Failed Methods}
-\label{app: failed methods}
+\label{appendix: failed methods}
 
 
-This appendix describes the methods for algorithmic HPE which have been attempted, but did not succeed in producing good enough results.
+This appendix describes the methods for algorithmic HPE that have been attempted, but did not succeed in producing good enough results.
+
+\section{Torso Removing}
+\label{appendix: failed methods - torso removing}
+
+Briefly discuss the torso removal system and the lessons learned from that
+
+
+\section{Cluster Based Tracking}
+\label{appendix: failed methods - cluster based tracking}
+
+Systems that tried to use clustering to get fewer but more important points.
+The main concept, the arm can be seen as a set of 15 tennisball-sized clusters. 
+If we can get a clustering algorithm to produce a significant number of those, we may be able to follow the arm (volumetric skeletal estimation-esque).
+
+\textbf{Two systems}:
+
+\begin{itemize}
+    \item 
+Personal software clustering. (only has access to the output of the FMCW, as we did not have a debug board)
+    \item 
+   Firmware clustering would have access to all the internals, but we won't have as much control over it. (here we got the firmware "\textit{Mobile tracking}" \cite{ti_mmwave_firmware} from.
+\end{itemize}
+

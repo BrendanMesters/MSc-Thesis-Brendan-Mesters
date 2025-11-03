@@ -1,0 +1,30 @@
+\chapter{Configuration in Detail}
+\label{appendix: configuration in detail}
+
+A detailed look into the software and hardware configuration, including:
+
+The specific firmware used:
+\begin{itemize}
+    \item What are some of the specs of this firmware
+    \item Why did we originally choose this firmware
+    \item What are some potential downsides to this firmware
+\end{itemize}
+
+
+% Specific firmware used and configurations used
+
+% Advantages/specs of firmware
+
+% Reason for firmware
+Originally, this firmware was chosen for two main reasons.\\
+Firstly, the firmware did not produce too few points to analyze, it produced around 30 points per frame, as opposed to some other firmware, which produced lower point totals, at around 10 points per frame. 
+Next to this, most points it produced seemed to be of high value, showing actual information about the scene.
+There were some firmwares that generated significantly more points (100+ points per frame), but only at active movement near the sensor (Vital Signs Tracking). 
+During testing, it was found that these points were difficult to handle and not the most useful in our situation.
+Secondly, the firmware aligned relatively well conceptually with an interpretation system which seemed to have some promise at the time, but failed to materialize enough results, namely the cluster based tracking, described in appendix \cref{appendix: failed methods - cluster based tracking}.
+
+The \textit{mobile tracking} firmware was the best one found during this thesis.
+There was not enough time to explore many of the potential firmware options, let alone write a custom firmware ourselves, as such, we landed on a "good enough" firmware.
+
+
+% Potential downsides for firmware
