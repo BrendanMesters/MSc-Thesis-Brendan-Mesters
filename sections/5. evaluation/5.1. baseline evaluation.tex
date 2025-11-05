@@ -1,20 +1,63 @@
 \section{Baseline Analysis}
 \label{section: evaluation - baseline analysis}
 
-% Apples to Apples
-Introduce the apples-to-apples setup,
-Explain why training on the calibration of a single recording is the \textit{most fair assessment}.
-Briefly explain the training parameters.
 
-% Results
-Show the results of the two systems.
-Show the accuracy plots
-Show a few particularly bad frames of the visual replay.
-
-% Discussion
-Discuss why this gives such a bad result.
-Give a small reason why this may not be a fully fair comparison (MARS is trained once, IAmMuse gets initialized every time)
-Introduce the next section.
+%     -[[ Apples to Apples ]]-
+% Introduce the apples-to-apples setup,
+% Explain why training on the calibration of a single recording is the \textit{most fair assessment}.
+% Briefly explain the training parameters.
+The first comparison that will be considered is one where the IAmMuse system and the MARS system have the same training data.
+For this comparison, the MARS model has been trained on the \textit{calibration data} of a single recording.
+This MARS model will then only be used to evaluate the \textit{usage data} of that single recording.
+In this way, a new model will have to be trained for each recording that is being analyzed, in the same way that IAmMuse has to initialize on separate data for separate recordings.
+IAmMuse of course also initialized using this \textit{calibration data} and evaluated the \textit{usage data}, in this way, the baseline analysis will compare apples to apples, so to say.
+Specific training parameters for all models can be found in \cref{section: setup baseline dataset - dataset}
 
 
-%Show the results of mars trained on the calib data of ONLY that specific recording
+%     -[[ Results ]]-
+% Show the results of the two systems.
+% Show the accuracy plots
+% Show a few particularly bad frames of the visual replay.
+
+The baseline MARS model was compared with the IAmMuse system on a few different metrics. 
+Note that the MARS baseline is referred to as '\textit{MARS a2a}' (apples to apples) in the figures.
+If we take a look at the accuracy for predicting either both hands correct, or a single hand correct, we can see that \textit{MARS a2a} performs just barely better than random, see \cref{figure: a2a arm accuracy}.
+Here, a random model is expected to predict an individual arm correctly a third of the time, and both arms one-ninth of the time, which MARS a2a barely surpasses.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/results/a2a arm accuracy.png}
+    \caption{Accuracy of predicting one or both arms correctly for the IAmMuse system and the MARS baseline (a2a) system.}
+    \label{figure: a2a arm accuracy}
+\end{figure}
+
+What seems to be happening here is that the MARS model simply has too little data to create a good prediction model.
+A look at the predicted skeletal estimations clearly shows how the a2a MARS model is not able to accurately generate "reasonable human skeletons".
+Figure \ref{figure: mars a2a skeletal estimation} shows this inability to predict logical human skeletons, as deep learning models don't have any internal concepts of logic built into them.
+This occurrence already shows the reliability on large amounts of training data, which deep learning models have, a problem which becomes more and more prevalent with more sophisticated models, as they will require more and more quality training data \cite{hestness2017deeplearningscalingpredictable}.
+
+
+
+\begin{figure}[h]
+    \begin{subfigure}{0.5\textwidth}
+        \includegraphics[width=0.9\linewidth]{figures/results/MARS a2a usr-41_rec-3.png}
+    \end{subfigure}
+    \begin{subfigure}{0.5\textwidth}
+        \includegraphics[width=0.9\linewidth]{figures/results/MARS a2a usr-41_trial-1.png}
+    \end{subfigure}
+    
+    \caption{Two skeletal predictions of MARS baseline (in red) with the ground truth overlaid (in blue)}
+    \label{figure: mars a2a skeletal estimation}
+\end{figure}
+
+%     -[[ verdict/Discussion ]]
+% Discuss why this gives such a bad result.
+% Give a small reason why this may not be a fully fair comparison (MARS is trained once, IAmMuse gets initialized every time)
+% Introduce the next section.
+It is clear that the MARS model can not function properly if it's only provided the same amount of data as the IAmMuse system.
+This shows that, all else being equal, IAmMuse will outperform MARS on a single recording, if it's not pre-trained.
+That being said, deep learning models benefit from the fact that they can be trained once and used over and over again without needing another calibration step.
+This training is an extra cost at the system creation level, but does not need to translate to an extra cost at the usage level.
+Therefore, the next section will look at some MARS models trained on more data and compare them to IAmMuse.
+
+%Show the results of MARS trained on the calibration data of ONLY that specific recording
