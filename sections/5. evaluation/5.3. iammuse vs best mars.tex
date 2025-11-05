@@ -1,9 +1,18 @@
 \section{IAmMuse vs Best MARS}
 \label{section: evaluation - iammuse vs best mars}
 
-Describe how we'll train the best MARS model we could make.
+% Describe how we'll train the best MARS model we could make.
+The final set of MARS trained models which will be considered are those which are also trained on the \textit{usage data}.
+Two models will be considered, the first one is trained on the usage data of all \textit{standard recordings} and is evaluated on the usage data of all \textit{free play} recordings.
+In this way, the generalization of the standardized movement set to more realistic usage can be measured, since the free play recordings emulate that very well.
+The second models which will be considered is trained on the \textit{first and second} standard recordings of each user, and evaluated on the \textit{third} standard recording of each user.
+This gives a more general view of how well the system generalizes on very similar data.
+The reason that the train-test split was made with the same users in both sets is to avoid a situation where an exceptional user (e.g. a very small one) is in the test set, but not in the train set. 
+A sufficiently well created training set should account for it, thus the "best case scenario" for MARS should also have that present.
 
-Show the acuracy results, discuss how it is better then the previous mars' but still worse then IAmMuse
+
+% Show the acuracy results, discuss how it is better then the previous mars' but still worse then IAmMuse
+
 
 Show the time-prediction diagram (showcasing the "stuttering" of mars)
 
