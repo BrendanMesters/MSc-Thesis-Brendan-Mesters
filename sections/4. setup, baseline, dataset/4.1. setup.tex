@@ -2,6 +2,63 @@
 \section{Testing Setup}
 \label{section: setup baseline dataset - testing setup}
 
+%     -[[ Hardware Setup ]]-
+% - What exact chip do we use, what exact Kinect
+% - What firmware do we run, and why
+% - refer to the appendix with more in-depth info
+% - 
+In this thesis, a few pieces of Hardware were used.
+% FMCW
+For the mmWave Radar, the IWR6843ISK chip by Texas Instruments was used.
+This chip needs to run a specific firmware to work, TI provides a set of ready-made firmware, which differ slightly in what they provide to the end user.
+The main aspects that are important to this thesis are the number of points generated, the noise percentage in those points, and the "usefulness" of each point.
+For this thesis, a "useful" point can tell you a lot about the position of a (semi-static) arm.
+These criteria were met by the \textit{Mobile Tracker} firmware \cite{ti_mmwave_firmware}, for this reason, and the fact that the firmware aligned well with an interpretation method which was being explored at the time, this became the firmware of choice.
+For more detail, read Appendix \ref{appendix: configuration in detail}
+% Kinect
+Next to the mmWave Radar, a Kinect 2 was used to collect ground truth data.
+The skeletal estimation was generated through a code base published by Kharche on GitHub \cite{kharche2019skeletal}, which creates a smooth skeletal estimation and saves it, along with timestamps, to a CSV file.
+
+%     -[[ Physical setup ]]-
+% - What does the room look like
+%   - Where was the sensor
+%   - Where was the user
+% - What effect could the room setup have
+% - 
+The experiments were performed in a large open room (7 by 10 meters), the mmWave radar was mounted at a height of 125 CM and was tilted very slightly (~5\degree) upwards.
+The Kinect was mounted at a height of 175 CM and angled somewhat downwards.
+A screen was also present, on which the user could see their currently predicted zones, and the incoming pointclouds.
+The user was standing at a distance of 2 meters from the sensors.
+Appendix \ref{appendix: experimental setup} shows the experimental setup in detail.
+The room being large and open meant that back wall reflections were spatially very distinct from the user.
+The back wall was also broken up with open shelving, which should've scattered the incoming millimeter waves, as opposed to reflecting them.
+The large screen present was angled upwards, and would've thus not reflected the signal back to the mmWave sensor.
+These factors meant that the mmWave radar produced pointclouds with relatively little noise in this room, which in turn meant that the noise reduction algorithms did not have to be tuned up as much.
+
+
+
+%     -[[ Testing procedures]]-
+% - How was the user informed
+% - What were they asked to do
+% - How did we provide feedback
+% - Refer to the appendix's giving more in-depth info
+% - 
+
+
+
+%     -[[ ]]-
+% - 
+% - 
+% - 
+%     -[[ ]]-
+
+% Double separation line and spacing
+\vspace{2em}
+\hrule
+\vspace{0.2em}
+\hrule
+\vspace{2em}
+
 %     [[ Hardware setup (chip, firmware, config ]]
 % Describe the chip we used, the config we used on that chip, the reason for that choice, the specific config used.
 % Also, describe the method for ground truth collection.
