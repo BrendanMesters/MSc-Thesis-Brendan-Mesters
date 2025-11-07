@@ -43,7 +43,11 @@ These factors meant that the mmWave radar produced pointclouds with relatively l
 % - How did we provide feedback
 % - Refer to the appendix's giving more in-depth info
 % - 
-
+Users were informed of how the system worked and what they were expected to do through an explanatory PDF (see Appendix \ref{appendix: user explanation}).
+The specific actions the users performed will be discussed in \cref{section: setup baseline dataset - dataset}.
+After each recording, the researcher provided some small feedback to the user about how to best use the system. 
+Commonly given advice was to wave their hands, or do "jazz hands", as well as informing the user where the optimal "zone positions" are (for low, mid, high).
+A more detailed overlook of the advice which was given, along with notes of the user performance, can be found in Appendix \ref{appendix: experiment notes}.
 
 
 %     -[[ ]]-
@@ -53,20 +57,21 @@ These factors meant that the mmWave radar produced pointclouds with relatively l
 %     -[[ ]]-
 
 % Double separation line and spacing
-\vspace{2em}
-\hrule
-\vspace{0.2em}
-\hrule
-\vspace{2em}
+% \vspace{2em}
+% \hrule
+% \vspace{0.2em}
+% \hrule
+% \vspace{2em}
 
 %     [[ Hardware setup (chip, firmware, config ]]
 % Describe the chip we used, the config we used on that chip, the reason for that choice, the specific config used.
 % Also, describe the method for ground truth collection.
-The mmWave radar used for this thesis was the IWR6843ISK by Texas Instruments.
-The firmware which is used on this chip is the \textit{Mobile Tracker} firmware \cite{ti_mmwave_firmware}, in part chosen due to it producing a reasonable number of relatively representative points, and in part due to legacy reasons, which are further discussed in Appendix \ref{appendix: configuration in detail}.
-Next to this, a Microsoft Kinect 2 was used to collect the ground truth.
-To get a skeletal estimation from the Kinect, a code base by \citeauthor{kharche2019skeletal}\cite{kharche2019skeletal} was used.
-This code base could record the skeletal estimation produced by the Kinect to a CSV file, with timestamps for each frame, making it a good choice for the ground truth.
+
+% The mmWave radar used for this thesis was the IWR6843ISK by Texas Instruments.
+% The firmware which is used on this chip is the \textit{Mobile Tracker} firmware \cite{ti_mmwave_firmware}, in part chosen due to it producing a reasonable number of relatively representative points, and in part due to legacy reasons, which are further discussed in Appendix \ref{appendix: configuration in detail}.
+% Next to this, a Microsoft Kinect 2 was used to collect the ground truth.
+% To get a skeletal estimation from the Kinect, a code base by \citeauthor{kharche2019skeletal}\cite{kharche2019skeletal} was used.
+% This code base could record the skeletal estimation produced by the Kinect to a CSV file, with timestamps for each frame, making it a good choice for the ground truth.
 
 
 %     [[ Hardware setup p2. ]]
@@ -74,13 +79,13 @@ This code base could record the skeletal estimation produced by the Kinect to a 
 % -- [ SKIP ] -- 
 
 %     [[ Environment setup (mounting, space) ]]
-Describe the room in which the tests were held, describe the positions for the various sensors, as well as the position of the user
-Use photos, specify measurements/distances
+% Describe the room in which the tests were held, describe the positions for the various sensors, as well as the position of the user
+% Use photos, specify measurements/distances
 
-% Testing procedure
-Describe the testing procedure.
-Describe the types of data that were collected and why,
-Describe the way in which the user was guided.
+% [[ Testing procedure ]]
+% Describe the testing procedure.
+% Describe the types of data that were collected and why,
+% Describe the way in which the user was guided.
 
 % Explain the type of room we took measurements in and why, also describe the sensors we use (fmcw + kinect)
 

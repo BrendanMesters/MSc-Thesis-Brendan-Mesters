@@ -2,6 +2,102 @@
 \section{Baseline Analysis}
 \label{section: setup baseline dataset - baseline analysis}
 
+%     -[[ Introduction ]]
+% - Why do we want to compare
+% - What are some of the criteria a comparison system must fulfill
+%   - Simple
+%   - "comparable"
+%   - Easy to get running.
+% - 
+IAmMuse should also be compared to a similar Deep Learning model to see how well this algorithmic approach holds up to these more conventional systems, for this type of problem.
+There are a few criteria that an interpretation model should fulfill in order to be considered for use in this thesis.
+% early model
+One important consideration is that the model should be a relatively early attempt at HPE interpretation through DL methods.
+Since IAmMuse is the first attempt at algorithmic data interpretation for HPE, a fair comparison would put it up against an early DL system.
+% Same data
+The DL system should be able to run with the data that this thesis already has, so it needs to be able to take a Kinect skeletal estimation as a ground truth, and to take the pointclouds collected for this thesis as training data.
+% Easy to get going
+Lastly, for practical reasons, it should be relatively easy to get working, due to the general time constraints on a master's thesis.
+
+
+%     -[[ MARS ]]
+% - How does MARS fulfill the criteria
+% - Short synopsis of MARS system (e.g. Skeletal estimation through deep learning)
+% - Small notice of "training" versions
+% - 
+With these considerations, the MARS system \cite{an2021mars} was chosen.
+This is a relatively early system when it comes to mmWave radar interpretation for HPE, making it a fair comparison against IAmMuse.
+MARS was also trained by using the pointcloud output of a previous model of mmWave Radar from TI (the IWR1443) to the one that was used for this thesis (IWR6843).
+Next to that, the ground truth used in the MARS paper was also collected with a Kinect 2.
+Lastly, this model has already been used in our group, which meant that it was relatively easy to get it up and running.
+The exact method by which MARS produces a skeletal estimation is beyond the scope of this thesis, and can be found in the paper itself, however, it's still important to go over some basics.
+The MARS model has to \textit{train} on a set of data, the predictions it will make are based on this training.
+The MARS system also only takes into account a single frame at a time, therefore, it has no consensus of temporality.
+
+%     -[[ MARS variations ]]
+% - What "MARS versions"/trainings will we use
+% - Why were these chosen
+% - What are the expectations for each one?
+% - 
+As was already mentioned, MARS needs to be trained on a dataset to work. 
+This thesis will compare IAmMuse with multiple different trained versions of the MARS model, which we will specify here.
+
+\begin{table}[!htb]
+    \centering
+    
+    \resizebox{\linewidth}{!}{%
+        \begin{tabular}{|p{0.30\linewidth}|p{0.5\linewidth}|p{0.5\linewidth}|}
+        \hline
+             \textbf{Model Name} & \textbf{Training Data} & \textbf{Testing Data}  \\
+             \hline\hline
+             MARS baseline  
+                & Calibration data of \textit{one specific recording}.
+                & Usage data of \textit{the same specific recording}.
+             \\ \hline
+             MARS paper 
+                & MARS data set.
+                & Usage data of all recordings.
+             \\ \hline
+             MARS full calib 
+                & Calibration data of all recordings.
+                & Usage data of all recordings.
+             \\ \hline
+             MARS partial standard 
+                & Usage data of 2/3 standard recordings. 
+                & Usage data of the other 1/3 standard recordings.
+             \\ \hline
+             MARS standard to free 
+                & Usage data of all standard recordings.
+                & Usage data of all free-play recordings.
+             \\ \hline
+        \end{tabular}
+    }
+    \caption{The training and testing data for the various MARS models considered}
+    \label{figure: MARS train test}
+    
+\end{table}
+
+
+%     -[[ ]]
+% - 
+% - 
+% - 
+
+%     -[[ ]]
+% - 
+% - 
+% - 
+%     -[[ ]]
+
+
+% Double separation line and spacing
+\vspace{2em}
+\hrule
+\vspace{0.2em}
+\hrule
+\vspace{2em}
+
+
 % Compare with a DL model
 Bring up the point of comparison, 
 Mention that we need a "baseline" for comparison.

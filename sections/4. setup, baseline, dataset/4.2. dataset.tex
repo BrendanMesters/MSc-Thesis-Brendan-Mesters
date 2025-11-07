@@ -2,27 +2,33 @@
 \section{Dataset}
 \label{section: setup baseline dataset - dataset}
 
+
+\subsection*{Frame specification}
 %       -------------------------------
 %     [[ Frame-by-frame data structure ]]
 %       -------------------------------
-% Explain the division between "initialization frames" and "usage frames", why this is important, and how this specification is made (timestamp at MEB initialization).
-% Explain the different characteristics of these two types of frame data (initialization has both hands at the same time)
-% Mention that this "initialization" is on a \textit{recording-by-recordings} basis
-% Refer to the frame count appendix
+% - Explain the division between "initialization frames" and "usage frames", why this is important, and how this specification is made (timestamp at MEB initialization).
+% - Explain the different characteristics of these two types of frame data (initialization has both hands at the same time)
+% - Mention that this "initialization" is on a \textit{recording-by-recordings} basis
+% - Refer to the frame count appendix
 
 In order to properly compare IAmMuse to the state-of-the-art solutions, we'll need a clear specification of the data that is available.
+% Frame specification
 First, a distinction will be made between two types of frames within any singular recording of the system.
 During the usage of the system, users were first instructed to initialize the system, as is specified in \cref{sub-section: tracking method - data enhancement - minimal enclosing ball}.
 Only after this initialization could the users actually use the system, since this initialization was required in order to do the data interpretation. 
 Due to this, there are two distinct parts of each recording, where the user acts very differently in each, a visualization of which is visible in \cref{fig:frame_types}.
+% init data
 Firstly, we have the \textbf{initialization data}, the data prior to the user being told that the initialization is complete, where the user moved both hands up and down at a steady pace.
-Secondly, we have the \textbf{usage data}, from the moment the user was told that the system was initialized. 
+
+% usage data
+Next to the initialization data, there is also the \textbf{usage data}, all data, from the moment the user was told that the system was initialized. 
 In this data, the user will move their hands to specific zones and hold them there for an amount of time to generate a note.
 It's important to make a distinction between these two types of data since the user behavior is inherently different in both these systems, but also because IAmMuse (by definition) only evaluates the \textit{usage data}, thus any comparison between IAmMuse and a different system must be a comparison over the results when applied to the \textit{usage data}.
 The separation between \textit{initialization data} and \textit{usage data} is the moment when the initialization has completed.
 The exact number of frames of \textit{initialization data} and \textit{usage data} for each recording can be found in Appendix \ref{appendix: recording frame distribution}.
 
-\begin{figure}[h]
+\begin{figure}[!htb]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/experimental setup/frame_types.png}
     \caption{Visualization of the two frametypes present in each recording}
@@ -30,28 +36,48 @@ The exact number of frames of \textit{initialization data} and \textit{usage dat
 \end{figure}
 
 
-
+\subsection*{Recording types}
 
 %         ---------------------------
 %       [[ Different recording types ]]
 %         ---------------------------
-Describe the two types of recordings which exist, \textbf{standard} and \textbf{free play}.
-Specify that this is \textbf{only} applicable to the \textit{usage frames} and that the type of initialization is the same.
-Explain why this choice for standardized was made (comparability over recordings)
-Explain why the choice for free play was made (more realistic system usage data)
-Refer to the standardized movement set appendix
+% - Describe the two types of recordings which exist, \textbf{standard} and \textbf{free play}.
+% - Specify that this is \textbf{only} applicable to the \textit{usage frames} and that the type of initialization is the same.
+% - Explain why this choice for standardized was made (comparability over recordings)
+% - Explain why the choice for free play was made (more realistic system usage data)
+% - Refer to the standardized movement set appendix
+
+The recordings are also split into two distinct groups.
+The difference between these two types of recordings is how the user acted during the usage of the system, thus, the only significant difference is in the way the \textit{usage data} looks.
+% Standard
+Firstly, there is the \textbf{standard recording}, in which the researcher instructed the user on how they should move, according to a specific script, see Appendix \ref{appendix: standardized movement set}.
+The users were to hold each position for 2-3 seconds. 
+The script was designed to be simple to follow for the user, by following a logical pattern, while also covering every position state transition possible by moving one hand one space.
+For most users, there are \textbf{three recordings} of the standardized user set, for two users, one of these three recordings got corrupted, thus they only have two.
+These recordings were designed to provide a clear comparison between users and to provide a stable training set for any Deep Learning models.
+
+% Free play
+The second type of recording is called a \textbf{free play} recording.
+These recordings should be a good representation of how users would use a system such as IAmMuse in real-life circumstances.
+These recordings where made after the standard recordings, such that the users where already familiarized with the system.
+The only input the users got at this stage was to "use the system for fun", this lead to the users exploring the system freely, trying to see what they could do, or even trying to make some kind of music.
+Different users made a different number of free-play recordings, as different users wanted to experiment with the system for a different amount of time.
+
+
 
 %         -----------------
 %       [[ Different users ]]
 %         -----------------
-Discuss the different users, the number we had, and the variations in them.
-Specify that \textit{a few recordings} got \textbf{corrupted} (failed to save, for one reason or another)
-Specify that different users made a different number of \textit{free play} recordings
+% - Discuss the different users, the number we had, and the variations in them.
+% - Specify that \textit{a few recordings} got \textbf{corrupted} (failed to save, for one reason or another)
+% - Specify that different users made a different number of \textit{free play} recordings
+
+
 
 %         -----------------------
 %       [[ Recap and terminology ]]
 %         -----------------------
-Small recap, quickly describing the different terms used, such as the \textit{types of frames}, \textit{types of recording}, etc
+% - Small recap, quickly describing the different terms used, such as the \textit{types of frames}, \textit{types of recording}, etc
 
 % Explain what data was collected, 
 
