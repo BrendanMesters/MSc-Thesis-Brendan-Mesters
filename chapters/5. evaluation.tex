@@ -3,18 +3,33 @@
 
 % brief introduction to \textbf{evaluation}, give a small overview "testing against different models, to see the strengths and weaknesses of IAmMuse"
 
-In order to assess the effectiveness of the methods proposed in this thesis, a comparison should be made to a similar SOA model.
-In our case, the \textit{MARS} \cite{an2021mars} was chosen, this choice is explained in \cref{section: setup baseline dataset - baseline analysis}.
-Before the evaluation methods are discussed, a few terms should be specified. 
-The different positions a single arm can hold: "low", "middle", or "high" are called "\textbf{arm positions}".
-The combinations of two of these arm positions, with nine total options, three for the right arm and three for the left, are called "\textbf{position states}".
+To assess the effectiveness of the methods proposed in this thesis, a comparison should be made with a similar SOA model.
+For this thesis, the \textit{MARS} system \cite{an2021mars} was chosen, this choice is substantiated in \cref{section: setup baseline dataset - baseline analysis}.
+A few terms should be defined before discussing the specific evaluation metrics used.
+% Before discussing the evaluation methods, a few terms should be defined. 
+The different positions a single arm can hold: "low", "middle", or "high" are referred to as  "\textit{arm positions}".
+The combined position of both arms, however, is called a "\textit{position state}".
+With each arm being able to take one of three \textit{arm positions}, that thus gives us \textbf{nine} total \textit{position states}.
+%The combinations of two of these arm positions, with nine total options, three for the right arm and three for the left, are called "\textbf{position states}".
 
-For this evaluation, a few different metrics will be considered.
-Firstly, the total accuracy will be considered, defined as $\text{total accuracy} = \frac{\text{correct guesses}}{\text{total guesses}}$.
-Secondly, the distribution of predicted position states for a model, versus the distribution of prediction states that the ground truth suggests.
-This should give insights into potential systemic biases in a specific prediction system.
-Thirdly, the accuracy for each of the nine position states for a specific model, to analyze if any particular position is hard to predict.
-In addition to this, some other diagrams or figures might be used, these will be more clearly specified when they are.
+The following evaluations will compare IAmMuse and the MARS models on a few different metrics.
+One metric, which is used as a first impression of a model's performance, is the accuracy in predicting the \textit{position state}, and the accuracy in predicting the \textit{arm position} of each arm individually, where a random model should see an accuracy of $1 / 9$ and $1 / 3$ respectively.
+The likelihood and accuracy of the specific \textit{position states} are also considered.
+An important distinction here is that the \textit{likelihood} tells us the chance of a certain system predicting a position state, without considering if that prediction was correct or incorrect.
+For these \textit{likelihood} graphs, the ground truth (the actual likelihood distribution) is also provided.
+The \textit{accuracy} of a \textit{position state}, however, tells you the accuracy of a specific model, given that the ground truth is that particular \textit{position state}.
+The \textit{likelihood} graphs can give insight into bias, while the \textit{accuracy} graph tells us about specific strengths or weaknesses of models.
+Lastly, other data visualizations may be used. 
+For MARS, the skeletal estimates will at times be shown, which should be self-explanatory.
+A "time prediction plot" will, however, also be used at times, this plot shows the ground truth and the prediction for both \textit{arm positions} of a specific system, over time.
+This is used to visualize in what ways the systems perform good and bad, in the temporality.
+
+% For this evaluation, a few different metrics will be considered.
+% Firstly, the total accuracy will be considered, defined as $\text{total accuracy} = \frac{\text{correct guesses}}{\text{total guesses}}$.
+% Secondly, the distribution of predicted position states for a model, versus the distribution of prediction states that the ground truth suggests.
+% This should give insights into potential systemic biases in a specific prediction system.
+% Thirdly, the accuracy for each of the nine position states for a specific model, to analyze if any particular position is hard to predict.
+% In addition to this, some other diagrams or figures might be used; these will be more clearly specified when they are.
 
 
 \input{sections/5. evaluation/5.1. baseline evaluation}
@@ -23,7 +38,7 @@ In addition to this, some other diagrams or figures might be used, these will be
 
 \input{sections/5. evaluation/5.3. iammuse vs best mars}
 
-% This is seemingly not present (atleast, there is no performance drop if you run a system
+% This is seemingly not present (at least, there is no performance drop if you run a system
 % trained on tall people on a short person).
 % \input{sections/5. evaluation/5.4. representative data issue}
 

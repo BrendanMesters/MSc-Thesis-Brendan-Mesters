@@ -40,7 +40,14 @@ The MARS system also only takes into account a single frame at a time, therefore
 % - What are the expectations for each one?
 % - 
 As was already mentioned, MARS needs to be trained on a dataset to work. 
-This thesis will compare IAmMuse with multiple different trained versions of the MARS model, which we will specify here.
+This thesis will compare IAmMuse with multiple different trained versions of the MARS model, in order to get a better view of how the two systems compare.
+Table \ref{figure: MARS train test} shows the 5 different models that will be trained, and specifies the training and testing data used in each.
+For each specific MARS model, a batch size of 128 was used, with 150 epochs, in accordance with the example code provided in the MARS github repository\cite{mars2021github}.
+% Specific models
+A more detailed discussion of the different MARS models considered in this paper will be given in \cref{chapter: evaluation}, specifically,
+\textit{MARS baseline} will be discussed in \cref{section: evaluation - baseline analysis}; 
+\textit{MARS paper} and \textit{MARS full calib} will be discussed in \cref{section: evaluation - larger models};
+and \textit{MARS partial standard} and \textit{MARS standard to free} will be discussed in \cref{section: evaluation - iammuse vs best mars}.
 
 \begin{table}[!htb]
     \centering
@@ -91,27 +98,27 @@ This thesis will compare IAmMuse with multiple different trained versions of the
 
 
 % Double separation line and spacing
-\vspace{2em}
-\hrule
-\vspace{0.2em}
-\hrule
-\vspace{2em}
+% \vspace{2em}
+% \hrule
+% \vspace{0.2em}
+% \hrule
+% \vspace{2em}
 
 
 % Compare with a DL model
-Bring up the point of comparison, 
-Mention that we need a "baseline" for comparison.
-A baseline should be a deep learning model, since all current SOA systems are DL.
-The baseline should be a simple/early model, as IAmMuse is also a first exploration
-Propose MARS as a good model for comparison.
+% Bring up the point of comparison, 
+% Mention that we need a "baseline" for comparison.
+% A baseline should be a deep learning model, since all current SOA systems are DL.
+% The baseline should be a simple/early model, as IAmMuse is also a first exploration
+% Propose MARS as a good model for comparison.
 
-Discuss MARS, the strengths and weaknesses according to its paper (single frame only, no temporality).
-Describe that we will want to train it on our own data.
-Briefly discuss the different training methods (single calib, all calib, MARS paper, standard to free, maybe partial standard).
+% Discuss MARS, the strengths and weaknesses according to its paper (single frame only, no temporality).
+% Describe that we will want to train it on our own data.
+% Briefly discuss the different training methods (single calib, all calib, MARS paper, standard to free, maybe partial standard).
 
-For this, use a table with the different train test data sets.
-Also, argue for each of these options, why they'd be interesting to look at.
-Give a small "alleup" for evaluation.
+% For this, use a table with the different train test data sets.
+% Also, argue for each of these options, why they'd be interesting to look at.
+% Give a small "alleup" for evaluation.
 
 % Argue why MARS was used as a comparative model
 

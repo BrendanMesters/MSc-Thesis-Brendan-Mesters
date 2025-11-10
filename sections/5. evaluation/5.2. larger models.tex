@@ -7,13 +7,16 @@
 % MARS paper and all calibration.
 % Explain why these two are interesting to look at (original model, a version with the same number of input frames as the original MARS).
 
-Since the baseline MARS model suffered from a lack of data, which makes it act unpredictably, the next step is to introduce more training data to MARS.
+Since \textit{MARS baseline} suffered from a lack of data, which made it act unpredictably, the next step is to introduce more training data to MARS.
 For this purpose, two different models will be considered.
-Firstly, the \textit{MARS pre-trained} model is considered, which is the precise model provided by \citeauthor{an2021mars} in their paper.
+% paper trained
+Firstly, the \textit{MARS paper} model is considered, which is the MARS model with the exact weights as provided by \citeauthor{an2021mars} in their paper\cite{an2021mars}.
 This will test the generalizability of the MARS model, since it's trained to generate skeletal estimations from pointclouds. 
-This should produce a reasonable result, as this is exactly what we want from it.
-Secondly, MARS will be trained with the \textit{calibration data} from \textbf{all} recordings, which will be referred to as "\textit{calib trained}".
-This should give the MARS model enough data to train on, while still only providing it with the same type of data that IAmMuse uses for its initialization.
+This should produce a reasonable result, since similar data is provided to the model, and since the same output is expected.
+% all calib
+Secondly, MARS will be trained with the \textit{calibration data} from \textbf{all} recordings, which will be referred to as "\textit{MARS full calib}".
+This should give the MARS model enough data to train on, solving the issue of a small training set, while still only providing it with the same type of data that IAmMuse uses for its initialization.
+Figure \ref{figure: accuracy vs training data} shows that \textit{MARS paper} and \textit{MARS full calib} have roughly the same amount of training data
 
 %     -[[ Results ]]-
 % Results MARS-paper
@@ -29,25 +32,27 @@ This should give the MARS model enough data to train on, while still only provid
 % show images to support my statement (and maybe a diagram showing that T-posing indeed gives minimal loss)
 
 Surprisingly, these models don't perform significantly better than the baseline model.
-Figure \ref{figure: pre-calib arm accuracy} shows how both the \textit{MARS pre-trained} and the \textit{MARS calib-trained} model perform only slightly better than random, both when considering the individual hand predictions, as well as the combined hand prediction.
-While the accuracy here is roughly equivalent to that of the baseline MARS, the reason for this bad performance is very different.
+Figure \ref{figure: pre-calib arm accuracy} shows how both the \textit{MARS paper} and the \textit{MARS full calib} model perform only slightly better than random.
+This low accuracy is present for the \textit{position state} ("both") as well as for the individual \textit{arm positions} ("left" and "right").
+While the accuracy here is roughly equivalent to that of the baseline MARS, the reason behind this bad accuracy is very different.
 
-\begin{figure}[h]
+\begin{figure}[!htb]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/results/pre-calib arm accuracy.png}
-    \caption{Accuracy of predicting one or both arms correctly for the IAmMuse system, the MARS pre-trained and the MARS calib-trained systems.}
+    \caption{Accuracy of predicting one or both arms correctly for the IAmMuse system, the MARS pre-trained, and the \textit{MARS full calib} systems.}
     \label{figure: pre-calib arm accuracy}
 \end{figure}
 
-The baseline model was not able to generate successful human skeletons, leaving the output of its arm zone prediction to be relatively random.
-The problem with \textit{MARS pre-trained} and \textit{MARS calib-trained}, however, is very different, as can be clearly seen in \cref{figure: a2a pre calib prediction likelihood}.
+The baseline model was not able to generate successful human skeletons, leaving the output of its arm zone prediction relatively random.
+The problem with \textit{MARS paper} and \textit{MARS full calib}, however, is very different, as can be clearly seen in \cref{figure: a2a pre calib prediction likelihood}.
 This figure shows the number of frames for which a certain model predicted a specific position state \textbf{regardless of} what the actual position state was.
 The red line then shows the actual likelihood of that prediction occurring in the dataset.
-The baseline model (a2a, yellow) does not predict the various position states with the same likelihood, but overall, the various position states are all predicted at times (even if some are very rare).
+The baseline model (yellow) does not predict the various position states with the same likelihood, but overall, the various position states are all predicted at times (even if some are very rare).
 This behaviour is to be expected, as the output of this model is, at least in some part, random. 
-The MARS pre-trained (pink) and MARS calib-trained (orange) on the other seem to only predict one or two position states ever.
+The MARS pre-trained (pink) and \textit{MARS full calib} (orange) on the other seem to only predict one or two position states ever.
+IAmMuse (blue), on the other hand, follows the ground truth distribution very closely.
 
-\begin{figure}[h]
+\begin{figure}[!htb]
     \centering
     \includegraphics[width=\linewidth]{figures/results/a2a, pre, calib prediction likelihood.png}
     \caption{Likelihood of position states for various MARS models and the ground truth}
@@ -55,18 +60,20 @@ The MARS pre-trained (pink) and MARS calib-trained (orange) on the other seem to
 \end{figure}
 
 %     -[[ Analysis ]] -
-This behaviour of the pre-trained and calib-trained models points to them suffering from something else.
+This behaviour of the pre-trained and \textit{full calib} models points to them suffering from something else.
 The MARS pre-trained model suffers from unrepresentative training data and potentially from overfitting.
-As already mentioned in \cref{section: background - millimeter wave radar}, mmWave radars produce slightly different pointclouds in different rooms, which can alter small secondary patterns in the pointclouds, mostly w.r.t. the noise and reflections in the room.
+% As already mentioned in \cref{section: background - millimeter wave radar}, mmWave radars produce slightly different pointclouds in different rooms, which can alter small secondary patterns in the pointclouds, mostly w.r.t. the noise and reflections in the room.
+mmWave radars produce slightly different pointclouds in different rooms, as mentioned in \cref{section: background - millimeter wave radar}, which can alter small secondary patterns in the pointclouds, mostly w.r.t. the noise and reflections in the room.
 If these secondary patterns are being used in the recognition model of a DL system, then it will cease to function when moved to a new location.
-Secondly, there are some significant differences in the hardware setup between MARS and IAmMuse.
+Furthermore, there are slight differences in the hardware setup between the MARS paper and IAmMuse.
 They use a different mmWave radar (the IWR1443BOOST, as opposed to the newer IWR6843ISK, which was used for IAmMuse) and firmware, which would make their data unrepresentative for our setup.
-In \cref{figure: skeletal estimate pre-trained}, it's shown how the skeletal estimate does not line up well, furthermore, the prediction almost always holds their arms slightly tilted downwards.
+In \cref{figure: skeletal estimate pre-trained}, it's shown how the skeletal estimate does not line up well, furthermore, the predicted skeleton almost always has its arms tilted slightly downwards.
 
-The calib-trained MARS model seems to suffer from a somewhat different issue, though.
-The model always holds its arms out to the side, regardless of the input data, as can be seen in \cref{figure: skeletal estimate calib-trained}, the exact point prediction also rarely ever moves.
-This indicates that this model has gotten stuck in a local maximum during training, since the position where the skeleton holds both its arms out straight minimizes the average mean squared error for \textit{calibration data}.
+\textit{MARS full calib} seems to suffer from a somewhat different issue, though.
+The model always holds its arms out to the side, regardless of the input data, as can be seen in \cref{figure: skeletal estimate calib-trained}, the exact point positions in the prediction also rarely ever move.
+This indicates that this model has gotten stuck in a local minima during training, since the position where the skeleton holds both its arms out straight minimizes the average mean squared error for \textit{calibration data}.
 Since the calibration data consists of a user waving their arms up and down, as is described in \cref{section: setup baseline dataset - dataset}, the static position with minimal error is the one where a user holds their arms out to the side.
+This shows that the model has stopped trying to dynamically interpret the input data, instead taking on a static position of minimal loss.
 
 
 
@@ -96,8 +103,8 @@ Since the calibration data consists of a user waving their arms up and down, as 
 % Discuss the need for data sets in the first place.
 
 These results show some of the shortcomings that deep learning models may encounter.
-A lot of high-quality and diverse training data is needed to avoid models optimizing in the wrong way, e.g., minimizing their arms by holding their arms still, like the calib-trained model did.
-Furthermore, one of the main advantages of DL models, being able to learn minute patterns in data, can become a downside when the measurement situation changes slightly.
+A lot of high-quality and diverse training data is needed to avoid models optimizing in the wrong way, e.g., minimizing the error by holding their arms still, like the calib-trained model did.
+Furthermore, one of the main advantages of DL models, being able to learn minute patterns in data, can become a downside when the specific environment changes, as the model might lose the small secondary features on which it depended.
 The last attempt, which will be made to try and get any kind of reasonable performance out of MARS, is to train it on a subset of the usage data, to see if that solves the issues that have been encountered until now.
 
 %These two models are a golden example of some of the issues that deep learning models can encounter. Getting good data, and with false optimizations.
