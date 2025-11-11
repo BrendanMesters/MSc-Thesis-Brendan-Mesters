@@ -2,20 +2,24 @@
 \label{section: evaluation - iammuse vs best mars}
 
 % Describe how we'll train the best MARS model we could make.
-The final set of MARS-trained models, which will be considered, is those that are also trained on the \textit{usage data}.
-Two models will be considered, the first one is trained on the usage data of all \textit{standard recordings} and is evaluated on the usage data of all \textit{free play} recordings, this model is called \textit{MARS standard to free}.
+The final set of trained MARS models considered is those that are also trained on the \textit{usage data}.
+Two models will be considered, the first one is trained on the usage data of all \textit{standard recordings} and is evaluated on the usage data of all \textit{free play} recordings. 
+This model is called \textit{MARS standard to free}.
+This model tests whether the MARS system can generalize well from the standardized movement set to a more realistic recording, such as the free play recordings.
 In this way, the generalization of the standardized movement set to more realistic usage can be measured, since the free play recordings emulate that very well.
-The second model, which will be considered, is trained on the \textit{first and second} standard recordings of each user, and evaluated on the \textit{third} standard recording of each user, this model is called \textit{MARS partial standard}.
-This gives a more general view of how well the system generalizes on very similar data.
+The second model, which will be considered, is trained on the \textit{first and second} standard recordings of each user, and evaluated on the \textit{third} standard recording of each user. 
+This gives a more general view of how well the MARS system generalizes on very similar data.
+This model is called \textit{MARS partial standard}.
 The reason that the train-test split was made with the same users in both sets is to avoid a situation where an exceptional user (e.g., a very small one) is in the test set, but not in the train set. 
-A sufficiently well-created training set should account for it, thus, the "best case scenario" for MARS should also have that present.
+A sufficiently well-created training set should account for these factors, thus, the "best case scenario" for MARS should also have this characteristic.
 
 
 % Show the accuracy results, discuss how it is better than the previous MARS, but still worse than IAmMuse
-This training method finally produces some reasonable results, which are immediately obvious when looking at the accuracy of the arm predictions, in \cref{figure: best mars arm accuracy}.
+These MARS models finally produce some reasonable results, which is immediately obvious when looking at the accuracy of the arm predictions in \cref{figure: best mars arm accuracy}.
 Note that the previous MARS models, which were considered, had an accuracy of $<0.4$ for an individual arm, as opposed to the 0.65+ accuracy of these new MARS models.
-The combined accuracy has also increased significantly, up to 0.45+ from less than 0.2
-Even with all these predictions, however, IAmMuse still performs better in this metric.
+The combined accuracy has also increased significantly, up to 0.45+ from less than 0.2.
+Even with this increase in accuracy, however, we see that IAmMuse still outperforms the MARS models by a significant margin.
+%Even with all these predictions, however, IAmMuse still performs better in this metric.
 
 
 \begin{figure}[h]
@@ -26,9 +30,10 @@ Even with all these predictions, however, IAmMuse still performs better in this 
 \end{figure}
 
 Looking at the accuracy per specific position state, see \cref{figure: best mars state accuracy}, reveals that the MARS models perform quite well on the positions where both arms are at a similar position, and perform significantly worse in the situations where one arm is "high" and the other is "low".
-Meanwhile, the performance of IAmMuse does differ slightly between the different positions, but it stays a lot more tightly, in a range between 0.65 and 0.8.
+Meanwhile, the performance of IAmMuse does differ slightly between the different positions, but stays in a relatively consistent range, certainly when compared with MARS' results.
+% but it stays a lot more tightly, in a range between 0.65 and 0.8.
 The reason for this becomes more obvious when considering \cref{figure: best mars state likelihood}.
-Both MARS models predict the position state of both hands middle significantly more often, while rarely predicting the position state of one hand low and one hand high, similar to how MARS calib trained did, in \cref{section: evaluation - larger models}.
+Both MARS models predict the position state of both hands middle significantly more often, while rarely predicting the position state of one hand low and one hand high, similar to how \textit{MARS baseline} and \textit{MARS full calib} did.
 This is most likely caused by the fact that the mmWave radar does not always produce data of the user's left and right half at the same time, as discussed in \cref{section: background - millimeter wave radar}, and by the fact that some frames are simply very sparse.
 On these "low quality frames", the MARS model will default to a \textit{minimal MAE position}, aka holding both hands out straight.
 
@@ -42,15 +47,17 @@ On these "low quality frames", the MARS model will default to a \textit{minimal 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/results/best mars state likelihood.png}
-    \caption{Likelihood of position states for IAmMuse, various MARS models, and
-the ground truth}
+    \caption{Likelihood of position states for IAmMuse (blue), various MARS standard to free (green), MARS partial standard (purple), and the ground truth (red)}
     \label{figure: best mars state likelihood}
 \end{figure}
 
 % Show the time-prediction diagram (showcasing the "stuttering" of MARS)
-This tendency to default to holding both hands in the middle position can be more clearly seen in \cref{figure: time prediction plots}, where the MARS prediction often jumps back and forth between different predictions in rapid succession.
-The researchers tried to see if this issue could be solved by applying an averaging smoothing filter with a window size of 7 (the line specified as 'LP'), but even with this extra assistance, the error of the MARS systems was significantly higher than the error of the IAmMuse system.
-This issue is most likely in part due to the fact that MARS is not a temporal system, it simply predicts each frame on its own.
+The \textit{time prediction} plots also clearly depict this tendency to "jump back to the middle position" which the MARS models exhibit.
+Figure \ref{figure: time prediction plots} shows the predictions of each model over time, as well as the ground truth. 
+Here, the predictions of the particular MARS models keep rapidly jumping between "middle" and the actual position.
+% This tendency to default to holding both hands in the middle position can be more clearly seen in \cref{figure: time prediction plots}, where the MARS prediction often jumps back and forth between different predictions in rapid succession.
+The researcher tried to solve this issue by applying an averaging smoothing filter with a window size of 7 (the line specified as 'LP'), but even with this extra assistance, the error of the MARS systems was significantly higher than the error of the IAmMuse system.
+This issue is most likely in part because the MARS system does not take into account the temporal connections in the data, it simply predicts each frame on its own.
 
 
 \begin{figure}[!htb]
@@ -74,6 +81,6 @@ This issue is most likely in part due to the fact that MARS is not a temporal sy
 
 % Mention that, even when given all the tools we could, MARS could not perform better than IAmMuse
 This shows that, even if MARS is given all the potential benefits available, IAmMuse still outperforms it by a significant margin.
-Although the MARS models produce a reasonable output most of the time, they still suffer from having a statistical bias to certain positions, and their output can not be stabilized by a smoothing algorithm because the system does not produce a "reasonable output" often enough.
-Therefore, it seems clear that, in this problem space, MARS is outperformed by IAmMuse.
+Although the MARS models produce a reasonable output most of the time, they still suffer from having a statistical bias to certain positions, and their output where not able to be stabilized by a smoothing algorithm because the system does not produce a "reasonable output" often enough.
+Therefore, it seems clear that, in this problem space, IAmMuse outperforms the comparative system in MARS.
 

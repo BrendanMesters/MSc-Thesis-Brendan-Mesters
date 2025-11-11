@@ -2,9 +2,9 @@
 \label{section: evaluation - key takeaways}
 
 %     -[[ Base Comparison - Training Data ]]-
-In this chapter, a few different trained MARS models have been compared with IAmMuse, but none of them could outperform IAmMuse in the position state predictions.
-The only models that came close to a reasonable performance also needed a significant amount of data to achieve this, as can be seen in \cref{figure: accuracy vs training data}, which plots the accuracy of a model against the amount of training/initialization data.
-This clearly shows that the MARS models do get better with more training data, however, this also shows that a well-designed algorithm outperforms the DL systems, even with little to no training/calibration.
+In this chapter, a few different trained MARS models have been compared with IAmMuse, none of them could outperform IAmMuse.
+The models that produced a reasonable output also needed a significant amount of training data to achieve this, as can be seen in \cref{figure: accuracy vs training data}, which plots the accuracy of a model against the amount of training/initialization data.
+This clearly shows that the MARS models do get better with more training data, however, it also shows that a well-designed algorithm (IAmMuse) can outperform the DL systems, even with little to no training/calibration.
 
 
 \begin{figure}[!htb]
@@ -15,19 +15,25 @@ This clearly shows that the MARS models do get better with more training data, h
 \end{figure}
 
 %     -[[ Specific pitfalls of MARS models ]]-
-The baseline, or apples-to-apples (a2a) model, which was trained on the calibration data of a single recording, performed very badly, as expected.
-The MARS model, which was provided by the paper, did not perform significantly better, even though it had a larger training data set, this was most likely in part due to the fact that the specific data recording setup was different from the one used in IAmMuse, something Deep Learning models are often sensitive to.
-Training the MARS model on all the calibration data yielded a bad result, also, the model seemed to get stuck in a local minima during training, where it held a static position, which minimized the MAE, as opposed to trying to react dynamically to the input data.
-This was likely in part due to the properties of the calibration data.
-The models where MARS were trained on a significant amount of \textit{usage data} performed the best. 
-These models still suffered from the fact that they were very stuttery.
+% BASELINE
+\textit{MARS baseline}, which was trained on the calibration data of a single recording, performed very badly, as was to be expected, due to the small training set.
+% PAPER
+\textit{MARS paper} did not perform significantly better, even though it had a larger training data set. 
+This was most likely in part due to the fact that the specific data recording setup used to create that model was different from the one used in IAmMuse, something Deep Learning models are often sensitive to.
+% FULL CALIB
+\textit{MARS full calib} also yielded a bad result, the model seemed to get stuck in a local minima during training. 
+It held a static position, which minimized the error, as opposed to trying to dynamically interpret the input data.
+This was likely in part due to the specific properties of the calibration data.
+The models where MARS was trained on a significant amount of \textit{usage data} (\textit{MARS standard to free} and \textit{MARS partial standard}) performed the best. 
+These models were, however, also not perfect, as their output was quite stuttery.
+% These models still suffered from the fact that they were very stuttery.
 This was almost certainly caused by the stability issue with data from the mmWave Radar, which is discussed in \cref{section: background - millimeter wave radar}.
 
 %     -[[ Conclusion ]]-
-The IAmMuse system uses significantly less data and produces significantly better results.
+The IAmMuse system uses significantly less data and produces significantly better results than similar DL systems.
 Granted, IAmMuse tries to solve a more specific problem than MARS, but in many cases, a solid application-specific solution is better than a flaky general-purpose solution.
 Many of the current shortcomings of IAmMuse, such as the need for calibration and the limited arm angles, are also not inherent and are likely to be solvable with follow-up research, this is further discussed in \cref{section: conclusion - future work}.
-Al in al IAmMuse succeeded in showing the potential of algorithmic solutions to the human pose estimation application for millimeter wave radar data.
+Al in al IAmMuse succeeded in showing the potential of \textbf{algorithmic} human pose estimation systems for millimeter wave radar data.
 It was able to circumnavigate the low point density inherent to these chips by using domain knowledge to enhance the data, as well as using other tunable systems to solve issues that were encountered.
 The various parts of the IAmMuse pipeline can also be inspected and tuned individually, making it feasible to move this system between different usage environments.
 
