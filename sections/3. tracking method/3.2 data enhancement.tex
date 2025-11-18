@@ -1,8 +1,30 @@
 \section{Data Enhancement}
 \label{section: tracking method - data enhancement}
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/internal data/Thesis zone prediction internal.png}
+    \caption{Step by step zone prediction visualization}
+    \label{figure: zone prediction internal}
+\end{figure}
 
-The data that comes from the mmWave sensor is quite sparse, thus, it's important to get as much information out of this data as we can, this process is called \textit{data enhancement}.
+Data enhancement is the first application-specific step in the prediction pipeline.
+In addition to the data filtering discussed above, we also give more weight to points near the hands.
+These points are most indicative of the arm angle, as they move the furthest for a change in the arm angle.
+To find the points near the hands, a sphere is constructed around the pointcloud, where the sphere's boundary follows the user's maximal reach.
+% This is done by constructing a ball around the pointcloud, where the edge of the ball should follow the reach of the person's arms.
+Figure \ref{figure: zone prediction internal} shows a visualization of the steps in the prediction pipeline.
+After noise filtering, \textit{arm zones} can be specified as slices of the encompassing sphere.
+An arm prediction is made based on the number of signal points in each zone.
+
+% Why data enhancement?
+
+The data from the mmWave sensor is relatively sparse, thus, it is important to get as much information from it as we can. 
+This process is called \textit{data enhancement}.
+
+
+
+The data from the mmWave sensor is relatively sparse, thus, it's important to get as much information out of this data as we can, this process is called \textit{data enhancement}.
 Data enhancement broadly covers any method that increases the "\textit{quality}" of the data that is being sent to the recognition systems.
 This can be done in two major ways: firstly, the physical setup can be changed to increase the quality of the data, secondly, software systems can be put in place to add extra context to the raw data.
 The first option, a change to the physical setup, can be quite effective, however, this should be avoided for the final product as it limits the flexibility of the system.

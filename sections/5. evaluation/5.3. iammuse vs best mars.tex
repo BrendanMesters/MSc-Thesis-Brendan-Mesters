@@ -24,7 +24,7 @@ Even with this increase in accuracy, however, we see that IAmMuse still outperfo
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{figures/results/best mars arm accuracy.png}
+    \includegraphics[width=0.8\linewidth]{figures/results/Arm Accuracy Best.png}
     \caption{Accuracy of predicting one or both arms correctly for the IAmMuse system, the MARS standard to free, and the MARS partial standard systems.}
     \label{figure: best mars arm accuracy}
 \end{figure}
@@ -39,14 +39,14 @@ On these "low quality frames", the MARS model will default to a \textit{minimal 
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.8\linewidth]{figures/results/best mars state accuracy.png}
+    \includegraphics[width=0.85\linewidth]{figures/results/Position State Accuracy Best MARS.png}
     \caption{Accuracy per state position for the IAmMuse system, the MARS standard to free, and the MARS partial standard systems.}
     \label{figure: best mars state accuracy}
 \end{figure}
 \vfill
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.8\linewidth]{figures/results/best mars state likelihood.png}
+    \includegraphics[width=0.85\linewidth]{figures/results/Position State likelihood best mars.png}
     \caption{Likelihood of position states for IAmMuse (blue), various MARS standard to free (green), MARS partial standard (purple), and the ground truth (red)}
     \label{figure: best mars state likelihood}
 \end{figure}
@@ -64,13 +64,17 @@ This issue is most likely in part because the MARS system does not take into acc
     \centering
     \begin{subfigure}{0.8\textwidth}
         \centering
-        \includegraphics[width=1.\linewidth]{figures/results/time prediction plot standard to free.png}
+        \makebox[\textwidth][c]{
+        \includegraphics[width=1.7\linewidth]{figures/results/time prediction plot standard to free edit.png}
+        }
         \caption{MARS standard to free}
         \label{figure: time prediction standard to free}
     \end{subfigure}
     \begin{subfigure}{0.8\textwidth}
         \centering
-        \includegraphics[width=1.\linewidth]{figures/results/time prediction plot partial standard.png}
+        \makebox[\textwidth][c]{
+        \includegraphics[width=1.7\linewidth]{figures/results/time prediction plot partial standard edit.png}
+        }
         \caption{MARS partial standard}
         \label{figure: time prediction partial standard}
     \end{subfigure}
