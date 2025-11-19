@@ -1,14 +1,11 @@
 \section{Human Pose Estimation}
 \label{section: background - human pose estimation}
-% Explain what exactly human pose estimation is, and reference some papers discussing it. 
-% Present the kinect and skeletal estimation, and \textbf{clearly specify} the \textbf{differences} between my \textit{arm location} estimation, and a \textit{full skeletal estimation}.
 
 %     -[[ What is HPE ]]-
-\textit{Human Pose Estimation} (\textbf{HPE}) is a broad term covering any system that tries to estimate the pose of people.
+Human Pose Estimation (\textbf{HPE}) is a broad term covering systems that estimate a human's pose, usually in the form of a set of 3D coordinates.
 A well-known example of an HPE system is the Microsoft Kinect system, a camera-based movement tracker originally introduced for the Xbox game console.
-Though HPE can cover a broad number of applications, many of them aim to construct a \textit{skeletal estimation}, a set of points that are indicative of the important joints on a human body, think of the head, shoulders, elbows, etc.
-Microsoft Kinect, in particular, generates a skeletal estimate composed of 25 points, as depicted in \cref{fig:kinect_skeletal_estimate}, and is used as a source of ground truth for a number of other HPE systems.
-
+Though HPE can cover a broad number of applications, many of them aim to construct a \textit{skeletal estimation}, a set of essential keypoints to represent a human skeleton.
+Microsoft Kinect, in particular, generates a skeletal estimate composed of 25 points, as depicted in \cref{fig:kinect_skeletal_estimate}, and is used as a source of ground truth for several other HPE systems.
 
 \begin{figure}[h]
     \centering
@@ -17,17 +14,16 @@ Microsoft Kinect, in particular, generates a skeletal estimate composed of 25 po
     \label{fig:kinect_skeletal_estimate}
 \end{figure}
 
-%\textbf{Something about arm angles vs skeletal estimate}.
-
 %     -[[ Why do we want HPE ]]-
 HPE methods have become increasingly prevalent as computer systems have become more integrated into our everyday environment, providing a non-invasive way to interface with them.
-These HPE systems can be used for a variety of purposes, the Kinect, for example, was originally built for gaming.
-Other fields have also started using HPE methods, and security systems can be enhanced by giving the computer a better way to interpret what people are doing.
-Action recognition and tracking methods can be used for control of IOT systems, and HPE systems have even seen use in automated sign language recognition, assisted living spaces, and driver assistance systems. \cite{munea2020progress}
+These HPE systems can be used for a variety of purposes; the Kinect, for example, was originally built for gaming.
+Other fields have also started using HPE methods.
+Activity recognition, through kinematic skeletal estimations, can enhance existing security systems, allowing them to detect security threats autonomously.
+Action recognition and tracking methods can control IoT systems, and HPE systems have even seen use in automated sign language recognition, assisted living spaces, and driver assistance systems \cite{munea2020progress}.
 
 
-%     -[[ What methods exit ]] -
-%  -= THIS SHOULD BE MOVED TO RELATED WORKS =-
-HPE can be applied over various types of data, common methods are \textit{camera-based} HPE methods \cite{Lan2023visionbased}, \textit{wearable-based} HPE methods, or methods using other types of sensors, such as mmwave sensors.
-Something most of these methods have in common though, is their reliance on deep learning.
-Many of the current state of the art systems, use deep learning to transform their video feed, or their pointcloud feed into skeletal estimations.
+%     -[[ What methods exit ]]-
+HPE systems exist for various input modalities.
+Vision-based methods \cite{Lan2023visionbased} often use normal cameras or RGB-D cameras to construct pose estimations. 
+Wearable-based methods \cite{moniruzzaman2023wearable} rely on sensors worn by the user to construct their estimations.
+Most of these methods, however, are built with a deep learning framework at the core in order to transform the sensor input into a prediction.

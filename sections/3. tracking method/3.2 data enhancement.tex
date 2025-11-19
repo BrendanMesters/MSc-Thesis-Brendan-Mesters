@@ -71,13 +71,14 @@ Therefore, a \textit{reflective glove} (see \cref{fig: reflective glove wearable
 \subsection{Initialization, Minimal Enclosing Ball}
 \label{sub-section: tracking method - data enhancement - minimal enclosing ball}
 
-The goal of a software-based data enhancement system is to make a distinction between points belonging to the hands, points belonging to the arms, and points belonging to neither.
-This distinction is made with the help of a ball, which encloses the user in such a way that the edge of the ball follows the maximal range of the user's hands.
-The distance between the edge of the ball and any particular point can be used as a proxy for whether a point was emitted by a user's hand, arm, or neither.
+The primary goal of our data enhancement system is to make a distinction between points belonging to the hands, points belonging to the arms, and points belonging to neither.
+A conceptual ball, which encloses the user in such a way that the surface of the ball follows the maximal range of the user's hands, help in achieving this distinction.
+% This distinction is achieved via a conceptual ball, which encloses the user in such a way that the surface of the ball follows the maximal range of the user's hands.
+The distance between the surface of the ball and any particular point functions as a proxy for whether a point was emitted by a user's hand, arm, or neither.
 To construct this \textit{enclosing ball}, we use the fact that only a minority of the points are noise.
 We collect a pointcloud of 3000 points by accumulating recorded points while the user moves their hands up and down.
-In this pointcloud, all signal points exist within the proposed enclosing ball, and these points will cover the whole range of movement of the user's arms.
-In this pointcloud, some noise points will still exist outside of the proposed enclosing ball.
+All collected signal points lie within the proposed enclosing ball, and these points will cover the whole range of movement of the user's arms.
+Some noise points will still lie outside of the proposed enclosing ball.
 We can now use a known algorithm to construct a minimal enclosing ball from a pointcloud with outliers.
 
 
@@ -101,9 +102,10 @@ We can now use a known algorithm to construct a minimal enclosing ball from a po
 % MEB method
 For this, we used a process described by \citeauthor{ding2020sublinear}, in \textit{algorithm 1} of their paper \cite{ding2020sublinear}.
 This algorithm gives a stochastic estimation of such a \textit{minimal enclosing ball with outliers}, with bounds on the accuracy.
-The stochastic nature of this method means that inaccurate fits are returned roughly 10\% of the time.
+The stochastic nature of this method results in an inaccurate fit in roughly 10\% of the predictions.
 Though somewhat infrequent, this occurs often enough that a mitigation strategy is warranted.
-For this purpose, the enclosing ball is estimated 100 times, and the average of these trials is used as our final estimation.
+For this reason, the final enclosing ball estimation is constructed as the average of 100 different predictions, to average out the noise and get a stable prediction.
+% For this purpose, the enclosing ball is estimated 100 times, and the average of these trials is used as our final estimation.
 An in-depth explanation of the configuration of this algorithm can be found in Appendix \ref{appendix: meb configuration}.
 
 % For this, we used a process described by \citeauthor{ding2020sublinear}, in \textit{algorithm 1} of their paper \cite{ding2020sublinear}.
@@ -117,10 +119,10 @@ An in-depth explanation of the configuration of this algorithm can be found in A
 % limitation, static ball.
 A current limitation of this system is that a user can only \textit{initialize} the system once, and this initialization dictates where the user has to stand, since the system expects the user's sternum to be stationary and at the center of the enclosing ball.
 A more dynamic version of the initialization system was explored, where the enclosing ball would be recalculated each frame with the most recent 3000 points.
-In this approach, the enclosing ball would drift upwards if the user held their hands high for an extended period of time, which was a problem.
+In this approach, the enclosing ball would drift upwards if the user held their hands high for an extended period of time, invalidating the estimation.
 % This approach did not work well as the MEB started to drift at times, depending on the most recent positions the user held.
 % As an example, if a user wanted to hold their hands up high a lot, then after enough time, the point cloud used to generate the MEB would not be representative of the user's whole range of movement anymore.
-Similar systems, which allow the user to move slightly during execution, are certainly feasible, but were deemed outside of the scope of this research and are thus left for future research.
+Similar systems, which allow the user to move slightly during execution, can be envisioned but were deemed outside of the scope of this research and are thus left for future research.
 
 
 \subsection{Programmatic enhancement: point weight}

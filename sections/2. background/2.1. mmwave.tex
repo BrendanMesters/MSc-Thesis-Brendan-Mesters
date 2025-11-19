@@ -4,23 +4,28 @@
 Millimeter Wave Radars (mmWave radar) are a type of sensor which have been discussed for many decades already, with early research dating back to the 1970s and with commercial usage dating back to 1990 in the telecommunication sector, and the automotive industry starting to use it at the turn of the century \cite{menzel2008years}.
 In recent years, mmWave radars have been used in a broad number of sensing applications, from human tracking and activity recognition, through to object inspection and classification \cite[Fig.~2]{vanberlo2021millimeter}.
 
-This recent interest in mmWave-based sensing solutions over some of the alternative methods, such as lidar and camera-based sensing methods, is due to some of the inherent advantages present in mmWave-based systems.
+This recent interest in mmWave-based sensing solutions over some of the alternative methods, such as LiDAR and camera-based sensing methods, is due to some of the inherent advantages present in mmWave-based systems.
 % vs cameras
 Cameras, for example, provide a detailed, high-resolution image of a specific location, but they are susceptible to environmental changes in the light intensity.
 mmWave radars do not suffer from this limitation, since they are an active sensor, meaning that they observe the reflection of a signal which has been sent out by the sensor itself.
-Furthermore, cameras do not usually include any depth information; they simply produce a 2-D projection of the scene that is being sensed.
+Furthermore, cameras do not usually include any depth information; they produce a 2-D projection of a scene.
 mmWave radars, on the other hand, provide a 3-D point cloud, which does have this range data.
-% vs lidar
-Many of these previously mentioned attributes are shared by both mmWave radars and Lidar, a very important difference between these two methods, however, is the wavelength of light which is used in each system. 
-Lidar (and most other radio-frequency radars, for that matter) use a longer wavelength of light than mmWave radars.
-This means that mmWave radars are able to produce results at a significantly higher resolution than other radar solutions, such as Lidar, and thus also sense smaller objects \cite{yan2025advancements}.
+% vs LiDAR
+mmWave radars share many of the previously mentioned attributes with other radio-frequency radars, such as LiDAR.
+An important difference between LiDAR and mmWave radars, however, is cost.
+The high cost of LiDAR makes it an uneconomical option for an everyday interface.
+Other radio frequency radars suffer from lower accuracy because the wavelength of the light they send out is longer than that of mmWave radars \cite{yan2025advancements}.
+mmWave radars are a cost-effective sensor for this job.
+
 
 %     -[[ Internal Workings ]]-
-mmWave radars achieve this all in a very clever manner, namely, they send out a wave of constantly increasing frequency and observe the reflection.
-Since the frequency is increasing at a constant rate, the distance to the object from which the wave bounced is equivalent to the difference in frequency of the outgoing and incoming signal, multiplied by a constant.
+To achieve this, mmWave radars transmit a millimeter wave of continuously increasing frequency, and by observing the backscatter, they can infer information about the scene.
+% mmWave radars achieve this all in a very clever manner, namely, they send out a wave of constantly increasing frequency and observe the reflection.
+Since the frequency is increasing at a constant rate, the distance to the object at which the wave is reflected is proportional to the difference in frequency between the outgoing and incoming signals.
 An alternative name for these sensors is thus also a Frequency Modulated Continuous Wave (FMCW) sensor.
-The mmWave radar uses a component called a \textit{mixer} for this task, which takes two signals as inputs and provides the difference in frequency as well as the difference in phase between those two signals.
-This frequency difference holds information about the macro-scale distance, while the frequency difference gives information on the micro-scale movements of an object, which is very useful in some specific applications.
+The mmWave radar uses a component called a \textit{mixer} to calculate the difference between the ongoing and outgoing signals, which takes two signals as inputs and provides the difference in frequency as well as the difference in phase between those two signals.
+This frequency difference holds information about the macro-scale distance, while the phase difference gives information on the micro-scale movements of an object, which is very useful in some specific applications.
+
 
 The mmWave radar has multiple receivers and multiple senders, which allows the sensor to calculate an elevation and an azimuth for each object.
 These different receivers are spaced half a wavelength apart from each other.
@@ -37,7 +42,7 @@ For anyone interested in this, the mmWave Radar course by TI\cite{ti2024lessons}
         \label{fig:mmwave_radar_top_view}
     \end{minipage}
     \begin{minipage}[c]{0.45\linewidth}
-        \includegraphics[width=0.95\linewidth]{figures/mmwave/WhatsApp Image 2025-10-28 at 15.59.05.jpeg}
+        \includegraphics[width=0.95\linewidth]{figures/mmwave/iwr6842_antenas_up_close.jpeg}
         \caption{Antenna layout for the IWR6843ISK}
         \label{fig:mmwave_radar_antennas}
     \end{minipage}
@@ -72,10 +77,5 @@ Practically, this means that in one frame, only the right arm is present (in the
 
 
 
-
-
-% \brendanLines
-% \input{sections/2. background/2.1.1. mmwave workings_old}
-% \brendanLines
 
 
