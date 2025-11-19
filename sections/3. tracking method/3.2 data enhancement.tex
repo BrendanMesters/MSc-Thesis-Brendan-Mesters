@@ -11,49 +11,45 @@
 Data enhancement is the first application-specific step in the prediction pipeline.
 In addition to the data filtering discussed above, we also give more weight to points near the hands.
 These points are most indicative of the arm angle, as they move the furthest for a change in the arm angle.
-To find the points near the hands, a sphere is constructed around the pointcloud, where the sphere's boundary follows the user's maximal reach.
+To find the points near the hands, a ball is constructed around the pointcloud, where the ball's boundary follows the user's maximal reach.
 % This is done by constructing a ball around the pointcloud, where the edge of the ball should follow the reach of the person's arms.
 Figure \ref{figure: zone prediction internal} shows a visualization of the steps in the prediction pipeline.
-After noise filtering, \textit{arm zones} can be specified as slices of the encompassing sphere.
+After noise filtering, \textit{arm zones} can be specified as slices of the enclosing ball.
 An arm prediction is made based on the number of signal points in each zone.
 
-% Why data enhancement?
 
-The data from the mmWave sensor is relatively sparse, thus, it is important to get as much information from it as we can. 
+The data from the mmWave sensor is relatively sparse, thus, it is important to get as much information out of this data as we can. 
 This process is called \textit{data enhancement}.
+Data enhancement broadly covers any method that increases the \textit{quality} of the data sent to the recognition systems.
+There are two distinct groups of data enhancement methods.
+Physical enhancement, changing the physical setup in order to get better results, and software enhancements, where software is put in place to add extra information to our data.
+The first option, a change to the physical setup, can be effective, however, we should avoid this for the final product as it limits the flexibility of the system.
+Physical setup changes can help significantly during the design of a system, as high-quality data is needed to design a good classification algorithm, and a good classification algorithm is needed to verify data enhancement methods.
+Software-based data enhancement is more challenging to create, but also more flexible, which makes it a preferable option for the final system.
+These systems work by adding additional information to the data already present, this is also where the difference between data filtering (\cref{section: tracking method - data filtering}) and data enhancement exists.
 
-
-
-The data from the mmWave sensor is relatively sparse, thus, it's important to get as much information out of this data as we can, this process is called \textit{data enhancement}.
-Data enhancement broadly covers any method that increases the "\textit{quality}" of the data that is being sent to the recognition systems.
-This can be done in two major ways: firstly, the physical setup can be changed to increase the quality of the data, secondly, software systems can be put in place to add extra context to the raw data.
-The first option, a change to the physical setup, can be quite effective, however, this should be avoided for the final product as it limits the flexibility of the system.
-However, physical setup changes can help greatly during the design of a system, as you need good data to design a good interpretation system, and you need a good interpretation system to verify your data enhancement methods.
-% One way in which this can be done is by changing the physical setup for the point gathering, though we would like to avoid this for the final product, as this could greatly limit the flexibility of the system.
-Software-based data enhancement is more difficult to create, but also more flexible, which makes it a preferable option for the final system.
-These systems work by adding additional information to the data already present, this is also where the difference between filtering and data enhancement exists.
-Section \ref{section: tracking method - data filtering}, \textit{Data filtering}, also adds information, the label of "noise" vs "signal", but this is a subtractive (removing faulty data) process, as opposed to an additive (adding additional useful data) process, therefore, a distinction between filtering and enhancement is made.
-
-\textbf{add a part about why we want to look at hands?}
 
 \subsection{Physical Enhancement}
 \label{sub-section: tracking method - data enhancement - physical enhancement}
 
-
-Many similar HPE systems rely solely on physical wearables \cite{filippeshi2017survey, antonio2010the}. 
-This is a logical choice, as it enables the direct tracking of specific parts of the user's body, at the cost of being more invasive and not easily deployable in non-private spaces.
-In IAmMuse, a wearable was chosen that increases the reflectivity of a specific part of the user's body, namely their hands. Increasing the reflectivity
-\begin{wrapfigure}{r}{0.32\textwidth}
+\begin{wrapfigure}{!h}{0\textwidth}
+    %\centering
+    \includegraphics[width=0.28\textwidth]{figures/experimental setup/reflective wearable.png}
     \caption{A reflective wearable}
-    \centering
-    \includegraphics[width=0.32\textwidth]{figures/experimental setup/reflective wearable.png}
     \label{fig: reflective glove wearable}
 \end{wrapfigure}
- at a certain location will make the mmWave radar generate more and denser point clusters at that location.
-The reason IAmMuse wants a higher point density at the user's hands is due to the fact that the position of the hands is most indicative of the angle of a user's arm.
-This is true because, for every angle change at the user's arm, the user's hand will move the largest distance, simply by being the part of the arm furthest removed from the shoulder.
-For this reason, the hand is the most effective location to increase the reflectivity and thus point generation.
-The software data enhancement method used by IAmMuse will, for the same reason, also increase the prevalence of the points belonging to the user's hands.
+
+% SOA wearables
+Many similar HPE systems rely solely on physical wearables \cite{filippeshi2017survey, antonio2010the}. 
+This is a logical choice, as it enables the direct tracking of specific parts of the user's body, at the cost of being more invasive and not easily deployable in non-private spaces.
+% IAmMuse
+Our system aims to give more weight to points belonging to the hands.
+Therefore, a \textit{reflective glove} (see \cref{fig: reflective glove wearable}) was chosen, as reflective surfaces produce denser pointclouds with mmWave radars.
+
+% The reason IAmMuse wants a higher point density at the user's hands is due to the fact that the position of the hands is most indicative of the angle of a user's arm.
+% This is true because, for every angle change at the user's arm, the user's hand will move the largest distance, simply by being the part of the arm furthest removed from the shoulder.
+% For this reason, the hand is the most effective location to increase the reflectivity and thus point generation.
+% The software data enhancement method used by IAmMuse will, for the same reason, also increase the prevalence of the points belonging to the user's hands.
 
 
 
@@ -71,38 +67,59 @@ The software data enhancement method used by IAmMuse will, for the same reason, 
 % Most of these data enhancement systems tried to "find" which points belonged to the hands, arms, and torso.
 % This labeling would allow for weighing points of the hands more heavily, while weighing points of the arms less heavily and ignoring points of the torso, in effect, producing the same outcome as the gloves gave with their higher point density near the hands.
 
+
 \subsection{Initialization, Minimal Enclosing Ball}
 \label{sub-section: tracking method - data enhancement - minimal enclosing ball}
 
+The goal of a software-based data enhancement system is to make a distinction between points belonging to the hands, points belonging to the arms, and points belonging to neither.
+This distinction is made with the help of a ball, which encloses the user in such a way that the edge of the ball follows the maximal range of the user's hands.
+The distance between the edge of the ball and any particular point can be used as a proxy for whether a point was emitted by a user's hand, arm, or neither.
+To construct this \textit{enclosing ball}, we use the fact that only a minority of the points are noise.
+We collect a pointcloud of 3000 points by accumulating recorded points while the user moves their hands up and down.
+In this pointcloud, all signal points exist within the proposed enclosing ball, and these points will cover the whole range of movement of the user's arms.
+In this pointcloud, some noise points will still exist outside of the proposed enclosing ball.
+We can now use a known algorithm to construct a minimal enclosing ball from a pointcloud with outliers.
+
+
+
+
+
+
 % Introduction software enhancement & MEB
-As mentioned at the start of this section, the eventual goal is to create a software-based data enhancement system. 
-IAmMuse's final enhancement system will be discussed here.
-The eventual goal of this initialization would be to find out what points belong to what parts of the body.
-If a distinction between points belonging to the torso, arms, and hands could be made, then IAmMuse can utilize this information in its interpretation system to more accurately predict the angles of the arms.
-To achieve this, IAmMuse makes use of a \textit{Minimal Enclosing Ball} (MEB) over the user's data points, to get more information on the individual points. 
-The goal of this system is to first create a point cloud that has points across the whole physical movement range of the user, in other words, it has points of the user's arms at all possible locations of their arms.
-This point cloud is constructed during an \textit{initialization step}, where the user is asked to move their hands up and down until the initialization is complete.
-IAmMuse then stacks these recorded frames until it has at least 3000 points, at which point IAmMuse informs the user that the initialization has been completed.
-This point cloud should then contain noise points and points belonging to the user.
-The user's points should roughly evaluate to a thin cylinder, where the center of the cylinder would be at the user's sternum, and the radius to the edge would be slightly larger than the user's arm span.
-% The actual data in this point cloud (points belonging to the user, not to noise) should roughly evaluate to be a disk, with the user's sternum as a centroid and their arm span as a radius.
-IAmMuse fits a ball around this data, and not a cylinder, because it's an easier and more explored problem, and it should be "good enough" in our case, given that the center and radius of such a ball should be very similar to the center and radius of an enclosing cylinder.
-% In this method, we try to fit the smallest ball around the data, which encompasses all of the points belonging to the user while ignoring any noise points.
+% As mentioned at the start of this section, the eventual goal is to create a software-based data enhancement system. 
+% IAmMuse's final enhancement system will be discussed here.
+% The eventual goal of this initialization would be to find out what points belong to what parts of the body.
+% If a distinction between points belonging to the torso, arms, and hands could be made, then IAmMuse can utilize this information in its interpretation system to more accurately predict the angles of the arms.
+% To achieve this, IAmMuse makes use of a \textit{Minimal Enclosing Ball} (MEB) over the user's data points, to get more information on the individual points. 
+% The goal of this system is to first create a point cloud that has points across the whole physical movement range of the user, in other words, it has points of the user's arms at all possible locations of their arms.
+% This point cloud is constructed during an \textit{initialization step}, where the user is asked to move their hands up and down until the initialization is complete.
+% IAmMuse then stacks these recorded frames until it has at least 3000 points, at which point IAmMuse informs the user that the initialization has been completed.
+% This point cloud should then contain noise points and points belonging to the user.
+% The user's points should roughly evaluate to a thin cylinder, where the center of the cylinder would be at the user's sternum, and the radius to the edge would be slightly larger than the user's arm span.
+% IAmMuse fits a ball around this data, and not a cylinder, because it's an easier and more explored problem, and it should be "good enough" in our case, given that the center and radius of such a ball should be very similar to the center and radius of an enclosing cylinder.
 
 % MEB method
 For this, we used a process described by \citeauthor{ding2020sublinear}, in \textit{algorithm 1} of their paper \cite{ding2020sublinear}.
-This algorithm gives a stochastic estimation, with lower and upper bounds on the accuracy, of a minimal enclosing ball, with outliers.
-Due to the stochastic nature of this method, it's possible to obtain a "bad result", which does not fit the underlying data correctly.
-Even though this does not happen often, in order to mitigate the issue completely, IAmMuse calculates this estimation 100 times and uses the average of these results.
-For the algorithm, we take $\delta$ (tightness bound) to be 0.08, we take $\gamma$ (noise percentage) to be 0.15, allowing 15\% of the points to be outside of the ball, and lastly we take $z$ (number of iterations used to look for an optimal solution) to be 50.
-These exact numbers are a result of tuning the system to get the most consistent tight ball around the data points.
-These variables should be re-examined if the system is deployed in a new environment, specifically $\gamma$ should be tuned to be as low as possible while avoiding taking noise points into account, and $z$ should be increased until the estimation does not improve any further.
+This algorithm gives a stochastic estimation of such a \textit{minimal enclosing ball with outliers}, with bounds on the accuracy.
+The stochastic nature of this method means that inaccurate fits are returned roughly 10\% of the time.
+Though somewhat infrequent, this occurs often enough that a mitigation strategy is warranted.
+For this purpose, the enclosing ball is estimated 100 times, and the average of these trials is used as our final estimation.
+An in-depth explanation of the configuration of this algorithm can be found in Appendix \ref{appendix: meb configuration}.
+
+% For this, we used a process described by \citeauthor{ding2020sublinear}, in \textit{algorithm 1} of their paper \cite{ding2020sublinear}.
+% This algorithm gives a stochastic estimation of such a \textit{minimal enclosing ball with outliers}, with bounds on the accuracy.
+% Due to the stochastic nature of this method, it's possible to obtain a "bad result", which does not fit the underlying data correctly.
+% Even though this does not happen often, in order to mitigate the issue completely, IAmMuse calculates this estimation 100 times and uses the average of these results.
+% For the algorithm, we take $\delta$ (tightness bound) to be 0.08, we take $\gamma$ (noise percentage) to be 0.15, allowing 15\% of the points to be outside of the ball, and lastly we take $z$ (number of iterations used to look for an optimal solution) to be 50.
+% These exact numbers are a result of tuning the system to get the most consistent tight ball around the data points.
+% These variables should be re-examined if the system is deployed in a new environment, specifically $\gamma$ should be tuned to be as low as possible while avoiding taking noise points into account, and $z$ should be increased until the estimation does not improve any further.
 
 % limitation, static ball.
-A current limitation of this system is that a user can only \textit{initialize} the system once, and this initialization dictates where the user has to stand, since the system expects their sternum to be roughly at the center of the MEB.
-A more dynamic version of the MEB initialization system was explored, where the MEB would be recalculated each frame with the most recent 3000 points.
-This approach did not work well as the MEB started to drift at times, depending on the most recent positions the user held.
-As an example, if a user wanted to hold their hands up high a lot, then after enough time, the point cloud used to generate the MEB would not be representative of the user's whole range of movement anymore.
+A current limitation of this system is that a user can only \textit{initialize} the system once, and this initialization dictates where the user has to stand, since the system expects the user's sternum to be stationary and at the center of the enclosing ball.
+A more dynamic version of the initialization system was explored, where the enclosing ball would be recalculated each frame with the most recent 3000 points.
+In this approach, the enclosing ball would drift upwards if the user held their hands high for an extended period of time, which was a problem.
+% This approach did not work well as the MEB started to drift at times, depending on the most recent positions the user held.
+% As an example, if a user wanted to hold their hands up high a lot, then after enough time, the point cloud used to generate the MEB would not be representative of the user's whole range of movement anymore.
 Similar systems, which allow the user to move slightly during execution, are certainly feasible, but were deemed outside of the scope of this research and are thus left for future research.
 
 

@@ -1,0 +1,19 @@
+\chapter{MEB configurations}
+\label{appendix: meb configuration}
+
+The algorithm to calculate a Minimal Enclosing Ball (MEB) with outliers takes three input parameters:
+\begin{itemize}
+    \item $\delta$, a tightness bound
+    \item $\gamma$, a noise percentage
+    \item $z$, the number of itterations
+\end{itemize}
+
+The algorithm works by iteratively calculating a best guess for the MEB and adding more points to its estimate until it eventually arrives at a reasonable prediction.
+The \textit{tightness bound} and \textit{noise percentage} inform the system how lenient it can be when adding new points.
+
+The precise values for these variables, used in the paper, were arrived at by manual tuning of the system.
+If the system is deployed in a different environment, then this tuning may not be optimal anymore. In general, $\gamma$ should be tuned to be as low as possible without including any obvious noise points. $z$ should start low and be tuned up, until the resulting estimations do not significantly improve anymore.
+
+For our purposes, we found that taking $\delta$ to be 0.08, $\gamma$ to be 0.15, and $z$ to be 50 results in good estimations roughly 90\% of the time.
+We then generate such an estimation 100 times, and average both the ball center and the ball radius across these 100 trials to arrive at a final estimation.
+For a mathematical description of the algorithm see \cite[Algorithm 1]{ding2020sublinear}
