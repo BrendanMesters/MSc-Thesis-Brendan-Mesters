@@ -2,34 +2,62 @@
 \label{section: introduction - motivation}
 
 
-%        -------
-%        [ GAP ]
-%        -------
+%     -[ Current state of IoT interfaces ]-
+The landscape of Human Computer Interactions (HCI) is shifting as our computers are becoming more powerful and more integrated.
+Standalone systems, such as the home computer, are becoming increasingly rare.
+Devices are now often part of a broader IoT environment, ranging from smart lights to voice assistants.
+Controlling this IoT environment with traditional input methods, such as a mouse, keyboard, or touchscreen, is intrusive and impractical.
+These IoT environments require new and alternative input methods.
+Smartphone apps and voice-controlled systems do fill this role, but a broader set of input options would be beneficial.
 
-%     -[[ Why HPE ]]-
-Human Pose Estimation (HPE) is a promising new interface to computer systems.
-The ability to capture a person's stance and use it as input opens the way to a myriad of control systems.
-Most modern HPE solutions use cameras \cite{munaro2014-3d_reconstruction, mehta2017vnect}
-A potential downside for such a system, however, could be the privacy of the users if cameras are used to determine the user's pose.
-%     -[[ Why mmWave ]]-
-However, mmWave radars solve this issue, as they do not record video, instead, they sense using privacy-preserving point pointclouds.
+%     -[ Why mmWave is a great option ]-
+A sufficiently unintrusive interface would not require any physical device to interact with it.
+Simple physical movements should be sufficient to control the underlying system.
+These types of Human Pose Estimation (HPE) systems have already been explored, but primarily used cameras for the recognition of a person, which are privacy-intrusive and sensitive to lighting conditions.
+Millimeter Wave (mmWave) radars, on the other hand, offer a privacy-preserving sensing method that is well-suited for this exact purpose.
 
-%     -[[ Current SOA ]]-
-Systems for HPE using mmWave radar-generated pointclouds already exist; however, these systems all use Deep Learning (DL) to interpret the pointcloud data \cite{an2021mars, an2022fuse, sengupta2020mmpose, junqiao2025diffusion}.
-These systems aim to generate a \textit{skeletal estimation}, a set of key anchor points representative of a human.
+%     -[ SOA uses DL, why might algorithms be better ]-
+Existing mmWave radar-based HPE systems, which can be used as a computer interface, are predominantly built on a Deep Learning (DL) foundation.
+Common limitations of DL systems are their computational intensity, functional opaqueness, and difficulty of tuning.
+Algorithmic HPE interpretation systems would be able to run on more affordable hardware while only requiring retuning as opposed to retraining.
+
+%     -[ Why we use musical interfaces ]-
+HPE solutions fill a niche of low-latency and high-precision interfaces, for which existing technologies like voice assistants are not suited.
+A suitable benchmark system is required to validate such a \textit{real-time} HPE solution.
+Musical interfaces are such a system, due to their low latency requirements.
+Their immediate auditory feedback further supports this suitability, since jitter and high latency make instruments unplayable.
+For these reasons, musical interfaces are an ideal use case through which such an HPE system can be designed.
 
 
 
-%     -[[ DL issues ]]
-These deep learning approaches have a few downsides, though. 
-They rely on large amounts of qualitative training data and need to be monitored and tested for over- and underfitting.
-Deep learning models also require powerful hardware and consume more electricity than algorithms that perform the same task.
-Lastly, DL models are hard to fine-tune, often requiring retraining.
-%     -[[ Why algorithms ]]-
-An algorithmic solution would solve the reliance on training data, while also providing tuning mechanisms to any users.
-The research into this topic, however, is currently nonexistent.
-Broad integration of HPE-based control systems into IoT environments may not be feasible due to the training and retraining requirements these DL models have.
-Algorithmic HPE methods hold unexplored potential in this regard and could allow for broader adoption of these input systems.
-
-% Computers are getting more and more integrated into our everyday lives, from smart watches to voice-controlled house assistants, from electric cars to IOT houses.
-% Therefore, it's important to explore robust, intuitive, and power-efficient interfaces to these systems.
+% %        -------
+% %        [ GAP ]
+% %        -------
+% 
+% %     -[[ Why HPE ]]-
+% Human Pose Estimation (HPE) is a promising new interface to computer systems.
+% The ability to capture a person's stance and use it as input opens the way to a myriad of control systems.
+% Most modern HPE solutions use cameras \cite{munaro2014-3d_reconstruction, mehta2017vnect}
+% A potential downside for such a system, however, could be the privacy of the users if cameras are used to determine the user's pose.
+% %     -[[ Why mmWave ]]-
+% However, mmWave radars solve this issue, as they do not record video, instead, they sense using privacy-preserving point pointclouds.
+% 
+% %     -[[ Current SOA ]]-
+% Systems for HPE using mmWave radar-generated pointclouds already exist; however, these systems all use Deep Learning (DL) to interpret the pointcloud data \cite{an2021mars, an2022fuse, sengupta2020mmpose, junqiao2025diffusion}.
+% These systems aim to generate a \textit{skeletal estimation}, a set of key anchor points representative of a human.
+% 
+% 
+% 
+% %     -[[ DL issues ]]
+% These deep learning approaches have a few downsides, though. 
+% They rely on large amounts of qualitative training data and need to be monitored and tested for over- and underfitting.
+% Deep learning models also require powerful hardware and consume more electricity than algorithms that perform the same task.
+% Lastly, DL models are hard to fine-tune, often requiring retraining.
+% %     -[[ Why algorithms ]]-
+% An algorithmic solution would solve the reliance on training data, while also providing tuning mechanisms to any users.
+% The research into this topic, however, is currently nonexistent.
+% Broad integration of HPE-based control systems into IoT environments may not be feasible due to the training and retraining requirements these DL models have.
+% Algorithmic HPE methods hold unexplored potential in this regard and could allow for broader adoption of these input systems.
+% 
+% % Computers are getting more and more integrated into our everyday lives, from smart watches to voice-controlled house assistants, from electric cars to IOT houses.
+% % % Therefore, it's important to explore robust, intuitive, and power-efficient interfaces to these systems.

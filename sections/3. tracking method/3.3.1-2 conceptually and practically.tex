@@ -1,0 +1,58 @@
+
+\subsection{Conceptually}
+\label{sub-section: tracking method - data interpretation - conceptually}
+
+% What do we want to predict
+As was mentioned at the start of \cref{chapter: tracking method}, the goal of IAmMuse is to predict what \textit{zone} a specific hand is in.
+These zones are defined as being a \textit{range of angles}, and can be either "low", "middle", or "high".
+Respectively representing situations where the user points at the floor, outwards, or at the sky.
+Figure \ref{figure: internal data view - b} shows these internal zones. 
+Note that there are two unlabeled sections (at the top and bottom), points within these regions are not taken into account.
+% 2D simplification.
+When reasoning about this system, a useful simplification is to think about the system in two dimensions.
+This would change our enclosing ball into a circle, enclosing the movement space of the user's arm, where the center of the circle is still at the user's sternum, and the edge still traces the potential positions of the user's hands. 
+Each 3D point would then be transformed into its 2D projection, where we remove the direction outwards from the mmWave camera.
+The reasoning performed on this simplified model still holds true for the actual model, why this is the case will be specified in \cref{sub-section: tracking method - data interpretation - practically}.
+
+
+% pointcloud -> angleset
+Since each point can be seen as a reading of the position of the arm, it is possible to make a prediction of the angle of the arm, as predicted by that singular point.
+This \textit{point angle} can be defined as the angle of the line that goes from the user's sternum (center of the enclosing circle) to that specific point.
+This allows us to transform our weighted pointcloud into a set of predicted angles, with a weight equal to the original point weight, which represents the "value" of that particular prediction.
+With this list of weighted angles, it's now easy to make some likelihood predictions for specific arm zones by looking at the weight of all the angles that fall within the angle range of that specific zone.
+% By simply looking at the zone in which each angle falls and the weight of that angle.
+
+
+\subsection{Practically}
+\label{sub-section: tracking method - data interpretation - practically}
+
+% Pointcloud -> angleset
+The first step that needs to be performed is to transform the weighted point cloud into a set of weighted angles, corresponding to the angle that the arm would have if it went through the specific point.
+To calculate this angle, the vector between the center of the enclosing ball and the specific point considered is taken.
+Then the arc-tangent of this vector's distance in the X-axis (side to side) and the Z-axis (up-down) is considered to be the angle of the point.
+Since the user is expected to hold their arms out mostly straight, the user can be correctly assumed to be roughly two-dimensional.
+From this, we can see that the encompassing ball can be viewed as an encompassing circle, since the center of the circle is said to be at the location of the user's sternum, and is thus at the same distance from the mmWave camera as the user.
+% \textbf{INCLUDE THIS?}
+A better method would have been to consider the angle between the aforementioned vector and the down vector, making a distinction between "left" and "right" based on the sign of the X component of the vector.
+This would allow the user to hold their arms somewhat more forward without affecting the accuracy of the system.
+In this case, the simplified two-dimensional reasoning still applies, as you can take an X-value in the 2D space as being $\sqrt{dx^2 + dy^2} \times \text{sign}(x)$.
+% \textbf{END OF INCLUDE THIS?}
+Doing this for all points in the weighted point cloud yields us a list of angles with an associated weight.
+
+% angleset -> prediction
+Each arm zone is internally defined as a range of angles, where a zone should thus be selected if the user's arm is within that specified angle zone.
+IAmMuse transforms the output of the arc-tangent (on the range of $[-90\degree, 90\degree]$) to an angle value on the range $[0\degree, 360\degree]$, based on the sign of the $x$ value of the vector (distinguishing between left and right).
+%The way IAmMuse differentiates between the left hand and the right hand is simply by the angle.
+On this new angle range, $0\degree$ is down, $90\degree$ is left, $180\degree$ is up, and $270\degree$ is right. 
+In this way, systems can be generalized over both arms.
+Each arm zone then gets a weight equal to the cumulative weight of all the angles that fall within its angle range, only considering angles from one frame.
+The right and left zones with the highest weight are then predicted to be the zone where the user's arms are currently located, making sure only to select \textit{one} left zone and \textit{one} right zone.
+
+% Why we need stabilization
+% This system has a few issues, though. 
+% For one, very sparse frames currently have the same effect as very dense frames, while the information present in a sparse frame is, by definition, lower.
+% Since the mmWave radar has frames where it simply produces less, and less useful data, it often happens that a small bit of noise will produce an almost random prediction on these frames.
+% Even on denser frames, it's possible for large noise spikes to poison a specific prediction.
+% Lastly, there is the issue where an arm located at the edge of two zones will be predicted to be one or the other almost at random for any particular frame, due to the inherently random point distribution point samples generated by the mmWave radar.
+% While this is not a big deal when it comes to a single frame, during system usage, this means that the system might rapidly change its prediction back and forth, resulting in a non-stable output on a stable input (user arm position), which is a bad thing.
+% For these reasons, it's important to consider methods for data stabilization.

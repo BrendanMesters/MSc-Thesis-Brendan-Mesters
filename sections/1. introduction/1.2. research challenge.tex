@@ -1,29 +1,44 @@
 \section{Research Challenge}
 \label{section: introduction - research challenge}
 
+% \ednote{ Why is it hard with mmWave (as opposed to cameras): Sparse pointclouds, high noise percentage\\ This is difficult due to our \textit{high-precision, low-latency} requirements. }
+Using mmWave radars over alternative sensors, such as cameras, introduces unique problems.
+Unlike cameras, which provide dense, rich, and low-noise data, mmWave radar pointclouds are sparse (20-30 points per frame at 10 frames per second) and noisier.
+Some frames are also exceptionally sparse (~5 points) or contain data only of either the right or left half of the user, which makes those frames less valuable.
+This sparseness poses a significant challenge when it comes to \textit{real-time}  systems with a \textit{low-latency} requirement.
+In order to have a tight response time, the system needs to generate an accurate response in a single frame or a few frames at most.
+Since some frames lack data from a specific section of the user, a response needs to be generated with only a single frame of data, or we risk having a noticeable response delay.
 
-%        -----------
-%        [ PROJECT ]
-%        -----------
+% \ednote{ Why is it hard with \textit{algorithms} as opposed to \textit{DL "black boxes"}? \\ No inherent ability to generalise; Researchers will have to \textit{distil} the core features we're looking for. }
+The avoidance of DL methods poses another challenge, as they do provide an impressive inherent ability to generalise, even if this is achieved through a \textit{black box}.
+The move to an algorithmic solution requires domain-specific prior knowledge to parse the sparse point cloud and infer the actual events that generated that specific input.
+This is a difficult challenge when working with high-quality dense data, exacerbated by the noisy nature of mmWave radar point clouds. 
+The input data should be fully exploited, using the known physical constraints, in order to observe the underlying events correctly.
 
-%     -[[ (TECHNICAL) Clear and concise problem statement ]]-
-For this thesis, we will assess the viability of algorithmic interpretation methods for mmWave radar pointclouds for human pose estimation.
-This will take the form of a HPE interface to a musical application, 
-This thesis will create an algorithmic interpretation algorithm for mmWave radar pointclouds.
-This system will measure the angle of the user's arms in real time
-%     -[[ (BRIEF) How and why music ]]- 
 
-%     -[[ Itemize research challenges ]]- 
 
-In this thesis, we will explore the possibility of algorithmic interpretation methods of mmWave point clouds.
-We will design a system which can predict the general position of a users arms, into one of three distinct regions, "low", meaning angled at ...., "middle", which is the region of angles ...., and high, given the region of angles ....
-
-\textbf{Research Challenge}: 
-\begin{itemize}
-    \item 
-    This thesis aims to design an effective algorithmic interpretation method of mmWave radar pointclouds for the purpose of human pose estimation.
-    \item
-    This interpretation method should be explainable, as well as tunable to changing circumstances.
-    \item
-    This interpretation method should hold up, if not exceed early Deep Learning methods for similar purposes.
-\end{itemize}
+% %        -----------
+% %        [ PROJECT ]
+% %        -----------
+% 
+% %     -[[ (TECHNICAL) Clear and concise problem statement ]]-
+% For this thesis, we will assess the viability of algorithmic interpretation methods for mmWave radar pointclouds for human pose estimation.
+% This will take the form of a HPE interface to a musical application, 
+% This thesis will create an algorithmic interpretation algorithm for mmWave radar pointclouds.
+% This system will measure the angle of the user's arms in real time
+% %     -[[ (BRIEF) How and why music ]]- 
+% 
+% %     -[[ Itemize research challenges ]]- 
+% 
+% In this thesis, we will explore the possibility of algorithmic interpretation methods of mmWave point clouds.
+% We will design a system which can predict the general position of a users arms, into one of three distinct regions, "low", meaning angled at ...., "middle", which is the region of angles ...., and high, given the region of angles ....
+% 
+% \textbf{Research Challenge}: 
+% \begin{itemize}
+    % \item 
+    % This thesis aims to design an effective algorithmic interpretation method of mmWave radar pointclouds for the purpose of human pose estimation.
+    % \item
+    % This interpretation method should be explainable, as well as tunable to changing circumstances.
+    % \item
+    % This interpretation method should hold up, if not exceed early Deep Learning methods for similar purposes.
+% \end{itemize}
