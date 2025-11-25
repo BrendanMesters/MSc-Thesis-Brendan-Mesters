@@ -1,7 +1,7 @@
 \section{Research Challenge}
 \label{section: introduction - research challenge}
 
-% \ednote{ Why is it hard with mmWave (as opposed to cameras): Sparse pointclouds, high noise percentage\\ This is difficult due to our \textit{high-precision, low-latency} requirements. }
+%     -[ Why mmWave is more difficult then cameras ]-
 Using mmWave radars over alternative sensors, such as cameras, introduces unique problems.
 Unlike cameras, which provide dense, rich, and low-noise data, mmWave radar pointclouds are sparse (20-30 points per frame at 10 frames per second) and noisier.
 Some frames are also exceptionally sparse (~5 points) or contain data only of either the right or left half of the user, which makes those frames less valuable.
@@ -9,11 +9,22 @@ This sparseness poses a significant challenge when it comes to \textit{real-time
 In order to have a tight response time, the system needs to generate an accurate response in a single frame or a few frames at most.
 Since some frames lack data from a specific section of the user, a response needs to be generated with only a single frame of data, or we risk having a noticeable response delay.
 
-% \ednote{ Why is it hard with \textit{algorithms} as opposed to \textit{DL "black boxes"}? \\ No inherent ability to generalise; Researchers will have to \textit{distil} the core features we're looking for. }
+%     -[ Why algorithms are more difficult then DL ]-
 The avoidance of DL methods poses another challenge, as they do provide an impressive inherent ability to generalise, even if this is achieved through a \textit{black box}.
 The move to an algorithmic solution requires domain-specific prior knowledge to parse the sparse point cloud and infer the actual events that generated that specific input.
 This is a difficult challenge when working with high-quality dense data, exacerbated by the noisy nature of mmWave radar point clouds. 
 The input data should be fully exploited, using the known physical constraints, in order to observe the underlying events correctly.
+
+%     -[ Why my problem statement is simpler then SOA ]-
+However, a full-body skeletal estimation is often unnecessary for a specific interaction task and introduces extra computational load and latency.
+To avoid this additional load and any potential dependency on large training sets, the problem space for this thesis is explicitly constrained.
+Instead of a skeletal estimation, this thesis provides an \textit{arm angle estimation}, focusing on a fast response time with low overhead, allowing for quick retuning, as opposed to retraining.
+
+
+% Many real-world applications do not need a full \textit{skeletal estimation}, instead requiring a more contained estimation of the user's actions.
+% Thus, in order to avoid dependency on large training sets, the problem space will be constrained for this thesis to an estimation of the \textit{angle of the user's arms}, as opposed to a full \textit{pose estimation}.
+
+%This thesis also focuses on a more constrained problem space, estimating the \textit{angle of the user's arms}, as opposed to doing a full \textit{pose estimation}.
 
 
 

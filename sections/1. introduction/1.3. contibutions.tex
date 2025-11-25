@@ -1,5 +1,17 @@
 \section{Contributions}
 \label{section: introduction - contributions}
 
-This thesis has made a few contributions to the field of mmWave HPE, namely:
-It provides a system for arm angle prediction; it shows that algorithmic methods have unexplored potential when it comes to HPE; it provides information on successful and unsuccessful methods for algorithmic data enhancement and interpretation of mmWave Pointclouds.
+
+This thesis presents a novel algorithmic interpretation framework for mmWave radar point clouds that outperforms a similar DL system in the specific problem of arm angle estimation.
+To this end, we created a spatio-temporal noise filter which filters out both low-density ambient noise and high-density noise spikes.
+We use an \textit{online} \textit{few-shot learning} approach to gather information about the kinematic range of the user's arms, which is used to assign a \textit{weight} to each point.
+The user's \textit{arm angles} are then estimated, using this kinematic range, alongside the weighted and filtered point cloud, using a temporally aware and stabilising algorithm.
+
+The pipeline uses an asynchronous, multi-threaded architecture in order to reduce latency and allow the system to work on more resource-constrained devices.
+IAmMuse employs a robust evaluation system, with multiple inbuilt countermeasures to jitter, that uses prior predictions to corroborate or discard the current predictions.
+This results in a stable and well-supported prediction, even on sparse frames.
+
+This thesis also provides a comparison between IAmMuse and a comparable DL HPE model to evaluate the feasibility of using algorithmic sensing models over DL sensing models.
+This comparison gives a clear overview of the strengths and weaknesses of each system and the characteristics that lead to the observed performance.
+This comparison shows that, for the problem of \textit{arm angle estimation}, IAmMuse has a performance improvement of $1.5\times$ to $4\times$ over a comparable DL model.
+
