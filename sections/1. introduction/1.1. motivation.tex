@@ -1,32 +1,64 @@
 \section{Motivation}
 \label{section: introduction - motivation}
 
+% \ednote{
+% Replace the term "Algorithmic" with something more descriptive, e.g. "Lightweight traditional signal processing".\\
+% I assume too much prior knowledge; this is the introduction. Make sure you introduce stuff.\\
+% Specify the system name "IAmMuse"
+% }
 
 %     -[ Current state of IoT interfaces ]-
-The landscape of Human Computer Interactions (HCI) is shifting as our computers are becoming more powerful and more integrated.
-Standalone systems, such as the home computer, are becoming increasingly rare.
-Devices are now often part of a broader IoT environment, ranging from smart lights to voice assistants.
-Controlling this IoT environment with traditional input methods, such as a mouse, keyboard, or touchscreen, is intrusive and impractical.
-These IoT environments require new and alternative input methods.
-Smartphone apps and voice-controlled systems do fill this role, but a broader set of input options would be beneficial.
+The landscape of Human-Computer Interactions (HCI) is shifting as our computers are becoming more powerful and more integrated.
+Standalone systems, such as the home computer, are becoming increasingly rare in favour of integrated Internet of Things (IoT) systems.
+Using traditional input methods, such as a mouse, keyboard or touchscreen, to control these IoT environments is intrusive and impractical.
+% Controlling this IoT environment with traditional input methods, such as a mouse, keyboard, or touchscreen, is intrusive and impractical.
+As such, these IoT environments require new and alternative input methods.
+Smartphone apps and voice-controlled systems do fill some of this demand, but a broader set of input options would be beneficial.
 
 %     -[ Why mmWave is a great option ]-
 A sufficiently unintrusive interface would not require any physical device to interact with it.
-Simple physical movements should be sufficient to control the underlying system.
-These types of Human Pose Estimation (HPE) systems have already been explored, but primarily used cameras for the recognition of a person, which are privacy-intrusive and sensitive to lighting conditions.
-Millimeter Wave (mmWave) radars, on the other hand, offer a privacy-preserving sensing method that is well-suited for this exact purpose.
+Simple arm movements should be sufficient to control the underlying system.
+% \ednote{substantiate the privacy-intrusive claim, either link research or cite the European GDPR\\ Explain "sensitive to light conditions" better, e.g. "will not work properly in the dark.}
+These types of Human Pose Estimation (HPE) systems have already been explored, but primarily used cameras for the recognition task.
+Cameras have a few problems; firstly, they are dependent on advantageous lighting conditions, and suffer in under- or over-illuminated environments.
+Secondly, cameras are privacy-intrusive, which could cause issues with new privacy-focused regulations, such as the GDPR~\cite{GDPR}.
+Millimetre Wave (mmWave) radars, on the other hand, offer a privacy-preserving sensing method that is well-suited for this exact purpose.
+
+
+% \ednote{add an introductory sentence to the subsections}
+\subsection*{Limitations in the State of the Art}
+
 
 %     -[ SOA uses DL, why might algorithms be better ]-
-Existing mmWave radar-based HPE systems, which can be used as a computer interface, are predominantly built on a Deep Learning (DL) foundation.
-Common limitations of DL systems are their computational intensity, functional opaqueness, and difficulty of tuning.
-Algorithmic HPE interpretation systems would be able to run on more affordable hardware while only requiring retuning as opposed to retraining.
+Research into HPE using mmWave radar pointclouds already exists; however, these systems are predominantly built with a Deep Learning (DL) framework.
+MARS~\cite{an2021mars}, mmDiff~\cite{junqiao2025diffusion}, and mmPose~\cite{sengupta2020mmpose} are prime examples of state-of-the-art (SoA) DL models for HPE.
+% Existing mmWave radar-based HPE systems, which can be used as a computer interface, are predominantly built on a Deep Learning (DL) foundation.
+% Common limitations of DL systems are their computational intensity~\cite{chris2024deep}, functional opaqueness~\cite{hussain2019deep}, and difficulty of tuning.
+Although these DL models have an exceptional ability to generalise over unstructured data, they also suffer from some limitations, namely their computational intensity, functional opaqueness and the difficulty of tuning~\cite{chris2024deep, hussain2019deep}.
+% Common limitations of DL systems are their computational intensity, functional opaqueness, and difficulty of tuning \cite{chris2024deep, hussain2019deep}.
+Interpretation methods built on a more traditional signal processing basis would be able to run on more affordable hardware.
+In addition, slight scenario changes would only incur a retuning in more traditional systems, as opposed to the expensive retraining of DL systems.
 
+\subsection*{Applications}
+\ednote{add an introductory sentence\\ e.g. "For this thesis we have to choose a specific application area, to test the ... etc etc"}
+{\color{red}WIP:} For this thesis, a specific application is required to test the interface we will create, where the application fits the problem space well. \\
 %     -[ Why we use musical interfaces ]-
-HPE solutions fill a niche of low-latency and high-precision interfaces, for which existing technologies like voice assistants are not suited.
-A suitable benchmark system is required to validate such a \textit{real-time} HPE solution.
-Musical interfaces are such a system, due to their low latency requirements.
-Their immediate auditory feedback further supports this suitability, since jitter and high latency make instruments unplayable.
-For these reasons, musical interfaces are an ideal use case through which such an HPE system can be designed.
+HPE solutions could fill an existing gap in low-latency and high-precision interfaces for IoT systems.
+Existing solutions, such as voice assistants, fail to address this niche, as they do not provide immediate feedback to the user due to the time it takes to interpret the user's request.
+We require a suitable low-latency benchmark to validate the viability of any specific HPE interface.
+A well-known class of interactive systems which rely on low-latency feedback is musical instruments.
+In addition to their low-latency requirement, musical instruments also provide instant auditory feedback to the user.
+Therefore, we identified musical applications as an ideal benchmark for HPE-powered computer interfaces.
+A video of the final system in action, with the musical interface, can be found here~\cite{usage_video}.
+% Therefore, a digital musical instrument, controlled through an HPE interface, is a well-suited and additionally engaging benchmarking system for this thesis.
+
+
+% % HPE solutions fill a niche of low-latency and high-precision interfaces, for which existing technologies like voice assistants are not suited.
+% A suitable benchmark system is required to validate such a \textit{real-time} HPE solution.
+% Musical interfaces are such a system, due to their low latency requirements.
+% Furthermore, their immediate auditory feedback supports this suitability, since jitter and high latency make instruments unplayable.
+% % Their immediate auditory feedback further supports this suitability, since jitter and high latency make instruments unplayable.
+% For these reasons, musical interfaces are an ideal use case through which such an HPE system can be designed.
 
 
 

@@ -1,43 +1,105 @@
 \chapter{Conclusion}
-\label{chapter:conclusion}
+\label{chapter: conclusion}
 
-%\textbf{After thought/lookback on paper}
-
-%     -[[ Motivation ]]-
-% Why did we do this research
-In the field of mmWave radar-based HPE, all published solutions use deep learning for data interpretation, which comes with an inherent cost.
-Deep learning has two inherent costs: the need for large, representative training datasets and the known high energy costs of deep learning models.
-Algorithmic solutions do not have these inherent costs and have been shown to work in other mmWave radar-based systems (\textbf{REFERENCES}).
-
-%     -[[ Research Question ]]-
-% What did we want to accomplish
-This thesis explores the 
-
-\brendanLines
-
-% motivation
-Currently, the field of HPE is dominated by Deep Learning systems
-Algorithmic approaches are new and far between, even though they can be very successful \cite{li2025acoustic}.
-This paper explored the possibility of algorithmic HPE for mmWave radars.
-
-% Question
-To do this, a pipeline was set up for a musical application
-The system specifically tries to predict an arm zone
-Results were compared with a similarly sized DL model, MARS \cite{an2021mars}
-
-% Why/What we found
-
-% Results and limitations
-Similar train/initialize data, MARS performs terribly
-With good training data, it performs reasonably (though not good)
-Limitation: MARS predicts skeletal estimate IAmMuse only arm zone
-Scenario-specific solutions are not an inherent downside.
-Limitation: In free-play users may have adjusted their exact arm position if they didn't get the note they wanted, making it so they could react to the feedback IAmMuse gave them, without them being able to react to the feedback of mars. (given the instability of mars I don't think this is a huge issue)
+%     -= SUMMARY =-
+% \ednote{Summary:\\hook; problem; solution (no details); results (substantiated)}
+With the steady adoption of integrated computer systems, a need arises for seamless privacy-preserving and low-latency interfaces.
+A promising sensor for this task is the mmWave radar; however, its output is sparse and prone to noise.
+Existing interpretation methods primarily rely on Deep Learning (DL) methods, which are data-hungry, resource-intensive, and opaque, potentially limiting their wide-scale adoption.
+Therefore, we designed IAmMuse, an interpretation system exploiting known domain knowledge, through traditional signal processing methods.
+This interpretation method produces a \textit{discrete arm-angle-estimation}, which predicts the position of both the user's arms as being either \textit{low}, \textit{middle}, or \textit{high}.
+After comparison with a baseline DL model, we found that IAmMuse performs 1.5 to 4 times better than the baseline.
 
 
-% Briefly conclude the whole research
-% Give a \textbf{one liner} conclusion
-% Refer to our results section, the discussion, and the recommendations
+%     -= RESEARCH CHALLENGES =-
+% \ednote{Answer the Research Challenges: \\Briefly explain for each of the challenges that we beat them.}
+% The system we created for this thesis was a signal-processing-based interpretation method for mmWave pointclouds with a comparable accuracy to similar SoA DL models.
+% The objective of this thesis was to create a signal-processing-based interpretation method for mmWave pointclouds with a comparable accuracy to similar SoA DL models.
+% This interpretation method produces a \textit{discrete arm-angle-estimation}, which estimates the position of both the user's arms as being positioned either \textit{low}, \textit{middle}, or \textit{high}.
+% To this end, a few challenges were noted.
+
+% Incomplete Frames
+Several research challenges were addressed before and during implementation.
+% For this implementation, there were some research challenges to overcome.
+The fragmented point cloud data was the first research challenge, as the mmWave radar only captured parts of the user in some frames.
+We circumvented this issue by creating a system that stabilises these predictions, even on sparse or partially incomplete frames.
+% For this, we created an effective system which reports stable predictions, even through sparse or partially incomplete frames.
+To achieve this, we applied a smoothing algorithm over the prediction output.
+This algorithm first employs a confidence threshold to reject any low-confidence predictions. 
+A second stage is used to ensure temporal consistency by disregarding any state changes not predicted twice consecutively, to suppress any predictions created by single-frame noise spikes.
+% Afterwards, we ensure temporal consistency by disregarding any state changes not predicted twice consecutively, to suppress any predictions created by single-frame noise spikes.
+
+% Low Latency
+Another challenge for this thesis was the low-latency requirement. 
+Low-latency response times could not fully be realised.
+Approximately 40\% of the state changes were correctly identified on the following data frame.
+This detection probability increased to 50\% by the 5th frame, and rose to 80\% only after a latency of 30 frames.
+
+
+% Outperform SOA DL model
+The final research challenge for this thesis was to outperform, or perform comparably to, an SoA DL model, MARS~\cite{an2021mars}.
+This requirement was successfully met, producing a correct prediction 1.5 to 4 times more often than MARS, depending on the specific training set.
+When considering the likelihood of predicting a frame correctly, IAmMuse outperformed MARS.
+This is in part due to the high variance in MARS' output, as well as its bias towards a \textit{default output state}, issues that do not occur with IAmMuse.
+MARS predicts its \textit{default output state} marginally better than IAmMuse, but all other output states are predicted either slightly or significantly (more than 4 times) better by IAmMuse.
+
+
+
+%     -= REFLECTION =-
+% \ednote{Reflection:\\ Reflect on the actual feasibility of the project.\\Mention the change in scope (more specific problemspace)\\ Discuss why DL failed (difficulty to generalise between train and test data)}
+Given these findings, we believe that more traditional signal processing-based interpretation systems for mmWave radar are a promising option for integrated HCI systems.
+%     -= LIMITATIONS =-
+% \ednote{Limitations:\\The smaller scope: \textit{arm angle estimation} instead of \textit{human pose estimation}.\\Calibration step required.\\User can not move around.}
+Nevertheless, IAmMuse is currently not flexible enough to be deployed in real scenarios, as its systems are still too constrained.
+Constraining the scope to arm angle estimations is not an inherent issue; however, the low angular resolution remains a limiting factor.
+In addition, the dependence on a \textit{calibration step} and the need for a stationary user limit the usability of the interface in its current state.
+
+
+
+
+%     -= FUTURE WORK =-
+% \ednote{Future Work:\\Where to go from here.}
+% Further research could alleviate these limitations, expanding the current work with a few extra systems.
+
+
+% \brendanLines
+% %\textbf{After thought/lookback on paper}
+% 
+% %     -[[ Motivation ]]-
+% % Why did we do this research
+% In the field of mmWave radar-based HPE, all published solutions use deep learning for data interpretation, which comes with an inherent cost.
+% Deep learning has two inherent costs: the need for large, representative training datasets and the known high energy costs of deep learning models.
+% Algorithmic solutions do not have these inherent costs and have been shown to work in other mmWave radar-based systems (\textbf{REFERENCES}).
+% 
+% %     -[[ Research Question ]]-
+% % What did we want to accomplish
+% This thesis explores the 
+% 
+% \brendanLines
+% 
+% % motivation
+% Currently, the field of HPE is dominated by Deep Learning systems
+% Algorithmic approaches are new and far between, even though they can be very successful \cite{li2025acoustic}.
+% This paper explored the possibility of algorithmic HPE for mmWave radars.
+% 
+% % Question
+% To do this, a pipeline was set up for a musical application
+% The system specifically tries to predict an arm zone
+% Results were compared with a similarly sized DL model, MARS \cite{an2021mars}
+% 
+% % Why/What we found
+% 
+% % Results and limitations
+% Similar train/initialize data, MARS performs terribly
+% With good training data, it performs reasonably (though not good)
+% Limitation: MARS predicts skeletal estimate IAmMuse only arm zone
+% Scenario-specific solutions are not an inherent downside.
+% Limitation: In free-play users may have adjusted their exact arm position if they didn't get the note they wanted, making it so they could react to the feedback IAmMuse gave them, without them being able to react to the feedback of mars. (given the instability of mars I don't think this is a huge issue)
+% 
+% 
+% % Briefly conclude the whole research
+% % Give a \textbf{one liner} conclusion
+% % Refer to our results section, the discussion, and the recommendations
 
 
 % \input{sections/6. conclusion/6.1. results}

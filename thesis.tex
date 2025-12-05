@@ -50,7 +50,12 @@
 \usepackage[textfont=bf]{caption}
 
 % Chose font style
-\usepackage[scaled=.92]{helvet}
+% \usepackage[scaled=.92]{helvet}
+% \usepackage{lmodern}
+\usepackage{newpxtext} % Palatino text
+\usepackage{newpxmath} % Matching math font
+% \usepackage{newtxtext} % Times text
+% \usepackage{newtxmath} % Matching math font
 \usepackage[T1]{fontenc} % to allow symbols like < and >
 
 % for url's use "\url{http://www.google.com/}"
@@ -91,12 +96,12 @@
 \newcommand{\reportUrlEmailNonTUD}{\href{mailto:\reportEmailNonTUD}{\reportEmailNonTUD}}
 \newcommand{\reportMSC}{Computer and Embedded Systems Engineering} % Examples are {Embedded Systems} {Computer Engineering} {Computer Science} or {Electrical Engineering}
 \newcommand{\reportDate}{PUT DATE OF PROVIDING THESIS TO GRADUATION COMMITTEE HERE}
-\newcommand{\presentationDate}{PUT DATE OF YOUR PRESENTATION HERE}
+\newcommand{\presentationDate}{December 16th 2025}
 \newcommand{\graduationCommittee}{
-PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER 1 HERE & Delft University of Technology \\
-PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER 2 HERE & Delft University of Technology \\
+Marco Zúñiga Zamalloa & Delft University of Technology \\
+Koen Langendoen & Delft University of Technology \\
 % ...
-PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft University of Technology \\
+% PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft University of Technology \\
 }
 
 % Provide full name and surname (no abbreviations), so "Koen Langendoen" not "K. Langendoen"
@@ -115,7 +120,23 @@ PUT THE NAME AND SURNAME OF GRADUATION COMMITTEE MEMBER X HERE & Delft Universit
 % prof.\,dr.\,Koen Langendoen (chairman) & Delft University of Technology \\ 
 % dr.\,Przemys{\l}aw Pawe{\l}czak & Delft University of Technology \\ 
 
-\newcommand{\reportAbstract}{WRITE YOUR ABSTRACT HERE}
+\newcommand{\reportAbstract}{
+% Context
+The broad adoption of integrated computing systems through the Internet of Things has led to a need for seamless, low-latency interfaces.
+Existing interfaces, such as voice assistants and smartphones, either introduce significant latency to any interaction or impose barriers to seamless interactions.
+% Gap/Problem
+Millimetre wave (mmWave) radars are an ideal sensor for such an interface, as they can operate through non-conductive materials and independently of lighting conditions.
+However, most human sensing solutions for mmWave radars use Deep Learning models, which rely on large data sets for training and have a high computational overhead, limiting their feasibility on resource-constrained edge devices.
+% solution/method
+To address these limitations, we present \textit{IAmMuse}, a lightweight, signal-processing-based interpretation pipeline for human sensing using mmWave radar technology.
+We filter and enhance the raw point cloud data, using spatio-temporal density information, as well as kinematic context acquired through a few-shot online learning step.
+IAmMuse uses this pre-processed data to generate a stabilised prediction, classifying the user's arm position into a discrete angular zone.
+% results
+To assess the efficacy of this method, we present a comparative analysis with a State-of-the-Art Human Pose Estimation model.
+This comparison shows that IAmMuse achieves a classification accuracy 1.5 to 4 times higher than the comparable baseline in the considered problem space
+% conclusion
+This thesis validates the viability of non-deep-learning-based interpretation algorithms for human sensing with mmWave radars through a fully functional prototype.
+}
 
 \newcommand{\reportKeywords}{LIST YOUR KEYWORDS HERE}
 

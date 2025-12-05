@@ -1,23 +1,63 @@
-\section{Recommendations/Future work}
+\section{Future work}
 \label{section: conclusion - future work}
-Depending on the results, I either want to encourage more research into stochastic MMWave interpretation, both in breath and scope. aka, people should try and make stochastic systems for more complex problems/different problems. And people should look further at optimizations in the current system, in firmware used, system tuning, and potential broadening.
-An interesting problem would be to see if you can increase the amount of zones, and reduce them in size, in such a way that you have ~20 zones per side, and to then try and modify the system to still predict zones correctly.
-This could be achieved with a kind of "decaying charge" (each step the zone loses a percentage of its value) and a kernel/distance based "charge addition" (each point gives value to multiple zones, depending on how "near to it" they are).
+
+\subsection*{Unified Dynamic User Tracking}
+To simultaneously address the requirement of a stationary subject and the dependency on a calibration step, future research should investigate a dynamic user tracking model.
+By tracking a user once they enter the Field of View of the radar, this system could maintain a continuous estimation of their sternum location.
+Simultaneously, an estimation of their arm span can be refined online through kinematic analysis of the observed point cloud.
+Together, these results yield a kinematic range estimation: a sphere with its centre at the sternum and a diameter equal to the arm span.
+The exact domain knowledge used by the IAmMuse interpretation system.
+
+\subsection*{Increased Angular Resolution}
+Future work should address the granularity limitation of the current system.
+We identified two potential approaches to solve this issue.
+Firstly, the \textit{classification system} of IAmMuse could be replaced by a \textit{regression model}, providing a real-valued angle estimation, as opposed to a discretised angle zone.
+Secondly, the granularity of the classification could be improved by subdividing the full angle range into a large number of smaller angle intervals.
+This latter approach can reuse the conceptual basis of the current classification system, but distribute the weight of a point over adjacent angular zones instead of using a binary hard-assignment.
+To support this new classification system, the stabilisation system could be replaced by a combined temporal median and IIR filter to remove outliers and ensure a smooth output.
+
+\subsection*{Latency Reduction}
+The problem of system latency persists in the current work and should be addressed in future research.
+The fact that a significant percentage of frames are estimated with low latency suggests that the high latency issue is not inherent to the method, but rather an implementation-specific issue.
+% We It is unlikely that this issue is an inherent problem with the methodology, due to the percentage of frames that are estimated correctly.
+Therefore, the first step is to identify and analyse the scenarios in which significant latency occurs.
+These findings can then be used to guide modifications to the existing method to alleviate this latency issue.
+
+\subsection*{Semantic Point Cloud Segmentation}
+An efficient framework for semantic segmentation of human body point clouds would lay the foundation for future signal-processing-based Human Pose Estimation.
+Such a system would assign a label to each point, based on the statistical likelihood of that point belonging to a particular anatomical segment.
+% Each point in a given cloud would need to be labelled with a statistical likelihood of belonging to a particular section of the user's body.
+This could then be used as a pre-processing step for future interpretation algorithms, significantly reducing implementation complexity for task-specific interfaces.
 
 
-\subsection{Dynamic Initialization Recalculation}
-The initialization step is currently fully static, this could be adapted to become a more dynamic system.
 
-\subsection{More Continuous Result Angles}
-One shortcoming of the current system is that it only considers some broad angle-zones.
-This isn't a weakness in and of itself, but it limits the usefulness of the system.
-One way to potentially mitigate this issue is to change the data interpretation method described in \cref{section: tracking method - data interpretation} to allow for a broader range of output values.
-One manner in which that could be done is to consider 360 "zones" of $1\degree$ each. 
-Due to the relatively low point density, this system would need to solve the issue that it's very unlikely for multiple points to end up in the same zone (which would make the system prone to random data distribution artifacts), and the fact that the current stabilization methods would not work anymore.
-One way to solve the first issue would to to have each point add its "weight" to many zones "near" it, for example, by using a Gaussian kernel to distribute its weight across nearby zones.
-This would produce a likelihood-density distribution along the angle axis.
-The peaks would be representative of where the arms might be, some clever new stabilization methods would be needed for this system, to ensure that "one sided frames" (frames whose data is predominantly on one side) don't mess things up, as well as to stabilize the output in general.
-
-One potential idea is to add the new weights to a running sum (for each zone) and normalize the output on a specific "Total weight", e.g., at the end of the normalization the sum total of all zone weights should always be 30.
-
-However, the further design and testing of these systems will be left to any future researchers.
+% A computationally inexpensive signal processing based approach to label segments of a pointcloud as parts of a human body would be a foundational work for further non-DL based interpretation systems.
+% A system that can make a statistical distinction between points likely to belong to specific parts of the human body could be a first step in a generalized signal processing based human pose estimation.
+% 
+% 
+% 
+% 
+% \brendanLines
+% 
+% 
+% Depending on the results, I either want to encourage more research into stochastic MMWave interpretation, both in breath and scope. aka, people should try and make stochastic systems for more complex problems/different problems. And people should look further at optimizations in the current system, in firmware used, system tuning, and potential broadening.
+% An interesting problem would be to see if you can increase the amount of zones, and reduce them in size, in such a way that you have ~20 zones per side, and to then try and modify the system to still predict zones correctly.
+% This could be achieved with a kind of "decaying charge" (each step the zone loses a percentage of its value) and a kernel/distance based "charge addition" (each point gives value to multiple zones, depending on how "near to it" they are).
+% 
+% 
+% \subsection{Dynamic Initialization Recalculation}
+% The initialization step is currently fully static, this could be adapted to become a more dynamic system.
+% 
+% \subsection{More Continuous Result Angles}
+% One shortcoming of the current system is that it only considers some broad angle-zones.
+% This isn't a weakness in and of itself, but it limits the usefulness of the system.
+% One way to potentially mitigate this issue is to change the data interpretation method described in \cref{section: tracking method - data interpretation} to allow for a broader range of output values.
+% One manner in which that could be done is to consider 360 "zones" of $1\degree$ each. 
+% Due to the relatively low point density, this system would need to solve the issue that it's very unlikely for multiple points to end up in the same zone (which would make the system prone to random data distribution artifacts), and the fact that the current stabilization methods would not work anymore.
+% One way to solve the first issue would to to have each point add its "weight" to many zones "near" it, for example, by using a Gaussian kernel to distribute its weight across nearby zones.
+% This would produce a likelihood-density distribution along the angle axis.
+% The peaks would be representative of where the arms might be, some clever new stabilization methods would be needed for this system, to ensure that "one sided frames" (frames whose data is predominantly on one side) don't mess things up, as well as to stabilize the output in general.
+% 
+% One potential idea is to add the new weights to a running sum (for each zone) and normalize the output on a specific "Total weight", e.g., at the end of the normalization the sum total of all zone weights should always be 30.
+% 
+% However, the further design and testing of these systems will be left to any future researchers.

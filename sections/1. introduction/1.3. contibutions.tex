@@ -1,17 +1,130 @@
 \section{Contributions}
 \label{section: introduction - contributions}
 
+\ednote{rethink this figure caption, is it the "theory" or the "implementation"}
+\ednote{Make this figure better readable (colours, whatever)}
+\ednote{Technically, this figure should also have a "point weight added" or "data enhancement" step between \textit{calibration complete} and \textit{Data Filtering}}
+\begin{figure}[!htb]
+    \centering
+    \makebox[\linewidth][c]{
+    \includegraphics[width=1.5\linewidth]{figures/internal data/System State Diagram.jpg}
+    }
+    \caption{State diagram of the system}
+    \label{figure: system state diagram}
+\end{figure}
 
-This thesis presents a novel algorithmic interpretation framework for mmWave radar point clouds that outperforms a similar DL system in the specific problem of arm angle estimation.
-To this end, we created a spatio-temporal noise filter which filters out both low-density ambient noise and high-density noise spikes.
-We use an \textit{online} \textit{few-shot learning} approach to gather information about the kinematic range of the user's arms, which is used to assign a \textit{weight} to each point.
-The user's \textit{arm angles} are then estimated, using this kinematic range, alongside the weighted and filtered point cloud, using a temporally aware and stabilising algorithm.
+\ednote{Be consistent with your terms "method", "architecture", "implementation" ect\\
+choose a specific one for each thing and keep to those.}
 
-The pipeline uses an asynchronous, multi-threaded architecture in order to reduce latency and allow the system to work on more resource-constrained devices.
-IAmMuse employs a robust evaluation system, with multiple inbuilt countermeasures to jitter, that uses prior predictions to corroborate or discard the current predictions.
-This results in a stable and well-supported prediction, even on sparse frames.
+This thesis makes three distinct contributions to the field of mmWave sensing \textbf{\color{red} Narrow this, what kind of sensing}: 
+a theoretical interpretation framework, a real-time software implementation of this framework, and a comparative evaluation against a state-of-the-art Deep Learning model.\\
 
-This thesis also provides a comparison between IAmMuse and a comparable DL HPE model to evaluate the feasibility of using algorithmic sensing models over DL sensing models.
-This comparison gives a clear overview of the strengths and weaknesses of each system and the characteristics that lead to the observed performance.
-This comparison shows that, for the problem of \textit{arm angle estimation}, IAmMuse has a performance improvement of $1.5\times$ to $4\times$ over a comparable DL model.
+\ednote{Make sure that the names mentioned above align with the names mentioned bellow e.g. "theoretical framework" vs "signal processing method for ..."}
+
+\ednote{Think about potentially using "forwards references" e.g. "... this will be discussed in more detail in chapter 3 or section 3.2"}
+\noindent \textbf{1. A Signal Processing Method for Sparse Point Cloud Interpretation}\\
+Our first contribution is a framework for the cleaning, enhancing and interpretation of sparse mmWave radar point clouds.\\
+This framework comprises:
+\begin{itemize}
+    \item 
+        A \textit{spatio-temporal filter} for pointclouds, which uses the local density and the prior frames to filter out both \textit{dense single-frame noise spikes}, as well as more \textit{consistent low-density noise}.
+    \ednote{split het volgende bulletpoint tot been few-shot online learning \textbf{EN} de data enhancement}
+    \item 
+        A \textit{data enhancement} technique to prioritise the points produced by the user's hands.
+        This is achieved through a \textit{few-shot online learning} step, which gathers context data of the scene, also providing valuable information about the user's position and arm span.
+    \item 
+        A \textit{stabilising angle estimation} method, which uses the context gathered by the data enhancement system to estimate which discrete arm angle range the user's arms are in.
+        Stabilisation methods are employed to counteract jitter and noise spikes.
+\end{itemize}
+
+
+\noindent \textbf{2. A Real-Time Software Architecture: 'IAmMuse'}\\
+Our second contribution is a multi-threaded full pipeline implementation of this methodology, called 'IAmMuse'.
+It is designed with robustness and fast response times in mind, to be able to run on more resource-constrained hardware.\\
+For this contribution, we present:
+\begin{itemize}
+    \item 
+        A custom high-performance driver for the radar communication protocol, implemented in Rust.
+        This development yields a platform-agnostic solution, resolving the compatibility limitations of the vendor-supplied driver while providing a native, low-latency interface, enabling seamless integration into the rest of the pipeline.
+    \item 
+        A fully asynchronous and multi-threaded implementation of the pipeline shown in \cref{figure: system state diagram}.
+        This architecture ensures that data processing can start as soon as a data packet arrives from the mmWave radar.
+        This enables optimal hardware utilisation, even on more resource-constrained hardware.
+    \item 
+        A custom visualizer in Python, providing a direct view into the system's internal state.
+        This is an essential tool, allowing us to tune and monitor the system through visual verification of many of the pipeline steps.
+\end{itemize}
+
+
+\noindent \textbf{3. A Comparative Evaluation Against the State of the Art}\\
+Our third contribution is a quantitative comparison with an SoA HPE interpretation system.
+For this, we compared IAmMuse to the DL model MARS~\cite{an2021mars}, to assess the efficacy of the IAmMuse framework.\\
+The findings from this benchmark are that:
+\begin{itemize}
+    \item 
+        IAmMuse outperformed the best-performing MARS model by a factor of 1.5 for correct state predictions, on our evaluation data set.
+        The output of MARS was often unstable, rapidly switching between different predictions.
+    % \ednote{Turn it around, "if we give it poor data" THEN "we get poor output"}
+    \item 
+        If MARS is trained using the data from the online few-shot training, then the performance is only slightly better than random guessing.
+        % MARS' results are only slightly better than random performance when it is trained using the same data IAmMuse uses for its online few-shot training.
+        % MARS performs only slightly above a chance-level performance when it is trained in the same data IAmMuse uses for its online few-shot training.
+        In this scenario, IAmMuse had an accuracy 4 times higher than MARS.
+    % \ednote{Misschien anders vertellen:\\ Je moet MARS met echt dezelfde data trained als je gebruiks data, also dit niet goed genoeg match dan krijgt hij been enorme bias.}
+    \item 
+        The training data for MARS also had to match the evaluation data very closely; using a different mmWave HPE dataset, for example, produced a model that was very prone to bias.
+        These models predicted the same state, regardless of the input data, more then 90\% of the time.
+        % The MARS model was prone to severe bias, predicting the same output state more than 90\% of the time.
+        % Careful training set selection was required to mitigate this behaviour.
+\end{itemize}
+
+
+\section*{Thesis Outline}
+\ednote{Jack is van meaning dat het better least als je elke chapter met "Chapter X shows", etc, etc begint.}
+
+\Cref{chapter: background} presents the theoretical foundations required to understand the thesis and its challenges, as well as the current state of research in the field.
+A detailed discussion of the system pipeline and its workings is given in \cref{chapter: tracking method}.
+% A detailed explanation of the evaluation pipeline is given in \cref{chapter: tracking method}.
+\Cref{chapter: experimental setup} shows the testing setup, lays out the characteristics of the collected data, and the baseline comparisons.
+The results of this comparison will be presented in \cref{chapter: evaluation}, and lastly, this thesis will be concluded in \cref{chapter: conclusion}.
+
+
+
+% \brendanLines
+% 
+% 
+% 
+% This thesis presents \textit{IAmMuse}, a lightweight signal processing-based system for estimating \textit{arm angles} from mmWave radar pointclouds.
+% Our \textbf{first contribution} is the \textit{method}
+% 
+% % This thesis has several contributions to the current field of research.\\
+% % Our \textbf{first contribution} is \textit{IAmMuse}, a lightweight signal processing-based system for estimating \textit{arm angles} from mmWave radar pointclouds.
+% A state diagram of the whole pipeline can be found in \cref{figure: system state diagram}.
+% This system consists of a few distinct parts:
+% \begin{itemize}
+    % \item A spatio-temporal noise filter, which can remove both low-density ambient noise, as well as high-density noise spikes.
+    % \item A novel approach to increase point weight for points likely produced by the hands, using an estimation of the kinematic range of the user's arms, derived from an \textit{online few-shot learning} step.
+    % \item A geometric method to estimate \textit{arm angles} from this weighted pointcloud and the estimation of the user's kinematic range.
+    % \item A stabilisation algorithm for the estimations, which reduces outlier occurrences and filters out any outliers which do occur.
+% \end{itemize}
+% 
+% 
+% 
+% \brendanLines
+% 
+% This thesis presents a novel algorithmic interpretation framework for mmWave radar point clouds that outperforms a similar DL system in the specific problem of arm angle estimation.
+% To this end, we created a spatio-temporal noise filter to mitigate both low-density ambient noise and high-density noise spikes.
+% We use an \textit{online} \textit{few-shot learning} approach to gather information about the kinematic range of the user's arms, which is used to assign a \textit{weight} to each point.
+% The user's \textit{arm angles} are estimated, using this kinematic range, alongside the weighted and filtered point cloud, using a temporally aware and stabilising algorithm.
+% 
+% The pipeline uses an asynchronous, multi-threaded architecture in order to reduce latency and allow the system to work on more resource-constrained devices.
+% \ednote{The jitter argument is hard to follow; phrase it as "removing outliers" in a "semi-stable output" or something.}
+% IAmMuse employs a robust evaluation system, with multiple inbuilt countermeasures to jitter, that uses prior predictions to corroborate or discard the current predictions.
+% This results in a stable and well-supported prediction, even on sparse frames.
+% 
+% This thesis also provides a comparison between IAmMuse and a comparable DL HPE model to evaluate the feasibility of using algorithmic sensing models over DL sensing models, for realistic sensing scenarios.
+% This comparison gives a clear overview of the strengths and weaknesses of each system and the characteristics that lead to the observed performance.
+% We see that, for the problem of \textit{arm angle estimation}, IAmMuse has a performance improvement of $1.5\times$ up to $4\times$ over a comparable DL model.
+% % This comparison shows that, for the problem of \textit{arm angle estimation}, IAmMuse has a performance improvement of $1.5\times$ to $4\times$ over a comparable DL model.
+
 

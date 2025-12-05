@@ -63,7 +63,7 @@ IAmMuse (blue), on the other hand, follows the ground truth distribution very cl
 This behaviour of the pre-trained and \textit{full calib} models points to them suffering from something else.
 The MARS pre-trained model suffers from unrepresentative training data and potentially from overfitting.
 % As already mentioned in \cref{section: background - millimeter wave radar}, mmWave radars produce slightly different pointclouds in different rooms, which can alter small secondary patterns in the pointclouds, mostly w.r.t. the noise and reflections in the room.
-mmWave radars produce slightly different pointclouds in different rooms, as mentioned in \cref{section: background - millimeter wave radar}, which can alter small secondary patterns in the pointclouds, mostly w.r.t. the noise and reflections in the room.
+mmWave radars produce slightly different pointclouds in different rooms, as mentioned in \cref{section: background - millimetre wave radar}, which can alter small secondary patterns in the pointclouds, mostly with respect to the noise and reflections in the room.
 If these secondary patterns are being used in the recognition model of a DL system, then it will cease to function when moved to a new location.
 Furthermore, there are slight differences in the hardware setup between the MARS paper and IAmMuse.
 They use a different mmWave radar (the IWR1443BOOST, as opposed to the newer IWR6843ISK, which was used for IAmMuse) and firmware, which would make their data unrepresentative for our setup.
@@ -72,7 +72,7 @@ In \cref{figure: skeletal estimate pre-trained}, it's shown how the skeletal est
 \textit{MARS full calib} seems to suffer from a somewhat different issue, though.
 The model always holds its arms out to the side, regardless of the input data, as can be seen in \cref{figure: skeletal estimate calib-trained}, the exact point positions in the prediction also rarely ever move.
 This indicates that this model has gotten stuck in a local minima during training, since the position where the skeleton holds both its arms out straight minimizes the average mean squared error for \textit{calibration data}.
-Since the calibration data consists of a user waving their arms up and down, as is described in \cref{section: setup baseline dataset - dataset}, the static position with minimal error is the one where a user holds their arms out to the side.
+Since the calibration data consists of a user waving their arms up and down, as is described in \cref{section: experimental setup - dataset}, the static position with minimal error is the one where a user holds their arms out to the side.
 This shows that the model has stopped trying to dynamically interpret the input data, instead taking on a static position of minimal loss.
 
 

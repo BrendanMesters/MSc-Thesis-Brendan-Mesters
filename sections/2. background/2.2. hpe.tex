@@ -7,7 +7,7 @@ A well-known example of an HPE system is the Microsoft Kinect system, a camera-b
 Though HPE can cover a broad number of applications, many of them aim to construct a \textit{skeletal estimation}, a set of essential keypoints to represent a human skeleton.
 Microsoft Kinect, in particular, generates a skeletal estimate composed of 25 points, as depicted in \cref{fig:kinect_skeletal_estimate}, and is used as a source of ground truth for several other HPE systems.
 
-\begin{figure}[h]
+\begin{figure}[!htb]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/misc/The-skeleton-of-the-Kinect-v2-19.png}
     \caption{Kinect's 25-point skeletal estimation \cite{guffanti2020accuracy}}
@@ -19,6 +19,7 @@ HPE methods have become increasingly prevalent as computer systems have become m
 These HPE systems can be used for a variety of purposes; the Kinect, for example, was originally built for gaming.
 Other fields have also started using HPE methods.
 Activity recognition, through kinematic skeletal estimations, can enhance existing security systems, allowing them to detect security threats autonomously.
+\ednote{Clearly specify that \cite{munea2020progress} is a review paper, and that the following examples are taken from it "For a full overview..."}
 Action recognition and tracking methods can control IoT systems, and HPE systems have even seen use in automated sign language recognition, assisted living spaces, and driver assistance systems \cite{munea2020progress}.
 
 
@@ -26,4 +27,5 @@ Action recognition and tracking methods can control IoT systems, and HPE systems
 HPE systems exist for various input modalities.
 Vision-based methods \cite{Lan2023visionbased} often use normal cameras or RGB-D cameras to construct pose estimations. 
 Wearable-based methods \cite{moniruzzaman2023wearable} rely on sensors worn by the user to construct their estimations.
+\ednote{According to who\\ Does this statement add anything?\\ Either remove it or put a source (Also, this is not a 'however')}
 Most of these methods, however, are built with a deep learning framework at the core in order to transform the sensor input into a prediction.

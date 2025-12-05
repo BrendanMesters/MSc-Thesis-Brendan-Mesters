@@ -14,13 +14,13 @@
 The data interpretation is built upon the specific enhancements of the input data provided by the data enhancement method.
 In our case, this entails a ball-shaped region that encloses the points of the user, the noise-signal labels, and the new point weight.
 The data interpretation method will use this information to determine which position state the user is currently in.
-\Cref{figure: internal data view} shows a visualization of the internal state of the system, with the ground truth in orange.
+\Cref{figure: internal data view} shows a visualisation of the internal state of the system, with the ground truth in orange.
 
 
 % The method used for data interpretation is tightly linked to the method used for data enhancement, since the data enhancement method adds a specific type of information to our input data.
 % In the case of IAmMuse, we have the ball, which encompasses the user, as well as the extra dimension of weight, added to the point cloud.
 % The data interpretation method of IAmMuse will thus be built around this new information.
-% A visualization of this internal state, with the ground truth in orange, is shown in \cref{figure: internal data view - a}.
+% A visualisation of this internal state, with the ground truth in orange, is shown in \cref{figure: internal data view - a}.
 
 \begin{figure}[h]
     \begin{subfigure}{0.5\textwidth}
@@ -39,56 +39,105 @@ The data interpretation method will use this information to determine which posi
 \end{figure}
 
 
-\subsection{Zone Prediciton}
+\subsection{Angle Estimation}
+\label{sub-section: tracking method - data interpretation - angle estimation}
+
 We want to predict a specific zone, \textit{low}, \textit{middle}, or \textit{high}, for each hand.
-These zones are represented to be the volume within a \textit{wedge}, as shown in \cref{figure: internal data view - b}. 
-Note that there are two regions (top and bottom) that do not represent any zone.
-Another equivalent way to specify a particular zone is as an angle range in the projection plane of the camera.
-Each point can be assigned to a zone, using these angle ranges, and the angle of the vector going from the encompassing ball's center to the specific point.
+These zones are represented to be the volume within a \textit{wedge} of the ball, as visualised in \cref{figure: internal data view - b}. 
+Note that there are two regions (at the top and bottom) that are not a part of any zone.
+An alternative method defines these zones as angle ranges within the camera's projection plane. 
+Here, the points are classified based on the angle of the vector extending from the projected sternum to the point in question.
+This produces an identical result, except for the fact that points which fall outside the ball can still be categorised into one of the position zones.
+% Another equivalent way to specify a particular zone is as an angle range in the projection plane of the camera.
+% Here, a point gets assigned to a certain angle range, dependent on the angle of the vector going from the user's sternum to that point in that given projection.
+% Each point can be assigned to a zone, using these angle ranges, and the angle of the vector going from the encompassing ball's centre to the specific point.
+
+The point cloud is now divided into points contained within the six position zones and points not contained in any position zone.
+We now assign a weight to each position zone, based on the weight of all the points contained in that specific zone.
+The weight of each position zone can be seen as the prediction likelihood of the user's arm actually being in that specific zone.
+Lastly, we find the right-hand position zone with the highest weight, and the left-hand position zone with the highest weight; these are now our zone predictions.
+
+% \ednote{I ended here with the rewrite}
 
 
+\subsection{Output Stabilisation}
+\label{sub-section: tracking method - data interpretation - stabilisation}
+% \ednote{STATE VS ZONE< MAKE SURE YOU HAVE IT CORRECT}
+
+% \ednote{intro: There are still some issues, however.}
+This estimation system still has some issues, in particular when it comes to stability.
+The first issue we consider is that of the data sparsity and occasional intermittency observed in the mmWave radar.
+This lack of data results in some frames where a significant portion of the position zones has a low weight and, thus, a low certainty.
+These low certainties can lead to unsubstantiated, near-random predictions.
+To counteract this, we enforce a weight threshold that a zone must attain before we consider the prediction to be \textit{valid}.
+If a frame does not contain any valid position zone predictions for the left or the right hand, then the previous prediction for that zone is used to avoid unsupported predictions.
 
 
-\brendanLines
-\input{sections/3. tracking method/3.3.1-2 conceptually and practically}
-\subsection{Data Stabilization}
-\label{sub-section: tracking method - data interpretation - data stabilization}
+% \ednote{mmWave Sparsity:\\ Occasional \textit{low certainty} predictions lead to unreliable predictions.\\ MITIGATION: Minimal zone weight to be considered a \textit{valid zone}\\ If no valid zone is found, we default to the previous prediction.\\ CONSIDERATION: We will be ignoring some frames; this data could be added to the next frame, but we don't do this as we consider the data stale.}
 
-% stabilization intro & minimal points
-There are a few issues with the current system, though, all to do with the stability of the resulting prediction, and extra systems have been put in place to mitigate these issues.
-Firstly, one issue occurs because the mmWave radar occasionally produces very sparse frames. 
-Sparse frames contain disproportionately few points, and thus also contain disproportionately few signal points. 
-This means that the predictions of IAmMuse are more susceptible to the random variations in the point distributions, as well as being more susceptible to noise, since the prediction system simply looks at which zone has the highest weight.
-The way in which IAmMuse mitigates this issue is by setting a \textit{minimal weight} which a zone must have to be considered as a "valid prediction". 
-If no valid prediction was made for a side, the previous prediction is kept.
-This mitigation strategy does have the side effect of ignoring some frames if they are too sparse, but this isn't a huge problem, as the amount of information present in that frame was already very low because of how sparse it was.
-A solution that adds the data from these "missed frames" to the following frames could be made.
-This would increase the amount of information the system uses, but could also induce a lower responsiveness by taking into account stale information.
-For these reasons, such a system was not put in place in IAmMuse.
+% \ednote{Noise spikes:\\ Most of the currently existing stuff is good, though I do need to change some wording.\\ Specify the delay in \textit{frames} not in \textit{millis}.}
+A further challenge we have to solve is that of noise spikes, which throw off the predictions.
+% The second issue we have to solve is noise spikes, which throw off the prediction.
+Noise spikes are still at times permitted by the filter, for example, when two noise spikes happen in quick succession in the same region.
+These spikes can significantly influence the position zone weights, thus affecting the predicted zone.
+This manifests itself as incidental \textit{random predictions}, which should be mitigated.
+We do this by introducing a temporal consistency constraint, since \textit{valid predictions} are assumed to remain stable across frames.
+This constraint is enforced by only switching our output state if the same state has been predicted twice.
 
+% \ednote{jittery output:\\ The text is okay, but should be made more concise,\\ HOWEVER: Do make sure to explain the mitigation method clearly.}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/misc/Zone expansion.png}
+    \caption{Shows the zone size increase (orange) of the active zones (green).}
+    \label{figure: active zone increase}
+\end{figure}
 
-% Multiple predictions needed
-Another similar issue occurs when a large spike of noise is perceived for a single frame, this influx of faulty data can make the system select an incorrect zone.
-These large noise spikes do not happen regularly, but they happen often enough that a mitigation system is needed.
-In these cases, most frames in a sequence will give a similar result, but one frame will give a "faulty prediction".
-Since we know that, in a correctly predicted set of frames, the same zone is likely to be predicted multiple times in a row, as the user's arm stays in that zone, we can filter out the faulty case by only choosing a new zone if that zone has been predicted twice in a row.
-In this system, it's important not to count "missing predictions" (as specified in the previous paragraph) as a part of these consecutive predictions.
-This system does add some delay to the selection of a new zone, specifically 100ms if you receive correct predictions every frame. 
-For the IAmMuse system, this delay is a worthwhile tradeoff for the added stability against both noise and random fluctuations in the mmWave radars' output, but this may not be the case for every system.
+% Lastly, if the user holds their arm at the boundary between two position zones, then the random sampling of the mmWave radar will result in our system randomly predicting either zone.
+This is an incorrect behaviour as the user provides the same input (a stationary arm) and receives a different input on consecutive frames.
+This issue only occurs at the boundary between two position zones, and is caused by that boundary's specific position.
+Our mitigation strategy moves the boundary between the zones in such a way that points near or at that boundary are assigned to the currently selected zone, through a hysteresis mechanism, see \cref{figure: active zone increase}.
+With these mitigation strategies in place, the output of the prediction system is sufficiently stabilised.
 
-% Zone expansion
-Lastly, in the scenario where a user is holding their arm near the border of two zones, an issue occurred where, for each frame, either zone could be predicted at random, due to the inherent random distribution in the mmWave point clouds.
-% Lastly, IAmMuse had to solve an issue in the scenario where a user is holding their arm near the border of two zones.
-% In this case, IAmMuse may predict either zone at random, purely due to the random nature in which the points in a mmWave frame are distributed.
-While a singular frame prediction would not be incorrect per se, the fact that the system produces an unstable output while the user provides a stable input (a stationary arm) is incorrect.
-The way that IAmMuse solves this issue is by expanding the range of angles associated with the currently selected zone.
-This eliminates the issue, as the randomly distributed points that are on the edge of the two zones will be predominantly in the active zone if the zone's angle range is increased.
-In IAmMuse, the active zone's angle range is increased by $10\degree$, or $5\degree$ on each side, and neighboring zones are shrunk in accordance.
-This increase should be as small as possible while still providing the stability-increasing effect.
-During system design, an increase of $10\degree$ seemed to be the smallest amount that fulfilled this wish.
-
-
-
+% \brendanLines
+% \input{sections/3. tracking method/3.3.1-2 conceptually and practically}
+% \subsection{Data Stabilization}
+% \label{sub-section: tracking method - data interpretation - data stabilisation}
+% 
+% % stabilization intro & minimal points
+% There are a few issues with the current system, though, all to do with the stability of the resulting prediction, and extra systems have been put in place to mitigate these issues.
+% Firstly, one issue occurs because the mmWave radar occasionally produces very sparse frames. 
+% Sparse frames contain disproportionately few points, and thus also contain disproportionately few signal points. 
+% This means that the predictions of IAmMuse are more susceptible to the random variations in the point distributions, as well as being more susceptible to noise, since the prediction system simply looks at which zone has the highest weight.
+% The way in which IAmMuse mitigates this issue is by setting a \textit{minimal weight} which a zone must have to be considered as a "valid prediction". 
+% If no valid prediction was made for a side, the previous prediction is kept.
+% This mitigation strategy does have the side effect of ignoring some frames if they are too sparse, but this isn't a huge problem, as the amount of information present in that frame was already very low because of how sparse it was.
+% A solution that adds the data from these "missed frames" to the following frames could be made.
+% This would increase the amount of information the system uses, but could also induce a lower responsiveness by taking into account stale information.
+% For these reasons, such a system was not put in place in IAmMuse.
+% 
+% 
+% % Multiple predictions needed
+% Another similar issue occurs when a large spike of noise is perceived for a single frame; this influx of faulty data can make the system select an incorrect zone.
+% These large noise spikes do not happen regularly, but they happen often enough that a mitigation system is needed.
+% In these cases, most frames in a sequence will give a similar result, but one frame will give a "faulty prediction".
+% Since we know that, in a correctly predicted set of frames, the same zone is likely to be predicted multiple times in a row, as the user's arm stays in that zone, we can filter out the faulty case by only choosing a new zone if that zone has been predicted twice in a row.
+% In this system, it's essential not to count "missing predictions" (as specified in the previous paragraph) as a part of these consecutive predictions.
+% This system does add some delay to the selection of a new zone, specifically 100ms if you receive correct predictions every frame. 
+% For the IAmMuse system, this delay is a worthwhile tradeoff for the added stability against both noise and random fluctuations in the mmWave radars' output, but this may not be the case for every system.
+% 
+% % Zone expansion
+% Lastly, in the scenario where a user is holding their arm near the border of two zones, an issue occurred where, for each frame, either zone could be predicted at random, due to the inherent random distribution in the mmWave point clouds.
+% % Lastly, IAmMuse had to solve an issue in the scenario where a user is holding their arm near the border of two zones.
+% % In this case, IAmMuse may predict either zone at random, purely due to the random nature in which the points in a mmWave frame are distributed.
+% While a singular frame prediction would not be incorrect per se, the fact that the system produces an unstable output while the user provides a stable input (a stationary arm) is incorrect.
+% The way that IAmMuse solves this issue is by expanding the range of angles associated with the currently selected zone.
+% This eliminates the issue, as the randomly distributed points that are on the edge of the two zones will be predominantly in the active zone if the zone's angle range is increased.
+% In IAmMuse, the active zone's angle range is increased by $10\degree$, or $5\degree$ on each side, and neighbouring zones are shrunk in accordance.
+% This increase should be as small as possible while still providing the stability-increasing effect.
+% During system design, an increase of $10\degree$ seemed to be the smallest amount that fulfilled this wish.
+% 
+% 
+% 
 
 
 % The data interpretation method is often tightly linked to the data enhancement method used, as we will use the extra context provided by the data enhancement in the interpretation.

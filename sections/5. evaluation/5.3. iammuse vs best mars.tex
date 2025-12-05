@@ -34,7 +34,7 @@ Meanwhile, the performance of IAmMuse does differ slightly between the different
 % but it stays a lot more tightly, in a range between 0.65 and 0.8.
 The reason for this becomes more obvious when considering \cref{figure: best mars state likelihood}.
 Both MARS models predict the position state of both hands middle significantly more often, while rarely predicting the position state of one hand low and one hand high, similar to how \textit{MARS baseline} and \textit{MARS full calib} did.
-This is most likely caused by the fact that the mmWave radar does not always produce data of the user's left and right half at the same time, as discussed in \cref{section: background - millimeter wave radar}, and by the fact that some frames are simply very sparse.
+This is most likely caused by the fact that the mmWave radar does not always produce data of the user's left and right half at the same time, as discussed in \cref{section: background - millimetre wave radar}, and by the fact that some frames are simply very sparse.
 On these "low quality frames", the MARS model will default to a \textit{minimal MAE position}, aka holding both hands out straight.
 
 \begin{figure}[!htb]

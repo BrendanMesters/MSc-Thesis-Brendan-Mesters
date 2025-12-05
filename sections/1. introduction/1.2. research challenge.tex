@@ -3,23 +3,38 @@
 
 %     -[ Why mmWave is more difficult then cameras ]-
 Using mmWave radars over alternative sensors, such as cameras, introduces unique problems.
-Unlike cameras, which provide dense, rich, and low-noise data, mmWave radar pointclouds are sparse (20-30 points per frame at 10 frames per second) and noisier.
-Some frames are also exceptionally sparse (~5 points) or contain data only of either the right or left half of the user, which makes those frames less valuable.
+Unlike cameras, which provide dense, rich, and low-noise data, mmWave radar point clouds are sparse (20-30 points per frame at 10 frames per second) and noisy.
+Some frames are also exceptionally sparse ($\sim$5 points) or contain data only of either the right or left half of the user, which makes those frames less valuable.
 This sparseness poses a significant challenge when it comes to \textit{real-time}  systems with a \textit{low-latency} requirement.
-In order to have a tight response time, the system needs to generate an accurate response in a single frame or a few frames at most.
-Since some frames lack data from a specific section of the user, a response needs to be generated with only a single frame of data, or we risk having a noticeable response delay.
+In order to have a tight response time, the system needs to generate an accurate response in a single frame or a few frames at most, which becomes challenging on partially incomplete frames.
+% Since some frames lack data from a specific section of the user, a response needs to be generated with only a single frame of data, or we risk having a noticeable response delay.
 
 %     -[ Why algorithms are more difficult then DL ]-
 The avoidance of DL methods poses another challenge, as they do provide an impressive inherent ability to generalise, even if this is achieved through a \textit{black box}.
-The move to an algorithmic solution requires domain-specific prior knowledge to parse the sparse point cloud and infer the actual events that generated that specific input.
-This is a difficult challenge when working with high-quality dense data, exacerbated by the noisy nature of mmWave radar point clouds. 
-The input data should be fully exploited, using the known physical constraints, in order to observe the underlying events correctly.
+The move to an algorithmic solution requires domain-specific prior knowledge to parse the sparse point cloud and infer the actual events that generated the input.
+% \ednote{following sentence is unclear and not part of the research challenge\\put this in contributions "As we've shown before, skeletal estimations are not always needed, as such we try to estimate assign a discrete location to the each arm. For that purpose we also use the known constraints of the human arm movement.}
+This is a challenging problem, certainly considering the poor quality of mmWave pointclouds.
+% This is a difficult challenge when working with high-quality dense data, exacerbated by the noisy nature of mmWave radar point clouds. 
+% The input data should be fully exploited, using the known physical constraints, in order to observe the underlying events correctly.
+
+\ednote{herformuleer paragraaf 3 ook als "een challenge" e.g. "this poses a challenge"}
 
 %     -[ Why my problem statement is simpler then SOA ]-
-However, a full-body skeletal estimation is often unnecessary for a specific interaction task and introduces extra computational load and latency.
-To avoid this additional load and any potential dependency on large training sets, the problem space for this thesis is explicitly constrained.
-Instead of a skeletal estimation, this thesis provides an \textit{arm angle estimation}, focusing on a fast response time with low overhead, allowing for quick retuning, as opposed to retraining.
+However, the problem that DL models often try to solve, creating a full-body skeletal estimation, is often superfluous and computationally wasteful.
+% a specific interface while still introducing extra computational load and latency.
+We therefore explicitly constrained the problem space for this thesis to avoid this additional latency and any dependency on large data sets.
+% To avoid this additional latency and dependence on large data sets, and any potential dependency on large training sets, the problem space for this thesis is explicitly constrained.
+Instead of a skeletal estimation, we perform an \textit{arm angle estimation}, classifying the user's arms into discrete angular zones (see \cref{figure: hpe vs arm angle estimation}).
+% where it predicts the user's arm as being in a discrete angle range, see \cref{figure: hpe vs arm angle estimation}.
+This prioritises focus on a fast response time with low overhead while allowing for quick retuning, as opposed to costly retraining.
 
+\ednote{on the figure 1.1, misschien been gestreept lijn mannetje tekenen}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/misc/hpe vs arm angle estimation.png}
+    \caption{Differences between IAmMuse and Deep Learning HPE}
+    \label{figure: hpe vs arm angle estimation}
+\end{figure}
 
 % Many real-world applications do not need a full \textit{skeletal estimation}, instead requiring a more contained estimation of the user's actions.
 % Thus, in order to avoid dependency on large training sets, the problem space will be constrained for this thesis to an estimation of the \textit{angle of the user's arms}, as opposed to a full \textit{pose estimation}.

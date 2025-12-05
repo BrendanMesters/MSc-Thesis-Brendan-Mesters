@@ -5,90 +5,118 @@
 %                  [ NEW STRUCTURE ]
 %                  -----------------
 
+\ednote{The first paragraph should be at the end, musical systems are the least important part.}
+% \ednote{introduction an musical works}
 For the related works, two different types of work will be considered: those related to innovative musical expression and those pertaining to mmWave technology.
-This thesis aims to use the sensing capabilities of an mmWave radar to create an instrument that is controlled by the user's arm movements.
+This thesis uses a musical system as a benchmark application to test the efficacy of our final mmWave-radar-based interface, using the user's arm movements to control the musical system.
+% This thesis aims to use the sensing capabilities of an mmWave radar to create an instrument that is controlled by the user's arm movements.
+%The user's arm movements control this musical interface. 
 Similar \textit{full body} musical interfaces already exist.
 One such system is Somi-1 \cite{somi-1}, which uses motion sensors to control music with dynamic movement.
-MiMu gloves \cite{mimu} is another similar system that can only attach to the user's hands, but can also measure the bend of the user's fingers, in addition to motion.
-There are also two existing systems that use mmWave radars for musical expression:
+MiMu gloves \cite{mimu} is another similar system that needs to attach to the user's hands, which measures finger position as well as hand motion.
+% but can also measure the bend of the user's fingers, in addition to motion.
+Two existing systems already use mmWave radars for musical expression, which both work through Deep Learning:
+% There are also two existing systems that use mmWave radars for musical expression:
 % There already exist two mmWave-based musical systems, but they have a different use case than IAmMuse.
 \textit{WaveTune} \cite{juneja2024wavetune}, which uses gestures to select a combination of prebuild beat-patterns; 
 and \textit{O Soli Mio} \cite{bernado2017o_soli_mio}, which allows you to control specific musical effects, or switch between different samples, by performing gestures above a sensor.
-IAmMuse, on the other hand, works more similarly to a traditional instrument, allowing the user to generate specific musical notes using their arm movement.
+IAmMuse, on the other hand, aims to provide a more traditional interface, allowing the user to play specific notes through their arm movement.
+% , works more similarly to a traditional instrument, allowing the user to generate specific musical notes using their arm movement.
 
-There exists a wide breadth of mmWave radar data interpretation systems, with either a Deep Learning (DL) or an algorithmic approach.
-
-
-\ednote{Algorithmic applications; and why we want one}
+% There exists a wide breadth of mmWave radar data interpretation systems, with either a Deep Learning (DL) or an algorithmic approach.
 
 
-\ednote{Existing mmWave HPE, which all use DL}
+% \ednote{Algorithmic applications; and why we want one}
+While the current mmWave-based musical systems all leverage deep learning methods, several point cloud and mmWave radar-based interpretation systems instead opt to employ more traditional machine learning and signal processing methods.
+DBSCAN~\cite{ester1996dbscan} is a foundational clustering technique for point clouds that is used in many other data interpretation pipelines.
+% prime example of a machine learning based algorithm, using deterministic and tunable algorithms to cluster point clouds according to their density.
+In addition to the widely recognised DBSCAN, we also find exemplary domain-specific interpretation systems in the field of mmWave sensing.
+% While DBSCAN is a widely recognised system, the field of mmWave sensing also provides its own domain-specific examples.
+\Citeauthor{li2025acoustic} achieved audio reconstruction~\cite{li2025acoustic}, using classical signal processing techniques to extract vibrational information using the micro-doppler information of the mmWave radar.
+% A notable example is the system for audio reconstruction designed by \citeauthor{li2025acoustic} \cite{li2025acoustic}, using classical signal processing techniques, extracting vibration information using micro-doppler.
+Similarly, for geometric labelling, \citeauthor{poux2019voxel} \cite{poux2019voxel} created a system using a voxel-based segmentation pipeline.
 
-\ednote{DL downsides, advantages and tradeoffs of IAmMuse (simpler, cheaper, no training) vs (simpler problem space, "arm position estimation" not HPE)}
 
+
+\ednote{This should maybe be the first paragraph}
+% \ednote{Existing mmWave HPE, which all use DL\\ give a very brief (1-2 sentences) overview of their workings}
+The majority of mmWave HPE methods, however, utilise deep learning for its ability to generalise over unstructured data.
+MARS~\cite{an2021mars}, for example, utilises a CNN to predict a set of \textit{3D joint coordinates}, using a Kinect 2 skeletal estimation as the ground truth during training.
+This method uses the mmWave radar point cloud output to predict output skeletons on a frame-by-frame basis.
+mmPose~\cite{sengupta2020mmpose} also uses a CNN to produce a skeletal estimation from the mmWave radar.
+However, where MARS uses the point cloud directly, mmPose uses the 2D \textit{range-azimuth} and \textit{range-elevation} projection to predict the human pose, to mitigate the data sparsity issue.
+Lastly, mmDiff~\cite{junqiao2025diffusion} uses a constrained diffusion model to perform the human pose estimation.
+To prevent unrealistic hallucinations, they explicitly constrain the diffusion model with kinematic and temporal bounds.
+
+\ednote{Jack thinks this does not belong in the related works, either chapter 1 or 3}
+% \ednote{DL downsides, advantages and tradeoffs of IAmMuse (simpler, cheaper, no training) vs (simpler problem space, "arm position estimation" not HPE)}
+Although using deep learning provides significant benefits, in particular when considering the ability to generalise, this does come at a cost.
+Deep learning models suffer from a lack of explainability due to their 'black box' nature; furthermore, complex models require large amounts of data to train and significant computing resources to use.
+Despite these practical considerations, the vast majority of research into mmWave human sensing focuses on deep learning models \cite{mars2021github, junqiao2025diffusion, sengupta2020mmpose} or on constructing datasets for these deep learning models \cite{brescia2023millinoise, su2025high_fidelity, cui2023milipoint}.
+Non-deep learning methods, using more traditional machine learning principles, or signal processing-based approaches, have not been explored for human pose estimation, despite the demonstrated efficacy of such methods in the broader mmWave sensing domain.
 
 % Similar concept musical experiences: Mimu \cite{mimu} and Somi-1 \cite{somi-1}.
 
 
 
-\brendanLines
+% \brendanLines
+% 
+% %     -[[ MUSIC ]]-
+% % Establish broad context for the engineering challenge.
+% % Mention that new technology often drives new forms of expression.
+% % Transition to new technology: mmWave
+% New technologies often lead to new forms of expression.
+% The electronic piano/synthesizer is one of the first and most well-known examples of an instrument made possible by the technological innovations at the time.
+% The theremin is another well-known musical instrument that emerged from a new invention, among many other lesser-known examples \cite{mcglynn2014interaction}.
+% These new instruments brought with them a new wave of musical intrigue \cite{otto1968history} and musical expression.
+% %     -[[ MMW Music ]]-
+% mmWave radars are another such system that can be used for new innovative ways of expression, and have already been used for this purpose in a limited manner.
+% The currently existing tools for mmWave music generation work either through gestures \cite{juneja2024wavetune}, or by movement close to the sensor \cite{bernado2017o_soli_mio}.
+% % though these systems limit the user's freedom of expression with their input modality.
+% These systems only allow the user to change between pre-existing music tracks or to affect some variables in an audio effect, thus limiting the scope of musical expression.
+% 
+% 
+% %     -[[ mmWave SOA (broad) ]]-
+% % Give the context of what is happening with mmWave
+% % Mention the various systems its being used in
+% Numerous innovative research papers use mmWave radar technology.
+% Research into vital sign monitoring \cite{wang2022heartprint,wang2023here} and acoustic reconstruction \cite{li2025acoustic, lin2024highquality} both use mmWave radar for its ability to sense sub-millimeter-sized movements.
+% % Research into vital sign monitoring \cite{wang2022heartprint,wang2023here} uses mmWave radar for its ability to sense sub-millimeter-sized movements.
+% % This ability to capture small movements can also be used to capture sound through otherwise soundproof barriers \cite{lin2024highquality, li2025acoustic}.
+% Systems designed for sensing in public spaces use mmWave radar for its privacy-preserving nature
+% % Due to mmWave radars' privacy-preserving nature, it is also seeing a lot of use in sensing systems for public spaces.
+% These systems range from people counting and tracking systems \cite{zhao2019tracking, vaidya2024exploiting}, activity and gesture recognition systems \cite{sen2024multi-user, palipana2021pantomime}, through to object detection and classification systems \cite{qi2016pointnet, qi2017pointnet++, guan2020through}.
+% 
+% %     -[[ Algorithms vs Deep Learning ]]-
+% % Open the discussion of Algorithms vs DL
+% % Give the pros and cons of both sides
+% % Show some algorithmic SOA systems.
+% Most research into pointcloud interpretation uses Deep Learning over algorithmic methods, in spite of both having distinct advantages and disadvantages.
+% % This thesis is, for a large part, based on a comparison between deep learning methods and algorithmic methods, both of which have advantages and disadvantages.
+% A significant advantage of algorithmic systems is that they can be explicitly reasoned about and allow for precise configuration using well-specified input parameters.
+% % allow for explicit reasoning and concisely configure them using well-specified input parameters.
+% Conversely, Deep Learning models offer a remarkable ability to generalize, but suffer from having opaque inner workings.
+% %be reasoned about and configured clearly using input parameters.
+% Robust and established clustering algorithms already exist for pointcloud analysis, such as DBSCAN \cite{ester1996dbscan}.
+% Other problems are successfully tackled by both DL systems, as well as algorithmic systems, such as geometric labeling of pointcloud data \cite{poux2019voxel}, or audio reconstruction using mmWave radars \cite{li2025acoustic}.
+% %For pointcloud analysis, some great and concise clustering algorithms have been created, such as DBSCAN \cite{ester1996dbscan}, and some problems are being successfully tackled by both DL systems, as well as algorithmic systems, such as geometric labeling of pointcloud data \cite{poux2019voxel}, or audio reconstruction using mmWave radars \cite{li2025acoustic}.
+% % 
+% 
+% %     -[[ mmWave HPE | the gap]]
+% % Discuss the current SOA in mmWave HPE.
+% % Introduce the GAP of algorithmic HPE.
+% Currently, there is a lack of research into algorithmic HPE methods using mmWave radars.
+% The vast majority of research in the field focuses either on deep learning interpretation models \cite{mars2021github, junqiao2025diffusion, sengupta2020mmpose} or on constructing data sets for those deep learning models \cite{brescia2023millinoise, su2025high_fidelity, cui2023milipoint}.
+% Algorithmic interpretation methods for mmWave data can match or even exceed the results of similar Deep Learning systems, thus it is worthwhile to explore algorithmic methods for mmWave HPE.
+% 
+% 
+% 
+% % 
 
-%     -[[ MUSIC ]]-
-% Establish broad context for the engineering challenge.
-% Mention that new technology often drives new forms of expression.
-% Transition to new technology: mmWave
-New technologies often lead to new forms of expression.
-The electronic piano/synthesizer is one of the first and most well-known examples of an instrument made possible by the technological innovations at the time.
-The theremin is another well-known musical instrument that emerged from a new invention, among many other lesser-known examples \cite{mcglynn2014interaction}.
-These new instruments brought with them a new wave of musical intrigue \cite{otto1968history} and musical expression.
-%     -[[ MMW Music ]]-
-mmWave radars are another such system that can be used for new innovative ways of expression, and have already been used for this purpose in a limited manner.
-The currently existing tools for mmWave music generation work either through gestures \cite{juneja2024wavetune}, or by movement close to the sensor \cite{bernado2017o_soli_mio}.
-% though these systems limit the user's freedom of expression with their input modality.
-These systems only allow the user to change between pre-existing music tracks or to affect some variables in an audio effect, thus limiting the scope of musical expression.
-
-
-%     -[[ mmWave SOA (broad) ]]-
-% Give the context of what is happening with mmWave
-% Mention the various systems its being used in
-Numerous innovative research papers use mmWave radar technology.
-Research into vital sign monitoring \cite{wang2022heartprint,wang2023here} and acoustic reconstruction \cite{li2025acoustic, lin2024highquality} both use mmWave radar for its ability to sense sub-millimeter-sized movements.
-% Research into vital sign monitoring \cite{wang2022heartprint,wang2023here} uses mmWave radar for its ability to sense sub-millimeter-sized movements.
-% This ability to capture small movements can also be used to capture sound through otherwise soundproof barriers \cite{lin2024highquality, li2025acoustic}.
-Systems designed for sensing in public spaces use mmWave radar for its privacy-preserving nature
-% Due to mmWave radars' privacy-preserving nature, it is also seeing a lot of use in sensing systems for public spaces.
-These systems range from people counting and tracking systems \cite{zhao2019tracking, vaidya2024exploiting}, activity and gesture recognition systems \cite{sen2024multi-user, palipana2021pantomime}, through to object detection and classification systems \cite{qi2016pointnet, qi2017pointnet++, guan2020through}.
-
-%     -[[ Algorithms vs Deep Learning ]]-
-% Open the discussion of Algorithms vs DL
-% Give the pros and cons of both sides
-% Show some algorithmic SOA systems.
-Most research into pointcloud interpretation uses Deep Learning over algorithmic methods, in spite of both having distinct advantages and disadvantages.
-% This thesis is, for a large part, based on a comparison between deep learning methods and algorithmic methods, both of which have advantages and disadvantages.
-A significant advantage of algorithmic systems is that they can be explicitly reasoned about and allow for precise configuration using well-specified input parameters.
-% allow for explicit reasoning and concisely configure them using well-specified input parameters.
-Conversely, Deep Learning models offer a remarkable ability to generalize, but suffer from having opaque inner workings.
-%be reasoned about and configured clearly using input parameters.
-Robust and established clustering algorithms already exist for pointcloud analysis, such as DBSCAN \cite{ester1996dbscan}.
-Other problems are successfully tackled by both DL systems, as well as algorithmic systems, such as geometric labeling of pointcloud data \cite{poux2019voxel}, or audio reconstruction using mmWave radars \cite{li2025acoustic}.
-%For pointcloud analysis, some great and concise clustering algorithms have been created, such as DBSCAN \cite{ester1996dbscan}, and some problems are being successfully tackled by both DL systems, as well as algorithmic systems, such as geometric labeling of pointcloud data \cite{poux2019voxel}, or audio reconstruction using mmWave radars \cite{li2025acoustic}.
-
-
-%     -[[ mmWave HPE | the gap]]
-% Discuss the current SOA in mmWave HPE.
-% Introduce the GAP of algorithmic HPE.
-Currently, there is a lack of research into algorithmic HPE methods using mmWave radars.
-The vast majority of research in the field focuses either on deep learning interpretation models \cite{mars2021github, junqiao2025diffusion, sengupta2020mmpose} or on constructing data sets for those deep learning models \cite{brescia2023millinoise, su2025high_fidelity, cui2023milipoint}.
-Algorithmic interpretation methods for mmWave data can match or even exceed the results of similar Deep Learning systems, thus it is worthwhile to explore algorithmic methods for mmWave HPE.
-
-
-
-
-
-
-
-
-
+% % 
+% 
+% 
+% 
 
 % \brendanLines
 % [[ Broad background ]]

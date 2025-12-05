@@ -4,70 +4,79 @@
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/internal data/Thesis zone prediction internal.png}
-    \caption{Step by step zone prediction visualization}
+    \caption{Step by step zone prediction visualisation}
     \label{figure: zone prediction internal}
 \end{figure}
 
 Data enhancement is the first application-specific step in the prediction pipeline.
 In addition to the data filtering discussed above, we also give more weight to points near the hands.
 These points are most indicative of the arm angle, as they move the furthest for a change in the arm angle.
-To find the points near the hands, a ball is constructed around the pointcloud, where the ball's boundary follows the user's maximal reach.
+To find the points near the hands, a ball is constructed around the point cloud, where the ball's boundary follows the user's maximal reach.
 % This is done by constructing a ball around the pointcloud, where the edge of the ball should follow the reach of the person's arms.
-Figure \ref{figure: zone prediction internal} shows a visualization of the steps in the prediction pipeline.
+Figure \ref{figure: zone prediction internal} shows a visualisation of the steps in the prediction pipeline.
 After noise filtering, \textit{arm zones} can be specified as slices of the enclosing ball.
 An arm prediction is made based on the number of signal points in each zone.
 
 
-The data from the mmWave sensor is relatively sparse; thus, it is essential to use this data to the fullest extent.
+The data from the mmWave sensor is sparse, which makes it essential to use all information effectively, which can be done through \textit{data enhancement}.
+% It is essential to use this data to the fullest extent.
 % get as much information out of this data as we can. 
-This process is called \textit{data enhancement}.
-Data enhancement broadly covers any method that increases the \textit{quality} of the data sent to the recognition systems.
-There are two distinct groups of data enhancement methods.
+% This process is called \textit{data enhancement}.
+Data enhancement broadly covers any method that increases the \textit{quality} of the data sent to the classification systems.
+There are two distinct types of data enhancement methods.
 Physical enhancement, changing the physical setup in order to get better results, and software enhancements, where software is put in place to add extra information to our data.
-The first option, a change to the physical setup, can be effective, however, we should avoid this for the final product as it limits the flexibility of the system.
-Physical setup changes can help significantly during the design of a system, as high-quality data is needed to design a good classification algorithm, and a good classification algorithm is needed to verify data enhancement methods.
-Software-based data enhancement is more challenging to create, but also more flexible, which makes it a preferable option for the final system.
-These systems work by adding additional information to the data already present, this is also where the difference between data filtering (\cref{section: tracking method - data filtering}) and data enhancement exists.
-
+The first option, a change to the physical setup, can be effective; however, we should avoid this for the final product as it limits the flexibility of the system.
+Physical setup changes can help significantly during the design of a system, as high-quality data is needed to design a good classification algorithm, and a good classification algorithm is required to verify data enhancement methods.
+Software-based data enhancement methods add additional context to data which is already present.
+This is more challenging to create, but also more flexible, which makes it a preferable option for the final system.
 
 \subsection{Physical Enhancement}
 \label{sub-section: tracking method - data enhancement - physical enhancement}
 
-\begin{wrapfigure}{!h}{0\textwidth}
+\begin{wrapfigure}{r}{0\textwidth}
     %\centering
     \includegraphics[width=0.28\textwidth]{figures/experimental setup/reflective wearable.png}
     \caption{A reflective wearable}
     \label{fig: reflective glove wearable}
+    \vspace{-35pt} % This removes the "void" on the next page
 \end{wrapfigure}
 
 
 % SOA wearables
-Many similar HPE systems rely solely on physical wearables \cite{filippeshi2017survey, antonio2010the}. 
+Many pose estimation systems rely solely on physical wearables \cite{filippeshi2017survey, antonio2010the}. 
 This is a logical choice, as it enables the direct tracking of specific parts of the user's body, at the cost of being more invasive and not easily deployable in non-private spaces.
 % IAmMuse
 Our system aims to give more weight to points belonging to the hands.
-Therefore, a \textit{reflective glove} (see \cref{fig: reflective glove wearable}) was chosen, as reflective surfaces produce denser pointclouds with mmWave radars.
+We achieve this by utilising a \textit{reflective glove}, which increases the point density near the hands (see \cref{fig: reflective glove wearable}).
+This enhancement method was only used during the design of IAmMuse and not in the final system.
 
 
-\subsection{Initialization, Minimal Enclosing Ball}
+\subsection{Enhancement Context: Enclosing ball}
 \label{sub-section: tracking method - data enhancement - minimal enclosing ball}
 
 The primary goal of our data enhancement system is to make a distinction between points belonging to the hands, points belonging to the arms, and points belonging to neither.
-A conceptual ball, which encloses the user in such a way that the surface of the ball follows the maximal range of the user's hands, help in achieving this distinction.
+For this, we want to find the position of the user's sternum, as well as the arm span of the user.
+This will assist in the data enhancement, as any point emitted by the user's hand will have a distance to the user's sternum equal to half the user's arm span.
+To determine the sternum position, as well as the arm span, we first ask the user to move their arms up and down, tracing their kinematic range.
+We then accumulate these frames into a point cloud containing at least three thousand points.
+Finally, we fit an enclosing ball around the point cloud, allowing for some outliers outside of the ball, due to noise.
+The diameter of this ball should be equal to the user's arm span, and the centre of the ball should be equal to the user's sternum location.
+% since a point emitted by the user's hand, then the distance between the user's sternum and that point should be half the arm span.
+% A conceptual ball, which encloses the user in such a way that the surface of the ball follows the maximal range of the user's hands, helps in achieving this distinction.
 % This distinction is achieved via a conceptual ball, which encloses the user in such a way that the surface of the ball follows the maximal range of the user's hands.
-The distance between the surface of the ball and any particular point functions as a proxy for whether a point was emitted by a user's hand, arm, or neither.
-To construct this \textit{enclosing ball}, we use the fact that only a minority of the points are noise.
-We collect a pointcloud of 3000 points by accumulating recorded points while the user moves their hands up and down.
-All collected signal points lie within the proposed enclosing ball, and these points will cover the whole range of movement of the user's arms.
-Some noise points will still lie outside of the proposed enclosing ball.
-We can now use a known algorithm to construct a minimal enclosing ball from a pointcloud with outliers.
+% The distance between the surface of the ball and any particular point functions as a proxy for whether a point was emitted by a user's hand, arm, or neither.
+% To construct this \textit{enclosing ball}, we use the fact that only a minority of the points are noise.
+% We collect a point cloud of 3000 points by accumulating recorded points while the user moves their hands up and down.
+% All collected signal points lie within the proposed enclosing ball, and these points will cover the whole range of movement of the user's arms.
+% Some noise points will still lie outside of the proposed enclosing ball.
+% We can now use a known algorithm to construct a minimal enclosing ball from a point cloud with outliers.
 
 
 
 
 % MEB method
 For this, we used a process described by \citeauthor{ding2020sublinear}, in \textit{algorithm 1} of their paper \cite{ding2020sublinear}.
-This algorithm gives a stochastic estimation of such a \textit{minimal enclosing ball with outliers}, with bounds on the accuracy.
+This algorithm gives a stochastic estimation of a \textit{minimal enclosing ball with outliers}, with bounds on the accuracy.
 The stochastic nature of this method results in an inaccurate fit in roughly 10\% of the predictions.
 Though somewhat infrequent, this occurs often enough that a mitigation strategy is warranted.
 For this reason, the final enclosing ball estimation is constructed as the average of 100 different predictions, to average out the noise and get a stable prediction.
@@ -75,42 +84,46 @@ For this reason, the final enclosing ball estimation is constructed as the avera
 An in-depth explanation of the configuration of this algorithm can be found in Appendix \ref{appendix: meb configuration}.
 
 % limitation, static ball.
-A current limitation of this system is that a user can only \textit{initialize} the system once, and this initialization dictates where the user has to stand, since the system expects the user's sternum to be stationary and at the center of the enclosing ball.
-A more dynamic version of the initialization system was explored, where the enclosing ball would be recalculated each frame with the most recent 3000 points.
+A current limitation of this system is that a user can only \textit{initialise} the system once, and this initialisation dictates where the user has to stand, since the system expects the user's sternum to be stationary and at the centre of the enclosing ball.
+A more dynamic version of the initialisation system was explored, where the enclosing ball would be recalculated each frame with the most recent 3000 points.
 In this approach, the enclosing ball would drift upwards if the user held their hands high for an extended period of time, invalidating the estimation.
 % This approach did not work well as the MEB started to drift at times, depending on the most recent positions the user held.
 % As an example, if a user wanted to hold their hands up high a lot, then after enough time, the point cloud used to generate the MEB would not be representative of the user's whole range of movement anymore.
 Similar systems, which allow the user to move slightly during execution, can be envisioned but were deemed outside of the scope of this research and are thus left for future research.
 
 
-\subsection{Programmatic enhancement: point weight}
+\subsection{Programmatic Enhancement: Point Weight}
 \label{sub-section: tracking method - data enhancement - point weight}
 
 % What did I tell before:
 % - Why the hands are important
 % - How programmatic and physical enhancement are similar and different
-% - Why the encompassing ball is needed
-% - How we use the encompassing ball to calculate how "handy" a point is
+% - Why the enclosing ball is needed
+% - How we use the enclosing ball to calculate how "handy" a point is
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/internal data/hand weight exaggerated.png}
-    \caption{Exaggerated visualization of programmatic point weight system}
+    \caption{Visualisation of the assigned point weights with the enclosing ball (blue) and ground truth (orange)}
     \label{figure: exaggerated point weight}
 \end{figure}
 
 
-After training, the points can be given a weight, based on how near to the hands they are, using the \textit{encompassing ball}.
-For any given change in arm angle, the points produced by the user's hands will move the furthest out of any of the signal points.
-The physical enhancement (\cref{sub-section: tracking method - data enhancement - physical enhancement} generates a higher number of points of the hands to increase the prevalence of that region of the pointcloud.
-The programmatic enhancement, on the other hand, adds the dimension of weight to represent this prevalence for each point.
+Once the context is acquired, the points can be given a weight based on the likelihood that they originated from the user's hands.
+% how near to the hands they are, using the \textit{enclosing ball}.
+% For any given change in arm angle, the points produced by the user's hands will move the furthest out of any of the signal points.
+The physical enhancement (\cref{sub-section: tracking method - data enhancement - physical enhancement}) generates a higher number of points of the hands to increase the prevalence of that region of the point cloud.
+The programmatic enhancement, on the other hand, adds the dimension of weight to represent the prevalence of these points
 
-The encompassing ball gives a sufficient amount of context about the scene to be able to estimate which points are generated by the hands, arms, or neither.
-This context is not present in any one frame, and must thus be gathered via a brief training step.
-Figure \ref{figure: exaggerated point weight} shows an exaggerated visualization of how the weights of the points change, using the encompassing ball.
-The points that are near the hands of the ground truth have an increased weight, while most other points have a decreased weight.
+The enclosing ball gives a sufficient amount of context about the scene to be able to estimate which points are generated by the hands, arms, or neither.
+This context is not present in any one frame, which necessitates the online training step.
+% and must thus be gathered via a brief training step.
+Figure \ref{figure: exaggerated point weight} shows an exaggerated visualisation of how the weights of the points change, using the enclosing ball.
+The points that are near the hands of the user (as visualised through the ground truth) receive an increased weight, while most other points receive a decreased weight.
+Notably, some noise points are also assigned an increased weight; however, these points are often removed in the noise filter.
+% Note how some noise points also get an increased weight, though these are likely to be removed in the combined filter.
 
-This weight change is based on the distance to the surface of the encompassing ball, and the precise weight is determined using the \textit{Gaussian Function}.
-The expected value of our Gaussian is equal to the radius of the encompassing ball, and the input to the function is the distance from the center of the encompassing ball to the point in question.
+This weight change is based on the distance to the surface of the enclosing ball, and the precise weight is determined using the \textit{Gaussian Function}.
+The expected value of our Gaussian is equal to the radius of the enclosing ball, and the input to the function is the distance from the centre of the enclosing ball to the point in question.
 This ensures that the weight of a point is inversely proportional to the distance to the ball's surface.
 For the variance ($\sigma^2$), a value of $0.25$ was used; this value ensured a high weight for any signal points belonging to either the hands or the arms, while reducing the weight of points further away by more than half.
 Other systems should take into account that the weights generated by this system are always smaller than one.
