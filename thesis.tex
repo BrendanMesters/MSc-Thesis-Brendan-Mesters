@@ -87,7 +87,7 @@
 
 
 % Information that will be filled in at various points in the report
-\newcommand{\reportTitle}{WRITE YOUR THESIS TITLE HERE}
+\newcommand{\reportTitle}{IAmMuse: A signal-processing-based approach to mmWave radar interfaces.}
 \newcommand{\reportAuthor}{Brendan Rudolf Mesters} % Please put your full and official name here: no abbreviations (and to Dutch students: geen roepnamen)
 \newcommand{\studentNumber}{4876016}
 \newcommand{\reportEmailTUD}{b.r.mesters@student.tudelft.nl}
@@ -95,7 +95,7 @@
 \newcommand{\reportUrlEmailTUD}{\href{mailto:\reportEmailTUD}{\reportEmailTUD}}
 \newcommand{\reportUrlEmailNonTUD}{\href{mailto:\reportEmailNonTUD}{\reportEmailNonTUD}}
 \newcommand{\reportMSC}{Computer and Embedded Systems Engineering} % Examples are {Embedded Systems} {Computer Engineering} {Computer Science} or {Electrical Engineering}
-\newcommand{\reportDate}{PUT DATE OF PROVIDING THESIS TO GRADUATION COMMITTEE HERE}
+\newcommand{\reportDate}{December 9th 2025}
 \newcommand{\presentationDate}{December 16th 2025}
 \newcommand{\graduationCommittee}{
 Marco Zúñiga Zamalloa & Delft University of Technology \\
@@ -123,22 +123,26 @@ Koen Langendoen & Delft University of Technology \\
 \newcommand{\reportAbstract}{
 % Context
 The broad adoption of integrated computing systems through the Internet of Things has led to a need for seamless, low-latency interfaces.
-Existing interfaces, such as voice assistants and smartphones, either introduce significant latency to any interaction or impose barriers to seamless interactions.
+Deploying these installations in public spaces, such as gaming areas in airports, presents unique challenges.
+Traditional input modalities are ill-suited for these environments.
+% Common sensors for these systems are ill-suited for such environments.
+Cameras compromise user privacy, and wearables are susceptible to theft, damage or loss.
 % Gap/Problem
 Millimetre wave (mmWave) radars are an ideal sensor for such an interface, as they can operate through non-conductive materials and independently of lighting conditions.
-However, most human sensing solutions for mmWave radars use Deep Learning models, which rely on large data sets for training and have a high computational overhead, limiting their feasibility on resource-constrained edge devices.
+Most human sensing solutions for mmWave radars use Deep Learning models, which rely on large data sets for training and have a high computational overhead, limiting their feasibility on resource-constrained edge devices.
 % solution/method
 To address these limitations, we present \textit{IAmMuse}, a lightweight, signal-processing-based interpretation pipeline for human sensing using mmWave radar technology.
 We filter and enhance the raw point cloud data, using spatio-temporal density information, as well as kinematic context acquired through a few-shot online learning step.
-IAmMuse uses this pre-processed data to generate a stabilised prediction, classifying the user's arm position into a discrete angular zone.
-% results
+IAmMuse uses this pre-processed data to generate a stabilised prediction, classifying the user's arm position.% into a discrete angular zone.
+We implemented a musical system, controlled through these predictions, as an example application for the technology.
+The user selects musical notes by moving their arms to either a \textit{low}, \textit{middle}, or \textit{high} position, similar to a conductor.
 To assess the efficacy of this method, we present a comparative analysis with a State-of-the-Art Human Pose Estimation model.
-This comparison shows that IAmMuse achieves a classification accuracy 1.5 to 4 times higher than the comparable baseline in the considered problem space
+This comparison shows that IAmMuse achieves a classification accuracy 1.5 times higher than the State-of-the-Art model, while using less than 1\% of the training data.
 % conclusion
 This thesis validates the viability of non-deep-learning-based interpretation algorithms for human sensing with mmWave radars through a fully functional prototype.
 }
 
-\newcommand{\reportKeywords}{LIST YOUR KEYWORDS HERE}
+\newcommand{\reportKeywords}{mmWave radar; millimeter wave radar; human pose estimation}
 
 % Did the thesis lead to a paper? 
 % e.g. The work presented in this thesis has lead to a paper which has been submitted to a conference for publication, pending peer-review
@@ -189,7 +193,7 @@ This thesis validates the viability of non-deep-learning-based interpretation al
 \cleardoublepage
 
 % (Optional) Include quotation: page v (uncomment if needed)
-\input{chapters/quotation}
+% \input{chapters/quotation}
 
 % Empty page: page vi
 \cleardoublepage
@@ -254,6 +258,7 @@ This thesis validates the viability of non-deep-learning-based interpretation al
 \input{appendix/experiment notes}
 \input{appendix/recording frame distribution}
 \input{appendix/failed methods}
+\input{appendix/user information}
 
 \end{document}
 

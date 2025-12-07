@@ -2,28 +2,53 @@
 \section{Baseline Analysis}
 \label{section: experimental setup - baseline analysis}
 
-\ednote{MARS is not "foundational", it is SOA}
-
-For our comparison, we need a DL model that is a foundational work in the field of mmWave radar HPE, which ensures that both systems have comparable prior literature to build upon.
+For our comparison, we need a DL model that is a State-of-the-Art work in the field of mmWave radar HPE.
+% which ensures that both systems have comparable prior literature to build upon.
 Furthermore, the DL model has to evaluate the same data that IAmMuse evaluates, the pointclouds of the mmWave radar.
 The output of the system should be a skeletal estimation, which can be transformed into an arm angle estimation in the same way as the ground truth.
-With these considerations, the MARS model~\cite{an2021mars}, a foundational model in the field of mmWave HPE and one of the first systems to generate skeletal estimations out of sparse mmWave pointclouds, was chosen as the ideal comparison model.
+With these considerations, the MARS model~\cite{an2021mars}, a State-of-the-Art model in the field of mmWave HPE and one of the first systems to generate skeletal estimations out of sparse mmWave pointclouds, is selected as the ideal comparison model.
 
-The MARS paper and this thesis use similar hardware, both using a Kinect 2 for the ground truth and using mmWave radars from TI as input.
+The MARS paper and this thesis both use a Kinect 2 for the ground truth and use mmWave radar point clouds as input.
 One notable difference in the setups is the fact that MARS uses an older radar model, the IWR1443, as opposed to the IWR6843, though their output should be comparable.
-Furthermore, the design of the MARS model has no temporal context and estimates each pointcloud frame independently; therefore, it may struggle on sparse pointcloud frames.
+Furthermore, the design of the MARS model has no temporal context and estimates each point cloud frame independently; therefore, it may struggle with sparse point cloud frames.
 
 
-\ednote{Either explain this in more detail here, or don't explain it here and do this in chapter 5.}
-Since MARS is a DL model, it requires training to function; we thus consider multiple distinct trained versions of MARS for the evaluation.
-% MARS, being a DL model, requires training in order to use it; for the evaluation, we consider multiple differently trained versions of MARS.
+% \ednote{Either explain this in more detail here, or don't explain it here and do this in chapter 5.}
+As a deep learning model, MARS's performance is directly linked to its training data.
+Therefore, we consider multiple versions of MARS in the evaluation, each trained on a different dataset.
 For the training of each of the models, we used a batch size of 128, with 150 epochs, in accordance with the example code provided on the GitHub repository of MARS~\cite{mars2021github}.
-The specific training set and testing set for each of the considered models can be found in \cref{figure: MARS train test}.
-Reasoning for the specific data sets chosen for these models can be found in \cref{chapter: evaluation}, specifically:
-\textit{MARS baseline} will be discussed in \cref{section: evaluation - baseline analysis}; 
-\textit{MARS paper} and \textit{MARS full calib} will be discussed in \cref{section: evaluation - larger models};
-and \textit{MARS partial standard} and \textit{MARS standard to free} will be discussed in \cref{section: evaluation - iammuse vs best mars}.
+The different MARS models we considered each had different training and testing data, as shown in \cref{table: MARS train test}.
+For the evaluation, we considered five different models:
+\begin{itemize}
+    \item \textbf{MARS baseline}: 
+        This model demonstrates the performance of the MARS model if it uses the same training and testing data as IAmMuse.
+        Therefore, it trains on the \textit{calibration data} of a \textbf{specific recording}, and it tests the \textit{interpretation data} of \textbf{the same recording}.
+        The performance of this model is discussed in \cref{section: evaluation - baseline analysis}.
+    \item \textbf{MARS paper}: 
+        This model shows the ability of MARS to generalise over datasets.
+        For this, it uses the weights provided by the original MARS paper~\cite{an2021mars}, so it is trained on the MARS dataset, while it tests the \textit{interpretation data} of all recordings.
+        The performance of this model is discussed in \cref{section: evaluation - larger models}.
+    \item \textbf{MARS full calib}: 
+        This model's training set consists of the \textit{calibration data} of \textbf{all recordings}, which ensures that our training set is nearly as large (more than 80\% of the size) as the training set used by the MARS paper.
+        This model is also tested on the \textit{interpretation data} of all recordings.
+        The performance of this model is discussed in \cref{section: evaluation - larger models}.
+    \item \textbf{MARS partial standard}: 
+        This model shows the ability of MARS to predict standard recordings when trained on very similar data.
+        To do this, the model is trained on two-thirds of the \textit{interpretation data} of the standard recordings, and tested on the remaining one-third of the \textit{interpretation data} of the standard recordings.
+        In this manner, the testing and training data are as similar as possible, which should result in optimal performance.
+        The performance of this model is discussed in \cref{section: evaluation - iammuse vs best mars}.
+    \item \textbf{MARS standard to free}: 
+        This model tests the capacity of MARS to generalise from the standardised move set to a more realistic scenario.
+        This model is trained with the interpretation data of \textit{all standardised recordings}, and is tested on the interpretation data of \textit{all free-play recordings}.
+        The performance of this model is discussed in \cref{section: evaluation - iammuse vs best mars}.
+\end{itemize}
 
+By considering six distinct versions of MARS, we aim to provide a fair comparison, ensuring we do not disadvantage MARS with a single suboptimal training set.
+Furthermore, the consideration of multiple models allows various failure modes of the MARS model to be shown.
+Some of these failure modes are unique to the MARS models, but others are more generally found in Deep Learning models as a whole.
+
+
+% \ednote{Jack zou hier een stukje toevoegen over waarom we 5 modelled geburiken. "We did not want to give a disadvantage to MARS by the type of training we gave it, so we considered multiple options, furthermore, we are able to see the various failure modes in this way".}
 
 
 \begin{table}[!htb]
@@ -36,29 +61,38 @@ and \textit{MARS partial standard} and \textit{MARS standard to free} will be di
              \hline\hline
              MARS baseline  
                 & Calibration data of \textit{one specific recording}.
-                & Usage data of \textit{the same specific recording}.
+                & Interpretation data of \textit{the same specific recording}.
              \\ \hline
              MARS paper 
                 & MARS data set.
-                & Usage data of all recordings.
+                & Interpretation data of all recordings.
              \\ \hline
              MARS full calib 
                 & Calibration data of all recordings.
-                & Usage data of all recordings.
+                & Interpretation data of all recordings.
              \\ \hline
              MARS partial standard 
-                & Usage data of 2/3 standard recordings. 
-                & Usage data of the other 1/3 standard recordings.
+                & Interpretation data of 2/3 standard recordings. 
+                & Interpretation data of the other 1/3 standard recordings.
              \\ \hline
              MARS standard to free 
-                & Usage data of all standard recordings.
-                & Usage data of all free-play recordings.
+                & Interpretation data of all standard recordings.
+                & Interpretation data of all free-play recordings.
              \\ \hline
         \end{tabular}
     }
     \caption{The training and testing data for the various MARS models considered}
-    \label{figure: MARS train test}
+    \label{table: MARS train test}
 \end{table}
+
+% The specific training set and testing set for each of the considered models can be found in \cref{table: MARS train test}.
+% Reasoning for the specific data sets chosen for these models can be found in \cref{chapter: evaluation}, specifically:
+% \textit{MARS baseline} will be discussed in \cref{section: evaluation - baseline analysis}; 
+% \textit{MARS paper} and \textit{MARS full calib} will be discussed in \cref{section: evaluation - larger models};
+% and \textit{MARS partial standard} and \textit{MARS standard to free} will be discussed in \cref{section: evaluation - iammuse vs best mars}.
+
+
+
 
 
 

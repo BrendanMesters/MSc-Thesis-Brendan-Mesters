@@ -1,10 +1,12 @@
 \section{Data filtering}
 \label{section: tracking method - data filtering}
-
+% \ednote{Briefly explain that we have \textit{random noise} (static) which is removed with the \textit{spatial filter}, and \textit{noise spikes} (which appear briefly in a single frame) which are removed by the \textit{temporal filter}\\ Put this explanation at the top of 3.1}
 
 One issue present with the mmWave Sensors is the fact that they are susceptible to both environmental noise and seemingly random noise. 
-This noise often occurs in \textit{streaks}, lines of points through 3d space. 
-These streaks are not very dense spatially and appear in only a single frame, see \cref{figure: noise streak}.
+There are two distinct types of noise which we encounter.
+Low density \textit{background noise}, which consists of a few random points scattered throughout a frame, and high density \textit{noise spikes}, which only occur in a single frame.
+These noise spikes often occur in \textit{streaks}, lines of points through 3d space. 
+These streaks are not very dense spatially and appear in only a single frame, see \cref{figure: noise spikes}.
 These noise points roughly take the shape of a line, though the points never line up exactly.
 The nature of this noise, combined with the unstable signal output by the mmWave radar, makes it challenging to filter out noise.
 
@@ -24,22 +26,27 @@ However, these existing systems expect a high point density, since they are buil
 Even papers describing methods for "sparse pointclouds" reason about thousands of points at a time, as opposed to the dozens of points encountered in mmWave data.
 This low density distinguishes mmWave point cloud denoising as a separate challenge, evidenced by the purpose-built dataset by \citeauthor{farella2019sparse}~\cite{farella2019sparse}
 % This makes mmWave pointcloud denoising a truly separate problem, as is evident by the dataset explicitly produced for this problem \cite{farella2019sparse} by \citeauthor{farella2019sparse}.
-
 \begin{figure}[!htb]
+    % \ednote{it is TEMPORAL and SPATIAL\\ The order of spacial and temporal is the other way around in the figure w.r.t. the sections.\\ Potentially clean this up a bit.}
     \centering
     \includegraphics[width=0.7\linewidth]{figures/internal data/Thesis combined filter diagram_with_arrows.png}
-    \caption{Overview of the internal workings of the combined noise filter}
+    \caption{Overview of the internal workings of the combined noise filter, using the spatial filter to filter out background noise (the red 3) and the temporal filter to filter out noise spikes (the red 8).}
+    %{\color{red} filtering out noise 'ruis' (the red 3) and noise spikes (the red 8)}}
     \label{figure: combined filtering}
 \end{figure}
 
-For these reasons, we propose a novel noise filter for low-density mmWave pointclouds.
+% \ednote{Change the order of columns around if you change the image around}
+
+For these reasons, we propose a novel noise filter for low-density mmWave point clouds.
 % For these reasons, IAmMuse implements its own noise filter.
 The primary objective of the filter is to label each point as either \textit{signal} or \textit{noise}.
 Figure \ref{figure: combined filtering} conceptually shows this process, with each row representing a different frame, and each column representing a different internal filtering step.
 The first column shows the input point cloud, where each quadrant represents a separate cluster with a number of points.
-The second column shows the \textit{temporal filter}, which considers the number of neighbours in \textbf{other frames}.
-The third column shows the \textit{spatial filter}, which considers the number of neighbours in \textbf{the same frame}.
+This is a simplified version of the point clouds often encountered, where there are a few densely packed sets of points in distinct spatial regions.
+The second column shows the \textit{spatial filter}, which considers the number of nearby points in \textbf{the same frame}.
+The third column shows the \textit{temporal filter}, which considers the number of nearby points in \textbf{other frames}.
 Lastly, the fourth column combines these scores to filter out both ambient noise (clusters which consistently get a low score, e.g. $3$) and noise spikes (clusters which are dense, but only present in a single frame).
+This is done by simply comparing the combined score to a pre-defined threshold, in this case, any threshold value between 9 and 14 would accurately filter the noise from the signal.
 % This filter consists of two parts: a temporal filter, measuring the density between frames, and a spatial filter, measuring the density within a frame.
 % The temporal filter removed inconsistent data, as that data is not dense \textbf{between} frames.
 % The spatial filter removed sparse data from a single frame.
@@ -123,7 +130,7 @@ In this way, the temporal filter can filter out any \textit{inconsistent data}, 
 % \textbf{END OF AT MATHEMETICAL DESCRIPTION}
 
 % In this way, the temporal filter can mitigate the noise types 
-\ednote{if time permits: rework this section, it has some duplicate info}
+% \ednote{if time permits: rework this section, it has some duplicate info}
 
 The temporal filter thus gives a low score to points in unstable and fleeting data, while giving high scores to points in temporally stable areas.
 The temporal filter will give higher scores than the spatial filter to points in consistent areas, since the temporal filter considers neighbours in multiple frames.
@@ -165,6 +172,7 @@ The distance within which other points contribute to a score, for \textit{both} 
 The threshold value for \textit{both} the temporal and spatial filters.
 And the \textit{combination factor}, which is used to combine the outputs of the two filters.
 It is crucial to have a clear strategy for how these variables will be tuned, since they all affect the output.
+% \ednote{Specify this in terms of "false positives" and "false negatives".}
 Our tuning strategy first tunes the spatial filter such that it identifies most actual signal points correctly, even if some noise still comes through.
 Then, the temporal filter is tuned such that it labels most actual noise points correctly, even if some signal gets labelled as noise.
 Lastly, the combination factor is tuned to mitigate any noise spikes permitted by the spatial filter while avoiding the discarding of valid points by the temporal filter.

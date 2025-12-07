@@ -5,57 +5,88 @@
 %                  [ NEW STRUCTURE ]
 %                  -----------------
 
-\ednote{The first paragraph should be at the end, musical systems are the least important part.}
-% \ednote{introduction an musical works}
-For the related works, two different types of work will be considered: those related to innovative musical expression and those pertaining to mmWave technology.
-This thesis uses a musical system as a benchmark application to test the efficacy of our final mmWave-radar-based interface, using the user's arm movements to control the musical system.
-% This thesis aims to use the sensing capabilities of an mmWave radar to create an instrument that is controlled by the user's arm movements.
-%The user's arm movements control this musical interface. 
-Similar \textit{full body} musical interfaces already exist.
-One such system is Somi-1 \cite{somi-1}, which uses motion sensors to control music with dynamic movement.
-MiMu gloves \cite{mimu} is another similar system that needs to attach to the user's hands, which measures finger position as well as hand motion.
-% but can also measure the bend of the user's fingers, in addition to motion.
-Two existing systems already use mmWave radars for musical expression, which both work through Deep Learning:
-% There are also two existing systems that use mmWave radars for musical expression:
-% There already exist two mmWave-based musical systems, but they have a different use case than IAmMuse.
-\textit{WaveTune} \cite{juneja2024wavetune}, which uses gestures to select a combination of prebuild beat-patterns; 
-and \textit{O Soli Mio} \cite{bernado2017o_soli_mio}, which allows you to control specific musical effects, or switch between different samples, by performing gestures above a sensor.
-IAmMuse, on the other hand, aims to provide a more traditional interface, allowing the user to play specific notes through their arm movement.
-% , works more similarly to a traditional instrument, allowing the user to generate specific musical notes using their arm movement.
 
-% There exists a wide breadth of mmWave radar data interpretation systems, with either a Deep Learning (DL) or an algorithmic approach.
-
-
-% \ednote{Algorithmic applications; and why we want one}
-While the current mmWave-based musical systems all leverage deep learning methods, several point cloud and mmWave radar-based interpretation systems instead opt to employ more traditional machine learning and signal processing methods.
-DBSCAN~\cite{ester1996dbscan} is a foundational clustering technique for point clouds that is used in many other data interpretation pipelines.
-% prime example of a machine learning based algorithm, using deterministic and tunable algorithms to cluster point clouds according to their density.
-In addition to the widely recognised DBSCAN, we also find exemplary domain-specific interpretation systems in the field of mmWave sensing.
-% While DBSCAN is a widely recognised system, the field of mmWave sensing also provides its own domain-specific examples.
-\Citeauthor{li2025acoustic} achieved audio reconstruction~\cite{li2025acoustic}, using classical signal processing techniques to extract vibrational information using the micro-doppler information of the mmWave radar.
-% A notable example is the system for audio reconstruction designed by \citeauthor{li2025acoustic} \cite{li2025acoustic}, using classical signal processing techniques, extracting vibration information using micro-doppler.
-Similarly, for geometric labelling, \citeauthor{poux2019voxel} \cite{poux2019voxel} created a system using a voxel-based segmentation pipeline.
-
-
-
-\ednote{This should maybe be the first paragraph}
 % \ednote{Existing mmWave HPE, which all use DL\\ give a very brief (1-2 sentences) overview of their workings}
-The majority of mmWave HPE methods, however, utilise deep learning for its ability to generalise over unstructured data.
+The majority of mmWave HPE methods utilise deep learning for its ability to generalise over unstructured data.
 MARS~\cite{an2021mars}, for example, utilises a CNN to predict a set of \textit{3D joint coordinates}, using a Kinect 2 skeletal estimation as the ground truth during training.
-This method uses the mmWave radar point cloud output to predict output skeletons on a frame-by-frame basis.
+This method uses the mmWave radar point cloud to output predicted skeletal estimations on a frame-by-frame basis.
 mmPose~\cite{sengupta2020mmpose} also uses a CNN to produce a skeletal estimation from the mmWave radar.
 However, where MARS uses the point cloud directly, mmPose uses the 2D \textit{range-azimuth} and \textit{range-elevation} projection to predict the human pose, to mitigate the data sparsity issue.
 Lastly, mmDiff~\cite{junqiao2025diffusion} uses a constrained diffusion model to perform the human pose estimation.
 To prevent unrealistic hallucinations, they explicitly constrain the diffusion model with kinematic and temporal bounds.
 
-\ednote{Jack thinks this does not belong in the related works, either chapter 1 or 3}
-% \ednote{DL downsides, advantages and tradeoffs of IAmMuse (simpler, cheaper, no training) vs (simpler problem space, "arm position estimation" not HPE)}
-Although using deep learning provides significant benefits, in particular when considering the ability to generalise, this does come at a cost.
-Deep learning models suffer from a lack of explainability due to their 'black box' nature; furthermore, complex models require large amounts of data to train and significant computing resources to use.
-Despite these practical considerations, the vast majority of research into mmWave human sensing focuses on deep learning models \cite{mars2021github, junqiao2025diffusion, sengupta2020mmpose} or on constructing datasets for these deep learning models \cite{brescia2023millinoise, su2025high_fidelity, cui2023milipoint}.
-Non-deep learning methods, using more traditional machine learning principles, or signal processing-based approaches, have not been explored for human pose estimation, despite the demonstrated efficacy of such methods in the broader mmWave sensing domain.
+While the mmWave HPE State-of-the-Art solutions all leverage deep learning methods, several other point cloud and mmWave radar-based interpretation systems instead opt to employ more traditional machine learning and signal processing methods.
+DBSCAN~\cite{ester1996dbscan} is a foundational clustering technique for point clouds that is used in many other data interpretation pipelines.
+In addition to the widely recognised DBSCAN, we also find exemplary domain-specific interpretation systems in the field of mmWave sensing.
+\Citeauthor{li2025acoustic} achieved audio reconstruction~\cite{li2025acoustic}, using classical signal processing techniques to extract vibrational information through the micro-doppler information of the mmWave radar.
+Similarly, \citeauthor{poux2019voxel} \cite{poux2019voxel} created a system which uses a voxel-based segmentation pipeline for geometric labelling.
 
-% Similar concept musical experiences: Mimu \cite{mimu} and Somi-1 \cite{somi-1}.
+
+Lastly, since this thesis uses a musical system as a benchmark application to test the efficacy of our final mmWave-radar-based interface, we consider similar, sensor-driven, musical applications.
+A particularly relevant domain to consider is that of \textit{full body} musical interfaces, given that our system uses arm tracking to control the musical output.
+% Since our system generates music from the users arm positions, a particularly relevant 
+% Due to the  our system, \textit{full body} musical interfaces are a particularly relevant domain to consider.
+% We plan on making a musical system where the position of the user's arms dictates the musical notes which are played; some similar \textit{full body} musical interfaces already exist.
+One such system is Somi-1 \cite{somi-1}, which uses motion sensors to control music with dynamic movement.
+MiMu gloves \cite{mimu} is another similar system that needs to attach to the user's hands, which measures finger position as well as hand motion.
+Two existing systems already use mmWave radars for musical expression, which both work through Deep Learning:
+\textit{WaveTune} \cite{juneja2024wavetune}, which uses gestures to select a combination of prebuild beat-patterns; 
+and \textit{O Soli Mio} \cite{bernado2017o_soli_mio}, which allows you to control specific musical effects, or switch between different samples, by performing gestures above a sensor.
+IAmMuse, on the other hand, aims to provide a more traditional interface, allowing the user to play specific notes through their arm movement.
+
+% \brendanLines
+% 
+% \ednote{The first paragraph should be at the end, musical systems are the least important part.}
+% % \ednote{introduction an musical works}
+% For the related works, two different types of work will be considered: those related to innovative musical expression and those pertaining to mmWave technology.
+% This thesis uses a musical system as a benchmark application to test the efficacy of our final mmWave-radar-based interface, using the user's arm movements to control the musical system.
+% % This thesis aims to use the sensing capabilities of an mmWave radar to create an instrument that is controlled by the user's arm movements.
+% %The user's arm movements control this musical interface. 
+% Similar \textit{full body} musical interfaces already exist.
+% One such system is Somi-1 \cite{somi-1}, which uses motion sensors to control music with dynamic movement.
+% MiMu gloves \cite{mimu} is another similar system that needs to attach to the user's hands, which measures finger position as well as hand motion.
+% % but can also measure the bend of the user's fingers, in addition to motion.
+% Two existing systems already use mmWave radars for musical expression, which both work through Deep Learning:
+% % There are also two existing systems that use mmWave radars for musical expression:
+% % There already exist two mmWave-based musical systems, but they have a different use case than IAmMuse.
+% \textit{WaveTune} \cite{juneja2024wavetune}, which uses gestures to select a combination of prebuild beat-patterns; 
+% and \textit{O Soli Mio} \cite{bernado2017o_soli_mio}, which allows you to control specific musical effects, or switch between different samples, by performing gestures above a sensor.
+% IAmMuse, on the other hand, aims to provide a more traditional interface, allowing the user to play specific notes through their arm movement.
+% % , works more similarly to a traditional instrument, allowing the user to generate specific musical notes using their arm movement.
+% 
+% % There exists a wide breadth of mmWave radar data interpretation systems, with either a Deep Learning (DL) or an algorithmic approach.
+% 
+% 
+% % \ednote{Algorithmic applications; and why we want one}
+% While the current mmWave-based musical systems all leverage deep learning methods, several point cloud and mmWave radar-based interpretation systems instead opt to employ more traditional machine learning and signal processing methods.
+% DBSCAN~\cite{ester1996dbscan} is a foundational clustering technique for point clouds that is used in many other data interpretation pipelines.
+% % prime example of a machine learning based algorithm, using deterministic and tunable algorithms to cluster point clouds according to their density.
+% In addition to the widely recognised DBSCAN, we also find exemplary domain-specific interpretation systems in the field of mmWave sensing.
+% % While DBSCAN is a widely recognised system, the field of mmWave sensing also provides its own domain-specific examples.
+% \Citeauthor{li2025acoustic} achieved audio reconstruction~\cite{li2025acoustic}, using classical signal processing techniques to extract vibrational information using the micro-doppler information of the mmWave radar.
+% % A notable example is the system for audio reconstruction designed by \citeauthor{li2025acoustic} \cite{li2025acoustic}, using classical signal processing techniques, extracting vibration information using micro-doppler.
+% Similarly, for geometric labelling, \citeauthor{poux2019voxel} \cite{poux2019voxel} created a system using a voxel-based segmentation pipeline.
+% 
+% 
+% 
+% \ednote{This should maybe be the first paragraph}
+% % % \ednote{Existing mmWave HPE, which all use DL\\ give a very brief (1-2 sentences) overview of their workings}
+% The majority of mmWave HPE methods, however, utilise deep learning for its ability to generalise over unstructured data.
+% MARS~\cite{an2021mars}, for example, utilises a CNN to predict a set of \textit{3D joint coordinates}, using a Kinect 2 skeletal estimation as the ground truth during training.
+% This method uses the mmWave radar point cloud output to predict output skeletons on a frame-by-frame basis.
+% mmPose~\cite{sengupta2020mmpose} also uses a CNN to produce a skeletal estimation from the mmWave radar.
+% However, where MARS uses the point cloud directly, mmPose uses the 2D \textit{range-azimuth} and \textit{range-elevation} projection to predict the human pose, to mitigate the data sparsity issue.
+% Lastly, mmDiff~\cite{junqiao2025diffusion} uses a constrained diffusion model to perform the human pose estimation.
+% To prevent unrealistic hallucinations, they explicitly constrain the diffusion model with kinematic and temporal bounds.
+% 
+% \ednote{Jack thinks this does not belong in the related works, either chapter 1 or 3}
+% % \ednote{DL downsides, advantages and tradeoffs of IAmMuse (simpler, cheaper, no training) vs (simpler problem space, "arm position estimation" not HPE)}
+% Although using deep learning provides significant benefits, in particular when considering the ability to generalise, this does come at a cost.
+% Deep learning models suffer from a lack of explainability due to their 'black box' nature; furthermore, complex models require large amounts of data to train and significant computing resources to use.
+% Despite these practical considerations, the vast majority of research into mmWave human sensing focuses on deep learning models \cite{mars2021github, junqiao2025diffusion, sengupta2020mmpose} or on constructing datasets for these deep learning models \cite{brescia2023millinoise, su2025high_fidelity, cui2023milipoint}.
+% Non-deep learning methods, using more traditional machine learning principles, or signal processing-based approaches, have not been explored for human pose estimation, despite the demonstrated efficacy of such methods in the broader mmWave sensing domain.
+% 
+% % Similar concept musical experiences: Mimu \cite{mimu} and Somi-1 \cite{somi-1}.
 
 
 

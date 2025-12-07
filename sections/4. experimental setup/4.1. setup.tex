@@ -9,7 +9,7 @@
 % - 
 % FMCW
 The mmWave~radar used in this thesis is the IWR6843ISK by Texas~Instruments.
-The radar requires firmware to run, a diverse variety of which are provided by TI, for varying sensing tasks.
+The radar requires firmware to run, a diverse variety of which are provided by Texas Instruments, for varying sensing tasks.
 % The radar runs firmware, a variety of which are provided by TI, for various sensing tasks.
 % This chip needs to run a specific firmware to work; TI provides a set of ready-made firmware, which differ slightly in what they provide to the end user.
 The main firmware characteristics that are important to this thesis are the number of points generated, the signal-to-noise ratio, and the discriminative value of each point, for arm angle estimation.
@@ -40,10 +40,10 @@ This skeletal estimation was transformed into an arm angle estimation by calcula
     \hfill
     \begin{subfigure}{0.45\textwidth}
        \includegraphics[width=1\textwidth]{figures/experimental setup/room_view.jpeg}
-       \caption{Sensor view}
+       \caption{View from the Sensor's perspective}
        \label{figure: testing environment - sensor view}
     \end{subfigure}
-    \caption{The testing environment, providing the user view (a) and the sensor view (b).}
+    \caption{The testing environment, providing the user view (a) and the sensor's perspective (b).}
     \label{figure: testing environment}
 \end{figure}
 
@@ -53,20 +53,22 @@ This skeletal estimation was transformed into an arm angle estimation by calcula
 %   - Where was the user
 % - What effect could the room setup have
 % - 
-The experiments were performed in a large open room ($7 \times 10$~m). 
-The mmWave~radar was mounted at a height of 125~cm and was tilted upwards at an angle of $5\degree$ upwards.
+The experiments are performed in a large open room ($7 \times 10$~m). 
+The mmWave~radar was mounted at a height of 125~cm and was tilted upwards at an angle of $5\degree$.
 The Kinect was mounted at a height of 175~cm with an angle of $5\degree$ downwards.
 The user could see a real-time visualisation of the incoming point cloud, as well as the current arm angle estimation on a screen in front of them, as shown in \cref{figure: testing environment - user view}.
 % A screen was also present, on which the user could see their currently predicted zones, and the incoming point clouds.
 The user was standing at a distance of 2 meters from the sensors.
 Appendix \ref{appendix: experimental setup} shows the experimental setup in detail.
 A large and open room was used, see \cref{figure: testing environment - sensor view}, which meant that back wall reflections were spatially distinct from the user.
-The back wall was also broken up with open shelving, diffusing any potential backscatter.
-% which should've scattered the incoming millimeter waves, as opposed to reflecting them.
-The large screen at the end of the room was angled upwards, reflecting the mmWaves away from, rather than back at, the radar.
-% The large screen present was angled upwards, and would've thus not reflected the signal to the mmWave sensor.
-These factors resulted in the mmWave radar producing point clouds with relatively little noise in this room, which in turn reduced the need for aggressive noise reduction, creating a higher-quality dataset.
-% meant that the noise reduction algorithms did not have to be tuned as much.
+This resulted in point clouds with relatively little noise, producing a relatively high-quality dataset.
+% \ednote{Info about the back wall is not needed and only confusing}
+% The back wall was also broken up with open shelving, diffusing any potential backscatter.
+% % which should've scattered the incoming millimeter waves, as opposed to reflecting them.
+% The large screen at the end of the room was angled upwards, reflecting the mmWaves away from, rather than back at, the radar.
+% % The large screen present was angled upwards, and would've thus not reflected the signal to the mmWave sensor.
+% These factors resulted in the mmWave radar producing point clouds with relatively little noise in this room, which in turn reduced the need for aggressive noise reduction, creating a higher-quality dataset.
+% % meant that the noise reduction algorithms did not have to be tuned as much.
 
 
 
@@ -76,15 +78,27 @@ These factors resulted in the mmWave radar producing point clouds with relativel
 % - How did we provide feedback
 % - Refer to the appendix for more in-depth info
 % - 
-\ednote{This "advice part" can mostly be skipped/removed.}
 
-Users were informed of how the system worked and what they were expected to do through an explanatory PDF (see Appendix~\ref{appendix: user explanation}).
-The specific actions the users performed will be discussed in \cref{section: experimental setup - dataset}.
-After each recording, the researcher provided some guidance to the user about how to best use the system, based on the user error observed in the previous recording.
-Common advice included keeping consistent micro-movements in the hands to increase the point cloud stability and density in those regions.
-Furthermore, a more precise specification of the exact \textit{spatial regions} which correlated to a specific \textit{arm position} ("low", "middle", or "high") was also often given as advice.
-% Commonly given advice was to wave their hands, or do "jazz hands", as well as informing the user where the optimal "zone positions" are (for low, mid, high).
-A more detailed overview of the provided feedback, along with notes of the user performance, can be found in Appendix \ref{appendix: experiment notes}.
+Six users took part in this experiment.
+The whole experiment, consisting of between 4 and 7 recordings, took between 20 and 40 minutes.
+During the recordings, both the mmWave radar point cloud and a skeletal estimation produced by the Kinect 2 were recorded.
+The Kinect 2 did record a video channel, but this video channel was only used to create the skeletal estimate and was never saved.
+While in use, the system produced musical notes in accordance with the pose that the system predicted at that given time.
+The users were given a content form before the experiment, and were allowed to drop out of the experiment at any point.
+For privacy reasons, we chose only to record the height and arm span of the users, and no other information, see Appendix~\ref{appendix: user information}.
+Before the experiment took place, we informed the users of how the system worked, and what was expected of them through an explanatory PDF (see Appendix~\ref{appendix: user explanation}).
+The specific actions the users performed are discussed in \cref{section: experimental setup - dataset}.
+
+% \ednote{Briefly explain the general testing situation, "how many people did we have", "how long roughly did each test take", and also "what data do we record", and the fact that the users hear the music output.\\ Briefly mention (and forward references to explanation) how many standard recordings and free play people had, and roughly how long they took.}
+% \ednote{Specify that we did not make any user interviews, briefly mention our privacy concern stuff.}
+ % Users were informed of how the system worked and what they were expected to do through an explanatory PDF (see Appendix~\ref{appendix: user explanation}).
+% The specific actions the users performed will be discussed in \cref{section: experimental setup - dataset}.
+% \ednote{This "advice part" can mostly be skipped/removed.}
+% After each recording, the researcher provided some guidance to the user about how to best use the system, based on the user error observed in the previous recording.
+% Common advice included keeping consistent micro-movements in the hands to increase the point cloud stability and density in those regions.
+% Furthermore, a more precise specification of the exact \textit{spatial regions} which correlated to a specific \textit{arm position} ("low", "middle", or "high") was also often given as advice.
+% % Commonly given advice was to wave their hands, or do "jazz hands", as well as informing the user where the optimal "zone positions" are (for low, mid, high).
+% A more detailed overview of the provided feedback, along with notes of the user performance, can be found in Appendix \ref{appendix: experiment notes}.
 
 
 %     -[[ ]]-

@@ -1,45 +1,50 @@
 \section{Contributions}
 \label{section: introduction - contributions}
 
-\ednote{rethink this figure caption, is it the "theory" or the "implementation"}
-\ednote{Make this figure better readable (colours, whatever)}
-\ednote{Technically, this figure should also have a "point weight added" or "data enhancement" step between \textit{calibration complete} and \textit{Data Filtering}}
 \begin{figure}[!htb]
     \centering
     \makebox[\linewidth][c]{
-    \includegraphics[width=1.5\linewidth]{figures/internal data/System State Diagram.jpg}
+    \includegraphics[width=1.2\linewidth]{figures/internal data/System state Diagram.jpg}
     }
-    \caption{State diagram of the system}
+    \caption{Diagram of the interpretation framework.}
     \label{figure: system state diagram}
 \end{figure}
 
-\ednote{Be consistent with your terms "method", "architecture", "implementation" ect\\
-choose a specific one for each thing and keep to those.}
+% \ednote{Be consistent with your terms "method", "architecture", "implementation" ect\\
+% Choose a specific one for each thing and keep to those.}
 
-This thesis makes three distinct contributions to the field of mmWave sensing \textbf{\color{red} Narrow this, what kind of sensing}: 
+This thesis makes three distinct contributions to the field of mmWave sensing for interactive interfaces:
+% \textbf{\color{red} Narrow this, what kind of sensing}: 
 a theoretical interpretation framework, a real-time software implementation of this framework, and a comparative evaluation against a state-of-the-art Deep Learning model.\\
 
-\ednote{Make sure that the names mentioned above align with the names mentioned bellow e.g. "theoretical framework" vs "signal processing method for ..."}
+% \ednote{Make sure that the names mentioned above align with the names mentioned bellow e.g. "theoretical framework" vs "signal processing method for ..."}
 
-\ednote{Think about potentially using "forwards references" e.g. "... this will be discussed in more detail in chapter 3 or section 3.2"}
-\noindent \textbf{1. A Signal Processing Method for Sparse Point Cloud Interpretation}\\
+% \ednote{Think about potentially using "forwards references" e.g. "... this will be discussed in more detail in chapter 3 or section 3.2"}
+\noindent \textbf{1. Theoretical Interpretation Framework for Sparse Point Cloud Interpretation}\\
+% \noindent \textbf{1. A Signal Processing Method for Sparse Point Cloud Interpretation}\\
 Our first contribution is a framework for the cleaning, enhancing and interpretation of sparse mmWave radar point clouds.\\
 This framework comprises:
 \begin{itemize}
+    \item
+        A \textit{user context gathering} system, using a \textit{few-shot online learning} approach.
+        This system provides information about the position of the user's sternum and their arm span.
     \item 
-        A \textit{spatio-temporal filter} for pointclouds, which uses the local density and the prior frames to filter out both \textit{dense single-frame noise spikes}, as well as more \textit{consistent low-density noise}.
-    \ednote{split het volgende bulletpoint tot been few-shot online learning \textbf{EN} de data enhancement}
-    \item 
-        A \textit{data enhancement} technique to prioritise the points produced by the user's hands.
-        This is achieved through a \textit{few-shot online learning} step, which gathers context data of the scene, also providing valuable information about the user's position and arm span.
+        A \textit{spatio-temporal filter} for point clouds, which uses the local density and the prior frames to filter out both \textit{dense single-frame noise spikes}, as well as more \textit{consistent low-density noise}.
+    \item
+        A \textit{data enhancement} technique to identify points produced by the user's hands.
+        This uses the user context to add an extra dimension of information to the point cloud.
+    % \ednote{split het volgende bulletpoint tot been few-shot online learning \textbf{EN} de data enhancement}
+    % \item 
+        % A \textit{data enhancement} technique to prioritise the points produced by the user's hands.
+        % This is achieved through a \textit{few-shot online learning} step, which gathers context data of the scene, also providing valuable information about the user's position and arm span.
     \item 
         A \textit{stabilising angle estimation} method, which uses the context gathered by the data enhancement system to estimate which discrete arm angle range the user's arms are in.
         Stabilisation methods are employed to counteract jitter and noise spikes.
 \end{itemize}
 
 
-\noindent \textbf{2. A Real-Time Software Architecture: 'IAmMuse'}\\
-Our second contribution is a multi-threaded full pipeline implementation of this methodology, called 'IAmMuse'.
+\noindent \textbf{2. Real-Time Software Implementation: 'IAmMuse'}\\
+Our second contribution is a multi-threaded full pipeline implementation of this framework, called 'IAmMuse'.
 It is designed with robustness and fast response times in mind, to be able to run on more resource-constrained hardware.\\
 For this contribution, we present:
 \begin{itemize}
@@ -47,7 +52,7 @@ For this contribution, we present:
         A custom high-performance driver for the radar communication protocol, implemented in Rust.
         This development yields a platform-agnostic solution, resolving the compatibility limitations of the vendor-supplied driver while providing a native, low-latency interface, enabling seamless integration into the rest of the pipeline.
     \item 
-        A fully asynchronous and multi-threaded implementation of the pipeline shown in \cref{figure: system state diagram}.
+        A fully asynchronous and multi-threaded implementation of the framework shown in \cref{figure: system state diagram}.
         This architecture ensures that data processing can start as soon as a data packet arrives from the mmWave radar.
         This enables optimal hardware utilisation, even on more resource-constrained hardware.
     \item 
@@ -80,13 +85,15 @@ The findings from this benchmark are that:
 
 
 \section*{Thesis Outline}
-\ednote{Jack is van meaning dat het better least als je elke chapter met "Chapter X shows", etc, etc begint.}
+% \ednote{Jack is van meaning dat het better least als je elke chapter met "Chapter X shows", etc, etc begint.}
 
 \Cref{chapter: background} presents the theoretical foundations required to understand the thesis and its challenges, as well as the current state of research in the field.
-A detailed discussion of the system pipeline and its workings is given in \cref{chapter: tracking method}.
+\Cref{chapter: tracking method} provides a detailed discussion of the interpretation framework.
+% A detailed discussion of the system pipeline and its workings is given in \cref{chapter: tracking method}.
 % A detailed explanation of the evaluation pipeline is given in \cref{chapter: tracking method}.
 \Cref{chapter: experimental setup} shows the testing setup, lays out the characteristics of the collected data, and the baseline comparisons.
-The results of this comparison will be presented in \cref{chapter: evaluation}, and lastly, this thesis will be concluded in \cref{chapter: conclusion}.
+\Cref{chapter: evaluation} shows the results of this comparison, an lastly \cref{chapter: conclusion} will conclude this thesis and give some future recommendations.
+% The results of this comparison will be presented in \cref{chapter: evaluation}, and lastly, this thesis will be concluded in \cref{chapter: conclusion}.
 
 
 
