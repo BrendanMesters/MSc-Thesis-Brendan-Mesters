@@ -67,7 +67,7 @@ For this, we compared IAmMuse to the DL model MARS~\cite{an2021mars}, to assess 
 The findings from this benchmark are that:
 \begin{itemize}
     \item 
-        IAmMuse outperformed the best-performing MARS model by a factor of 1.5 for correct state predictions, on our evaluation data set.
+        IAmMuse achieved an accuracy 50\% higher than the best-performing MARS model, for correct state predictions, on our evaluation data set.
         The output of MARS was often unstable, rapidly switching between different predictions.
     % \ednote{Turn it around, "if we give it poor data" THEN "we get poor output"}
     \item 
@@ -78,7 +78,7 @@ The findings from this benchmark are that:
     % \ednote{Misschien anders vertellen:\\ Je moet MARS met echt dezelfde data trained als je gebruiks data, also dit niet goed genoeg match dan krijgt hij been enorme bias.}
     \item 
         The training data for MARS also had to match the evaluation data very closely; using a different mmWave HPE dataset, for example, produced a model that was very prone to bias.
-        These models predicted the same state, regardless of the input data, more then 90\% of the time.
+        These models predicted the same state, regardless of the input data, more than 90\% of the time.
         % The MARS model was prone to severe bias, predicting the same output state more than 90\% of the time.
         % Careful training set selection was required to mitigate this behaviour.
 \end{itemize}
@@ -92,7 +92,7 @@ The findings from this benchmark are that:
 % A detailed discussion of the system pipeline and its workings is given in \cref{chapter: tracking method}.
 % A detailed explanation of the evaluation pipeline is given in \cref{chapter: tracking method}.
 \Cref{chapter: experimental setup} shows the testing setup, lays out the characteristics of the collected data, and the baseline comparisons.
-\Cref{chapter: evaluation} shows the results of this comparison, an lastly \cref{chapter: conclusion} will conclude this thesis and give some future recommendations.
+\Cref{chapter: evaluation} shows the results of this comparison, and lastly \Cref{chapter: conclusion} will conclude this thesis and give some future recommendations.
 % The results of this comparison will be presented in \cref{chapter: evaluation}, and lastly, this thesis will be concluded in \cref{chapter: conclusion}.
 
 

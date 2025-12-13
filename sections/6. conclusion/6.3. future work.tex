@@ -3,10 +3,14 @@
 
 \subsection*{Unified Dynamic User Tracking}
 To simultaneously address the requirement of a stationary subject and the dependency on a calibration step, future research should investigate a dynamic user tracking model.
+To maintain compatibility with the current architecture, this tracking method would need to provide the same user model as IAmMuse, consisting of the user's \textit{sternum location} and \textit{arm span}.
 By tracking a user once they enter the Field of View of the radar, this system could maintain a continuous estimation of their sternum location.
-Simultaneously, an estimation of their arm span can be refined online through kinematic analysis of the observed point cloud.
-Together, these results yield a kinematic range estimation: a sphere with its centre at the sternum and a diameter equal to the arm span.
-The exact domain knowledge used by the IAmMuse interpretation system.
+For the \textit{arm span}, we can assume a default value at the start (e.g. 170 cm) and refine this online through analysis of the point cloud.
+Ensuring that these estimated variables match reality well allows for seamless integration into the existing IAmMuse pipeline.
+
+% Simultaneously, an estimation of their arm span can be refined online through kinematic analysis of the observed point cloud.
+% Together, these results yield a kinematic range estimation: a sphere with its centre at the sternum and a diameter equal to the arm span.
+% The exact domain knowledge used by the IAmMuse interpretation system.
 
 \subsection*{Increased Angular Resolution}
 Future work should address the granularity limitation of the current system.
@@ -15,19 +19,23 @@ Firstly, the \textit{classification system} of IAmMuse could be replaced by a \t
 Secondly, the granularity of the classification could be improved by subdividing the full angle range into a large number of smaller angle intervals.
 This latter approach can reuse the conceptual basis of the current classification system, but distribute the weight of a point over adjacent angular zones instead of using a binary hard-assignment.
 To support this new classification system, the stabilisation system could be replaced by a combined temporal median and IIR filter to remove outliers and ensure a smooth output.
+Consequently, this would also alleviate some of the latency issues observed, as this new stabilisation system can change its prediction with a single frame, as opposed to requiring at least two frames as IAmMuse did.
 
 \subsection*{Latency Reduction}
-The problem of system latency persists in the current work and should be addressed in future research.
-The fact that a significant percentage of frames are estimated with low latency suggests that the high latency issue is not inherent to the method, but rather an implementation-specific issue.
+A current shortcoming in IAmMuse is its response time.
+The system does detect 40\% of transitions immediately, but a detection rate of 50\% is only achieved after 700 milliseconds, while an 80\% detection rate only occurs 3 seconds after the state change.
+% as IAmMuse produces an immediate response to a change in the ground truth in only 40\% of cases, while taking just under a second to respond to 50\% of the cases, and almost 3 seconds to respond to 80\% of the cases.
+% The problem of system latency persists in the current work and should be addressed in future research.
+However, the fact that a significant percentage of frames are estimated with low latency suggests that the high latency issue is not inherent to the proposed framework, but rather an implementation-specific issue.
 % We It is unlikely that this issue is an inherent problem with the methodology, due to the percentage of frames that are estimated correctly.
 Therefore, the first step is to identify and analyse the scenarios in which significant latency occurs.
 These findings can then be used to guide modifications to the existing method to alleviate this latency issue.
 
-\subsection*{Semantic Point Cloud Segmentation}
-An efficient framework for semantic segmentation of human body point clouds would lay the foundation for future signal-processing-based Human Pose Estimation.
-Such a system would assign a label to each point, based on the statistical likelihood of that point belonging to a particular anatomical segment.
-% Each point in a given cloud would need to be labelled with a statistical likelihood of belonging to a particular section of the user's body.
-This could then be used as a pre-processing step for future interpretation algorithms, significantly reducing implementation complexity for task-specific interfaces.
+% \subsection*{Semantic Point Cloud Segmentation}
+% An efficient framework for semantic segmentation of human body point clouds would lay the foundation for future signal-processing-based Human Pose Estimation.
+% Such a system would assign a label to each point, based on the statistical likelihood of that point belonging to a particular anatomical segment.
+% % Each point in a given cloud would need to be labelled with a statistical likelihood of belonging to a particular section of the user's body.
+% This could then be used as a pre-processing step for future interpretation algorithms, significantly reducing implementation complexity for task-specific interfaces.
 
 
 

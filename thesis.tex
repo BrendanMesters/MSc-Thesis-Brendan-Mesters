@@ -66,7 +66,8 @@
 \usepackage{wrapfig} % Allows for figures inside of text
 \usepackage{subcaption} % Subfigures and such
 \usepackage[export]{adjustbox}
-\usepackage{tabularx}
+\usepackage{tabularx} 
+\usepackage{enumitem}
 % [[ natbib with `plain` looks]]
 % The paper wants me to use the "plain" bibliography style, but I'd really like the features form 
 % the `natbib` package, this setup should do exactly that
@@ -87,7 +88,7 @@
 
 
 % Information that will be filled in at various points in the report
-\newcommand{\reportTitle}{IAmMuse: A signal-processing-based approach to mmWave radar interfaces.}
+\newcommand{\reportTitle}{IAmMuse: A signal-processing-based method to estimate arm positions with mmWave radar}
 \newcommand{\reportAuthor}{Brendan Rudolf Mesters} % Please put your full and official name here: no abbreviations (and to Dutch students: geen roepnamen)
 \newcommand{\studentNumber}{4876016}
 \newcommand{\reportEmailTUD}{b.r.mesters@student.tudelft.nl}
@@ -134,10 +135,10 @@ Most human sensing solutions for mmWave radars use Deep Learning models, which r
 To address these limitations, we present \textit{IAmMuse}, a lightweight, signal-processing-based interpretation pipeline for human sensing using mmWave radar technology.
 We filter and enhance the raw point cloud data, using spatio-temporal density information, as well as kinematic context acquired through a few-shot online learning step.
 IAmMuse uses this pre-processed data to generate a stabilised prediction, classifying the user's arm position.% into a discrete angular zone.
-We implemented a musical system, controlled through these predictions, as an example application for the technology.
+\,We implemented a musical system, controlled through these predictions, as an example application for the technology.
 The user selects musical notes by moving their arms to either a \textit{low}, \textit{middle}, or \textit{high} position, similar to a conductor.
 To assess the efficacy of this method, we present a comparative analysis with a State-of-the-Art Human Pose Estimation model.
-This comparison shows that IAmMuse achieves a classification accuracy 1.5 times higher than the State-of-the-Art model, while using less than 1\% of the training data.
+This comparison shows that IAmMuse achieves a classification accuracy 50\% higher than the State-of-the-Art model, while using less than 1\% of the training data.
 % conclusion
 This thesis validates the viability of non-deep-learning-based interpretation algorithms for human sensing with mmWave radars through a fully functional prototype.
 }
@@ -209,9 +210,9 @@ This thesis validates the viability of non-deep-learning-based interpretation al
 
 \cleardoublepage
 
-\input{chapters/-1. terminology}
+% \input{chapters/-1. terminology}
 
-\cleardoublepage
+% \cleardoublepage
 
 
 \pagenumbering{arabic}
@@ -255,9 +256,9 @@ This thesis validates the viability of non-deep-learning-based interpretation al
 \input{appendix/experimental setup}
 \input{appendix/system explanation}
 \input{appendix/MEB configuration}
-\input{appendix/experiment notes}
+% \input{appendix/experiment notes}
 \input{appendix/recording frame distribution}
-\input{appendix/failed methods}
+% \input{appendix/failed methods}
 \input{appendix/user information}
 
 \end{document}

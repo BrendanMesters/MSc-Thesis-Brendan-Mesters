@@ -1,97 +1,98 @@
 \chapter{Recording Frame Distribution}
 \label{appendix: recording frame distribution}
 
-The different recordings have a different number of frames in total, and will also use a different number of frames for the \textit{pre-configuration} step. 
-The following table shows the exact number of frames used for \textit{pre-configuration} as well as the number of frames used for \textit{evaluation} (evaluation frames = total frames - preconfig frames).
-The duration of each recording is roughly $\frac{1}{10}$th of the number of frames in the recording, since the mmWave radar records at 10 frames per second
+The different recordings have a different number of frames in total, and will also use a different number of frames for the \textit{calibration} step. 
+The following table shows the exact number of \textit{calibration} frames as well as the number of \textit{interpretation} frames (interpretation frames + calibration frames = total recording frames).
+The duration of each recording is roughly $\frac{1}{10}$th of the number of frames in the recording, since the mmWave radar records at 10 frames per second, giving an average recording duration of 140 seconds.
 
 The table will use a shorthand notation to refer to recordings.
-Standard movement set recordings will be specified with 'std' while free play recordings will be specified with 'free'.
-The user of which the recording is will be specified by 'usr\_xx'.
-The specific recording will be specified with 'rec\_a/b'.
+The user for whom the recording is will be specified by 'usr\_xx', where 'xx' is a random, unique private identifier of the user.
+Standard movement set recordings will be specified with 'std', while free play recordings will be specified with 'free'.
+Each user has made multiple standard recordings, and some users have made multiple free play recordings. 
+To distinguish between the recordings, each recording gets an incremental identifier when both the user and the type match, given as \textit{rec\_n} where n is the incremental identifier.
 Examples:
 \begin{itemize}
-    \item "\textbf{standard movement set} recording from \textbf{user 07} number \textbf{2 out of 3}" becomes "std usr\_07 rec\_2/3"
-    \item "\textbf{free play} recording from \textbf{user 52} number \textbf{1 out of 1}" becomes "free usr\_52 rec\_1/1"
+    \item "\textbf{standard movement set} recording from \textbf{user 07} number \textbf{2}" becomes "std usr\_07 rec\_2"
+    \item "\textbf{free play} recording from \textbf{user 52} number \textbf{1 out of 1}" becomes "free usr\_52 rec\_1"
 \end{itemize}
 
 
 \begin{table}
     \begin{tabular}{|c|c|c|}
         \hline
-        \textbf{Recording} & \textbf{\# Pre-configuration frames} & \textbf{\# Evaluation frames} \\
+        \textbf{Recording} & \textbf{\# Calibration Frames} & \textbf{\# Interpretation Frames} \\
         \hline
         \textit{total} & 7229 & 40272 \\
         \hline
         \textit{average} & 212 & 1184 \\
         \hline
-        free usr\_07 rec\_1/2 & 168 & 853 \\
+        free usr\_07 rec\_1 & 168 & 853 \\
         \hline
-        free usr\_07 rec\_2/2 & 171 & 1014 \\
+        free usr\_07 rec\_2 & 171 & 1014 \\
         \hline
-        free usr\_0 rec\_1/1 & 179 & 331 \\
+        free usr\_07 rec\_3 & 179 & 331 \\
         \hline
-        free usr\_41 rec\_1/1 & 235 & 1423 \\
+        free usr\_41 rec\_1 & 235 & 1423 \\
         \hline
-        free usr\_51 rec\_1/4 & 187 & 1322 \\
+        free usr\_51 rec\_1 & 187 & 1322 \\
         \hline
-        free usr\_51 rec\_2/4 & 206 & 1478 \\
+        free usr\_51 rec\_2 & 206 & 1478 \\
         \hline
-        free usr\_51 rec\_3/4 & 208 & 1461 \\
+        free usr\_51 rec\_3 & 208 & 1461 \\
         \hline
-        free usr\_51 rec\_4/4 & 179 & 1431 \\
+        free usr\_51 rec\_4 & 179 & 1431 \\
         \hline
-        free usr\_52 rec\_1/2 & 223 & 668 \\
+        free usr\_52 rec\_1 & 223 & 668 \\
         \hline
-        free usr\_52 rec\_2/2 & 183 & 863 \\
+        free usr\_52 rec\_2 & 183 & 863 \\
         \hline
-        free usr\_61 rec\_1/2 & 194 & 1247 \\
+        free usr\_61 rec\_1 & 194 & 1247 \\
         \hline
-        free usr\_61 rec\_2/2 & 180 & 769 \\
+        free usr\_61 rec\_2 & 180 & 769 \\
         \hline
-        free usr\_94 rec\_1/2 & 190 & 861 \\
+        free usr\_94 rec\_1 & 190 & 861 \\
         \hline
-        free usr\_94 rec\_2/2 & 230 & 1412 \\
+        free usr\_94 rec\_2 & 230 & 1412 \\
         \hline
-        std experienced\_user rec\_1/3 & 171 & 1003 \\
+        std experienced\_user rec\_1 & 171 & 1003 \\
         \hline
-        std experienced\_user rec\_2/3 & 210 & 1043 \\
+        std experienced\_user rec\_2 & 210 & 1043 \\
         \hline
-        std experienced\_user rec\_3/3 & 162 & 917 \\
+        std experienced\_user rec\_3 & 162 & 917 \\
         \hline
-        std usr\_07 rec\_1/3 & 232 & 905 \\
+        std usr\_07 rec\_1 & 232 & 905 \\
         \hline
-        std usr\_07 rec\_2/3 & 246 & 1132 \\
+        std usr\_07 rec\_2 & 246 & 1132 \\
         \hline
-        std usr\_07 rec\_3/3 & 211 & 1203 \\
+        std usr\_07 rec\_3 & 211 & 1203 \\
         \hline
-        std usr\_41 rec\_2/3 & 206 & 1150 \\
+        std usr\_41 rec\_2 & 206 & 1150 \\
         \hline
-        std usr\_41 rec\_3/3 & 223 & 1204 \\
+        std usr\_41 rec\_3 & 223 & 1204 \\
         \hline
-        std usr\_51 rec\_1/3 & 191 & 1117 \\
+        std usr\_51 rec\_1 & 191 & 1117 \\
         \hline
-        std usr\_51 rec\_2/3 & 212 & 1181 \\
+        std usr\_51 rec\_2 & 212 & 1181 \\
         \hline
-        std usr\_51 rec\_3/3 & 182 & 1212 \\
+        std usr\_51 rec\_3 & 182 & 1212 \\
         \hline
-        std usr\_52 rec\_1/3 & 204 & 989 \\
+        std usr\_52 rec\_1 & 204 & 989 \\
         \hline
-        std usr\_52 rec\_2/3 & 189 & 1147 \\
+        std usr\_52 rec\_2 & 189 & 1147 \\
         \hline
-        std usr\_52 rec\_3/3 & 198 & 1028 \\
+        std usr\_52 rec\_3 & 198 & 1028 \\
         \hline
-        std usr\_61 rec\_1/3 & 183 & 1118 \\
+        std usr\_61 rec\_1 & 183 & 1118 \\
         \hline
-        std usr\_61 rec\_2/3 & 151 & 1291 \\
+        std usr\_61 rec\_2 & 151 & 1291 \\
         \hline
-        std usr\_61 rec\_3/3 & 167 & 1017 \\
+        std usr\_61 rec\_3 & 167 & 1017 \\
         \hline
-        std usr\_94 rec\_1/3 & 275 & 1067 \\
+        std usr\_94 rec\_1 & 275 & 1067 \\
         \hline
-        std usr\_94 rec\_2/3 & 223 & 1142 \\
+        std usr\_94 rec\_2 & 223 & 1142 \\
         \hline
-        std usr\_94 rec\_3/3 & 218 & 1044 \\
+        std usr\_94 rec\_3 & 218 & 1044 \\
         \hline
     \end{tabular}
 \end{table}

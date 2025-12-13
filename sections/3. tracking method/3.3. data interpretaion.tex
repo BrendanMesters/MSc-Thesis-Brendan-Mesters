@@ -34,7 +34,7 @@ The data interpretation method will use this information to determine which posi
         \label{figure: internal data view - b}
     \end{subfigure}
     
-    \caption{Internal data view}
+    \caption{Internal data representation}
     \label{figure: internal data view}
 \end{figure}
 
@@ -52,7 +52,7 @@ This produces an identical result, except for the fact that points which fall ou
 % Here, a point gets assigned to a certain angle range, dependent on the angle of the vector going from the user's sternum to that point in that given projection.
 % Each point can be assigned to a zone, using these angle ranges, and the angle of the vector going from the encompassing ball's centre to the specific point.
 
-The point cloud is now divided into points contained within the six position zones and points not contained in any position zone.
+The point cloud is now divided into points contained within the six position zones and points not included in any position zone.
 We now assign a weight to each position zone, based on the weight of all the points contained in that specific zone.
 The weight of each position zone can be seen as the prediction likelihood of the user's arm actually being in that specific zone.
 Lastly, we find the right-hand position zone with the highest weight, and the left-hand position zone with the highest weight; these are now our zone predictions.
@@ -87,7 +87,7 @@ This constraint is enforced by only switching our output state if the same state
 % \ednote{jittery output:\\ The text is okay, but should be made more concise,\\ HOWEVER: Do make sure to explain the mitigation method clearly.}
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/misc/Zone expansion.png}
+    \includegraphics[width=0.7\linewidth]{figures/misc/Zone expansion.png}
     \caption{Shows the zone size increase (orange) of the active zones (green).}
     \label{figure: active zone increase}
 \end{figure}

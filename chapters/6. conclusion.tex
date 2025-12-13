@@ -8,7 +8,11 @@ A promising sensor for this task is the mmWave radar; however, its output is spa
 Existing interpretation methods primarily rely on Deep Learning (DL) methods, which are data-hungry, resource-intensive, and opaque, potentially limiting their wide-scale adoption.
 Therefore, we designed IAmMuse, an interpretation system exploiting known domain knowledge, through traditional signal processing methods.
 This interpretation method produces a \textit{discrete arm-angle-estimation}, which predicts the position of both the user's arms as being either \textit{low}, \textit{middle}, or \textit{high}.
-After comparison with a baseline DL model, we found that IAmMuse performs 1.5 to 4 times better than the baseline.
+When compared to the DL baseline model, IAmMuse achieved a classification accuracy 50\% higher than that of the baseline, while using approximately 1\% of the amount of training data.
+% Comparing IAmMuse with the optimal baseline DL model showed that IAmMuse has an accuracy which is 50\% higher than the best DL model we were able to train, while using 100 times less data.
+
+
+% After comparison with a baseline DL model, we found that IAmMuse performs 1.5 to 4 times better than the baseline.
 
 
 %     -= RESEARCH CHALLENGES =-
@@ -24,25 +28,31 @@ Several research challenges were addressed before and during implementation.
 The fragmented point cloud data was the first research challenge, as the mmWave radar only captured parts of the user in some frames.
 We circumvented this issue by creating a system that stabilises these predictions, even on sparse or partially incomplete frames.
 % For this, we created an effective system which reports stable predictions, even through sparse or partially incomplete frames.
-To achieve this, we applied a smoothing algorithm over the prediction output.
+To achieve this, we applied a two-part smoothing algorithm over the prediction output.
 This algorithm first employs a confidence threshold to reject any low-confidence predictions. 
-A second stage is used to ensure temporal consistency by disregarding any state changes not predicted twice consecutively, to suppress any predictions created by single-frame noise spikes.
+Secondly, it only changes the system output if a prediction occurs twice in a row.
+% A second stage is used to ensure temporal consistency by disregarding any state changes not predicted twice consecutively, to suppress any predictions created by single-frame noise spikes.
 % Afterwards, we ensure temporal consistency by disregarding any state changes not predicted twice consecutively, to suppress any predictions created by single-frame noise spikes.
 
 % Low Latency
-Another challenge for this thesis was the low-latency requirement. 
+Another challenge was the low-latency requirement. 
 Low-latency response times could not fully be realised.
 Approximately 40\% of the state changes were correctly identified on the following data frame.
-This detection probability increased to 50\% by the 5th frame, and rose to 80\% only after a latency of 30 frames.
+This detection probability increased to 50\% by the 7th frame, and rose to 80\% only after a latency of 30 frames.
 
 
 % Outperform SOA DL model
-The final research challenge for this thesis was to outperform, or perform comparably to, an SoA DL model, MARS~\cite{an2021mars}.
-This requirement was successfully met, producing a correct prediction 1.5 to 4 times more often than MARS, depending on the specific training set.
-When considering the likelihood of predicting a frame correctly, IAmMuse outperformed MARS.
-This is in part due to the high variance in MARS' output, as well as its bias towards a \textit{default output state}, issues that do not occur with IAmMuse.
-MARS predicts its \textit{default output state} marginally better than IAmMuse, but all other output states are predicted either slightly or significantly (more than 4 times) better by IAmMuse.
-
+The final research challenge for this thesis was to outperform, or perform comparably to, a State-of-the-Art DL model, MARS~\cite{an2021mars}.
+A comparison between IAmMuse and MARS showed that IAmMuse achieves superior accuracy in predicting the position of both the user's arms.
+IAmMuse had an accuracy of 70\%, meaning that 70\% of the frames were classified correctly, while MARS's accuracy ranged from 15\% up to 48\% depending on the training data used.
+To achieve an accuracy above 20\%, MARS had to be trained with a subset of the interpretation data (with the remainder being used for testing), as opposed to the distinct \textit{calibration dataset}, which IAmMuse used for training.
+Furthermore, the MARS models, which achieved an accuracy above 20\%, also used roughly 100 times more training data than IAmMuse did (18,000-25,000 frames, as opposed to 108-275 frames).
+In the case where MARS used 100 times the amount of training data IAmMuse used, we still observed that IAmMuse gives an accuracy 50\% higher than MARS.
+% old
+% This requirement was successfully met, producing a correct prediction 1.5 to 4 times more often than MARS, depending on the specific training set.
+% When considering the likelihood of predicting a frame correctly, IAmMuse outperformed MARS.
+% This is in part due to the high variance in MARS' output, as well as its bias towards a \textit{default output state}, issues that do not occur with IAmMuse.
+% MARS predicts its \textit{default output state} marginally better than IAmMuse, but all other output states are predicted either slightly or significantly (more than 4 times) better by IAmMuse.
 
 
 %     -= REFLECTION =-

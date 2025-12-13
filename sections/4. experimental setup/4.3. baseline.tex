@@ -4,9 +4,9 @@
 
 For our comparison, we need a DL model that is a State-of-the-Art work in the field of mmWave radar HPE.
 % which ensures that both systems have comparable prior literature to build upon.
-Furthermore, the DL model has to evaluate the same data that IAmMuse evaluates, the pointclouds of the mmWave radar.
+Furthermore, the DL model has to evaluate the same data that IAmMuse evaluates, the point clouds of the mmWave radar.
 The output of the system should be a skeletal estimation, which can be transformed into an arm angle estimation in the same way as the ground truth.
-With these considerations, the MARS model~\cite{an2021mars}, a State-of-the-Art model in the field of mmWave HPE and one of the first systems to generate skeletal estimations out of sparse mmWave pointclouds, is selected as the ideal comparison model.
+With these considerations, the MARS model~\cite{an2021mars}, a State-of-the-Art model in the field of mmWave HPE and one of the first systems to generate skeletal estimations out of sparse mmWave point clouds, is selected as the ideal comparison model.
 
 The MARS paper and this thesis both use a Kinect 2 for the ground truth and use mmWave radar point clouds as input.
 One notable difference in the setups is the fact that MARS uses an older radar model, the IWR1443, as opposed to the IWR6843, though their output should be comparable.
@@ -24,12 +24,12 @@ For the evaluation, we considered five different models:
         This model demonstrates the performance of the MARS model if it uses the same training and testing data as IAmMuse.
         Therefore, it trains on the \textit{calibration data} of a \textbf{specific recording}, and it tests the \textit{interpretation data} of \textbf{the same recording}.
         The performance of this model is discussed in \cref{section: evaluation - baseline analysis}.
-    \item \textbf{MARS paper}: 
+    \item \textbf{MARS pre-trained}: 
         This model shows the ability of MARS to generalise over datasets.
         For this, it uses the weights provided by the original MARS paper~\cite{an2021mars}, so it is trained on the MARS dataset, while it tests the \textit{interpretation data} of all recordings.
         The performance of this model is discussed in \cref{section: evaluation - larger models}.
     \item \textbf{MARS full calib}: 
-        This model's training set consists of the \textit{calibration data} of \textbf{all recordings}, which ensures that our training set is nearly as large (more than 80\% of the size) as the training set used by the MARS paper.
+        This model's training set consists of the \textit{calibration data} of \textbf{all recordings}, increasing the size of the training set to roughly one fifth that of the MARS paper.
         This model is also tested on the \textit{interpretation data} of all recordings.
         The performance of this model is discussed in \cref{section: evaluation - larger models}.
     \item \textbf{MARS partial standard}: 
@@ -43,7 +43,7 @@ For the evaluation, we considered five different models:
         The performance of this model is discussed in \cref{section: evaluation - iammuse vs best mars}.
 \end{itemize}
 
-By considering six distinct versions of MARS, we aim to provide a fair comparison, ensuring we do not disadvantage MARS with a single suboptimal training set.
+By considering five distinct versions of MARS, we aim to provide a fair comparison, ensuring we do not disadvantage MARS with a single suboptimal training set.
 Furthermore, the consideration of multiple models allows various failure modes of the MARS model to be shown.
 Some of these failure modes are unique to the MARS models, but others are more generally found in Deep Learning models as a whole.
 
@@ -63,7 +63,7 @@ Some of these failure modes are unique to the MARS models, but others are more g
                 & Calibration data of \textit{one specific recording}.
                 & Interpretation data of \textit{the same specific recording}.
              \\ \hline
-             MARS paper 
+             MARS pre-trained 
                 & MARS data set.
                 & Interpretation data of all recordings.
              \\ \hline

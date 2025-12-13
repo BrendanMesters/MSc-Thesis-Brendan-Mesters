@@ -21,9 +21,9 @@ The nature of this noise, combined with the unstable signal output by the mmWave
 % \end{figure}
 
 Many sophisticated systems for point cloud filtering already exist \cite{ester1996dbscan, faisal2017density}.
-However, these existing systems expect a high point density, since they are built for Lidar, which makes them unsuitable for mmWave radar pointclouds.
+However, these existing systems expect a high point density, since they are built for Lidar, which makes them unsuitable for mmWave radar point clouds.
 % However, most of these systems are built for Lidar, which has a significantly higher number of points per frame. 
-Even papers describing methods for "sparse pointclouds" reason about thousands of points at a time, as opposed to the dozens of points encountered in mmWave data.
+Even papers describing methods for "sparse point clouds" reason about thousands of points at a time, as opposed to the dozens of points encountered in mmWave data.
 This low density distinguishes mmWave point cloud denoising as a separate challenge, evidenced by the purpose-built dataset by \citeauthor{farella2019sparse}~\cite{farella2019sparse}
 % This makes mmWave pointcloud denoising a truly separate problem, as is evident by the dataset explicitly produced for this problem \cite{farella2019sparse} by \citeauthor{farella2019sparse}.
 \begin{figure}[!htb]
@@ -46,7 +46,7 @@ This is a simplified version of the point clouds often encountered, where there 
 The second column shows the \textit{spatial filter}, which considers the number of nearby points in \textbf{the same frame}.
 The third column shows the \textit{temporal filter}, which considers the number of nearby points in \textbf{other frames}.
 Lastly, the fourth column combines these scores to filter out both ambient noise (clusters which consistently get a low score, e.g. $3$) and noise spikes (clusters which are dense, but only present in a single frame).
-This is done by simply comparing the combined score to a pre-defined threshold, in this case, any threshold value between 9 and 14 would accurately filter the noise from the signal.
+This is done by simply comparing the combined score to a pre-defined threshold; in this case, any threshold value between 9 and 14 would accurately filter the noise from the signal.
 % This filter consists of two parts: a temporal filter, measuring the density between frames, and a spatial filter, measuring the density within a frame.
 % The temporal filter removed inconsistent data, as that data is not dense \textbf{between} frames.
 % The spatial filter removed sparse data from a single frame.
@@ -75,7 +75,7 @@ This \textit{density score} is compared with a (configurable) threshold, to dete
 The main task of this spatial filter is to remove outliers, always let dense clusters pass, and quantify the significance of points in the context of the current frame.
 By constructing the \textit{density score} from the weights of nearby points, we ensure that high-valued points propagate their importance.
 The spatial filter is effective against sparse noise, but struggles with dense, single-frame noise spikes.
-Mitigating of these noise spikes requires a \textit{temporal filter}.
+Mitigating these noise spikes requires a \textit{temporal filter}.
 % That type of noise needs temporal information to be filtered out.
 % That is why IAmMuse also uses a \textit{temporal filter}, discussed in the next section.
 
@@ -162,7 +162,7 @@ That is why it is essential to use a combination of \textbf{both} the \textit{te
 IAmMuse uses a combination of the \textit{spatial} and the \textit{temporal} filters, so that it can get the benefits of both while mitigating their weaknesses.
 It does this by calculating both the \textit{density score} and the \textit{temporal score} for each point and combining them in accordance with a \textit{combination factor}.
 Let $S_{spat}$ and $S_{temp}$ be the \textit{spatial} and \textit{temporal} scores, respectively.
-Let $T_{spat}$ and $T_{temp}$ be the \textit{spacial} and \textit{temporal} threshold respectively.
+Let $T_{spat}$ and $T_{temp}$ be the \textit{spatial} and \textit{temporal} threshold respectively.
 We then introduce a \textbf{combination factor} $F$, where $0 \leq F \leq 1$, that determines how much we take into account each of the filters.
 A point is then considered to be \textit{signal} if $F \times S_{spat} + (1 - F) \times S_{temp} > F \times T_{spat} + (1 - F) \times T_{temp} $.
 Otherwise, the point is considered to be \textit{noise}.
